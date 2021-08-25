@@ -7,14 +7,17 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		C80690EE26D602B000DDAC94 /* ContactCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C80690ED26D602B000DDAC94 /* ContactCell.swift */; };
 		C8A4B9F126D534C20065BB20 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8A4B9F026D534C20065BB20 /* AppDelegate.swift */; };
 		C8A4B9F326D534C20065BB20 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8A4B9F226D534C20065BB20 /* SceneDelegate.swift */; };
-		C8A4B9F526D534C20065BB20 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8A4B9F426D534C20065BB20 /* ViewController.swift */; };
+		C8A4B9F526D534C20065BB20 /* ContactsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8A4B9F426D534C20065BB20 /* ContactsViewController.swift */; };
 		C8A4B9F826D534C20065BB20 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C8A4B9F626D534C20065BB20 /* Main.storyboard */; };
 		C8A4B9FA26D534C50065BB20 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C8A4B9F926D534C50065BB20 /* Assets.xcassets */; };
 		C8A4B9FD26D534C50065BB20 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C8A4B9FB26D534C50065BB20 /* LaunchScreen.storyboard */; };
 		C8A4BA0826D534C50065BB20 /* PhonebookTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8A4BA0726D534C50065BB20 /* PhonebookTests.swift */; };
 		C8A4BA1326D534C50065BB20 /* PhonebookUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8A4BA1226D534C50065BB20 /* PhonebookUITests.swift */; };
+		C8A4BA2426D534EA0065BB20 /* Person.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8A4BA2326D534EA0065BB20 /* Person.swift */; };
+		C8A4BA2926D53A3D0065BB20 /* PersonStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8A4BA2826D53A3D0065BB20 /* PersonStore.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -35,10 +38,11 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		C80690ED26D602B000DDAC94 /* ContactCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactCell.swift; sourceTree = "<group>"; };
 		C8A4B9ED26D534C20065BB20 /* Phonebook.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Phonebook.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		C8A4B9F026D534C20065BB20 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		C8A4B9F226D534C20065BB20 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
-		C8A4B9F426D534C20065BB20 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
+		C8A4B9F426D534C20065BB20 /* ContactsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactsViewController.swift; sourceTree = "<group>"; };
 		C8A4B9F726D534C20065BB20 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		C8A4B9F926D534C50065BB20 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		C8A4B9FC26D534C50065BB20 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
@@ -49,6 +53,8 @@
 		C8A4BA0E26D534C50065BB20 /* PhonebookUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = PhonebookUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		C8A4BA1226D534C50065BB20 /* PhonebookUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhonebookUITests.swift; sourceTree = "<group>"; };
 		C8A4BA1426D534C50065BB20 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		C8A4BA2326D534EA0065BB20 /* Person.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Person.swift; sourceTree = "<group>"; };
+		C8A4BA2826D53A3D0065BB20 /* PersonStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersonStore.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -101,11 +107,14 @@
 			children = (
 				C8A4B9F026D534C20065BB20 /* AppDelegate.swift */,
 				C8A4B9F226D534C20065BB20 /* SceneDelegate.swift */,
-				C8A4B9F426D534C20065BB20 /* ViewController.swift */,
+				C8A4B9F426D534C20065BB20 /* ContactsViewController.swift */,
 				C8A4B9F626D534C20065BB20 /* Main.storyboard */,
 				C8A4B9F926D534C50065BB20 /* Assets.xcassets */,
 				C8A4B9FB26D534C50065BB20 /* LaunchScreen.storyboard */,
 				C8A4B9FE26D534C50065BB20 /* Info.plist */,
+				C8A4BA2326D534EA0065BB20 /* Person.swift */,
+				C8A4BA2826D53A3D0065BB20 /* PersonStore.swift */,
+				C80690ED26D602B000DDAC94 /* ContactCell.swift */,
 			);
 			path = Phonebook;
 			sourceTree = "<group>";
@@ -258,9 +267,12 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				C8A4B9F526D534C20065BB20 /* ViewController.swift in Sources */,
+				C80690EE26D602B000DDAC94 /* ContactCell.swift in Sources */,
+				C8A4B9F526D534C20065BB20 /* ContactsViewController.swift in Sources */,
 				C8A4B9F126D534C20065BB20 /* AppDelegate.swift in Sources */,
+				C8A4BA2426D534EA0065BB20 /* Person.swift in Sources */,
 				C8A4B9F326D534C20065BB20 /* SceneDelegate.swift in Sources */,
+				C8A4BA2926D53A3D0065BB20 /* PersonStore.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

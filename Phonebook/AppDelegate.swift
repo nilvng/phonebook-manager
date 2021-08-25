@@ -6,14 +6,20 @@
 //
 
 import UIKit
+import Contacts
 
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
 
-
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
-        // Override point for customization after application launch.
+        CNContactStore().requestAccess(for: .contacts) { (access, error) in
+          print("Access: \(access)")
+        }
+        UINavigationBar.appearance().barStyle = .default
+        UINavigationBar.appearance().isOpaque = false
+        //UINavigationBar.appearance().titleTextAttributes = [.foregroundColor: UIColor.white]
+        
         return true
     }
 
