@@ -7,6 +7,7 @@
 
 import Foundation
 import Contacts
+import UIKit
 
 struct Person {
     
@@ -29,6 +30,14 @@ struct Person {
     init(firstName: String, lastName: String) {
         self.firstName = firstName
         self.lastName = lastName
+    }
+}
+
+extension Person : Equatable{
+    static func ==(lhs: Person, rhs: Person) -> Bool{
+        return lhs.firstName == rhs.firstName &&
+          lhs.lastName == rhs.lastName &&
+            lhs.phoneNumber == rhs.phoneNumber
     }
 }
 
@@ -56,3 +65,12 @@ extension Person{
         }
     }
 }
+
+#if DEBUG
+let samplePersons = [
+    Person(firstName: "Nil", lastName: "Nguyen"),
+    Person(firstName: "Steve", lastName: "Jobs"),
+    Person(firstName: "Ada", lastName: "Lovelace"),
+    Person(firstName: "Daniel", lastName: "Bourke")
+]
+#endif

@@ -17,7 +17,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         guard let _ = (scene as? UIWindowScene) else { return }
         let navController = window!.rootViewController as! UINavigationController
         let homeController = navController.topViewController as! PersonsViewController
-        let store = PersonStore()
+        let store = InMemoPersonStore()
         homeController.personStore = store
 
     }

@@ -46,14 +46,15 @@
                             <outlet property="delegate" destination="7Iu-4Q-i4A" id="dgr-R9-bYE"/>
                         </connections>
                     </tableView>
-                    <toolbarItems>
-                        <barButtonItem title="Add" id="BRa-dQ-2Vq">
+                    <toolbarItems/>
+                    <navigationItem key="navigationItem" title="Phonebook" id="TLS-3s-nz3">
+                        <barButtonItem key="leftBarButtonItem" systemItem="add" id="BRa-dQ-2Vq">
                             <connections>
-                                <action selector="addContactWithSender:" destination="7Iu-4Q-i4A" id="XVp-8L-ktZ"/>
+                                <action selector="addNativeContactWithSender:" destination="7Iu-4Q-i4A" id="TiM-3F-L95"/>
                             </connections>
                         </barButtonItem>
-                    </toolbarItems>
-                    <navigationItem key="navigationItem" title="Phonebook" id="TLS-3s-nz3"/>
+                        <barButtonItem key="rightBarButtonItem" title="Edit" id="Kov-C9-XQ4"/>
+                    </navigationItem>
                     <simulatedToolbarMetrics key="simulatedBottomBarMetrics"/>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="CZV-zn-Pc6" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
@@ -63,7 +64,7 @@
         <!--Navigation Controller-->
         <scene sceneID="K5s-bM-XH1">
             <objects>
-                <navigationController automaticallyAdjustsScrollViewInsets="NO" toolbarHidden="NO" id="Dwm-4X-Eb6" sceneMemberID="viewController">
+                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="Dwm-4X-Eb6" sceneMemberID="viewController">
                     <toolbarItems/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="vit-92-YZy">
                         <rect key="frame" x="0.0" y="44" width="414" height="44"/>
@@ -71,7 +72,6 @@
                     </navigationBar>
                     <nil name="viewControllers"/>
                     <toolbar key="toolbar" opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="c32-jo-oy0">
-                        <rect key="frame" x="0.0" y="813" width="414" height="49"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </toolbar>
                     <connections>
