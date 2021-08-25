@@ -6,8 +6,9 @@
 //
 
 import UIKit
+import ContactsUI
 
-class ContactsViewController: UITableViewController {
+class PersonsViewController: UITableViewController {
     // MARK: Properties
     var personStore:PersonStore!
     
@@ -30,7 +31,7 @@ class ContactsViewController: UITableViewController {
 }
 
 // MARK: - UITableViewDataSource
-extension ContactsViewController{
+extension PersonsViewController{
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return personStore.persons.count
     }
@@ -47,9 +48,15 @@ extension ContactsViewController{
 }
 
 // MARK: - UITableViewDelegate
-extension ContactsViewController{
+extension PersonsViewController{
+    
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        
         tableView.deselectRow(at: indexPath, animated: true)
+        let contact = personStore.persons[indexPath.row].contactValue
+        let nativeContactVC = CNContactViewController(forUnknownContact: contact)
+        
+        navigationController?.pushViewController(nativeContactVC, animated: true)
     }
 }
 
