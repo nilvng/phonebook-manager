@@ -9,8 +9,9 @@ import Foundation
 import Contacts
 import UIKit
 
-struct Person {
+class Person {
     
+    var uid = UUID().uuidString
     var firstName: String
     var lastName: String
     
@@ -56,7 +57,7 @@ extension Person{
         return contactObj.copy() as! CNContact
     }
     
-    init(contact: CNContact) {
+    convenience init(contact: CNContact) {
         
         self.init(firstName: contact.givenName, lastName:contact.familyName)
         

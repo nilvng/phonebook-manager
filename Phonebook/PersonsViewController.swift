@@ -22,6 +22,16 @@ class PersonsViewController: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
+        personStore.fetchAllContacts{ (fetched) in
+            if fetched{
+                print("from Contacts.")
+                DispatchQueue.main.async {
+                    self.tableView.reloadData()
+                }
+            } else{
+                print("from local.")
+            }
+        }
     }
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
 
@@ -47,7 +57,7 @@ extension PersonsViewController : CNContactPickerDelegate{
         let newContacts = contacts.compactMap{Person(contact: $0)}
         
         for c in newContacts{
-            if !personStore.persons.contains(c){
+            if !personStore.contains(c){
                 personStore.addPerson(c)
             }
         }
@@ -62,17 +72,21 @@ extension PersonsViewController{
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        
         let cell = tableView.dequeueReusableCell(withIdentifier: "ContactCell",for: indexPath)
         
+        let keys = Array(personStore.persons.keys)
         if let cell = cell as? ContactCell{
-            cell.person = personStore.persons[indexPath.row]
+            cell.person = personStore.get(key:keys[indexPath.row])
         }
         return cell
     }
     
     override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == .delete{
-            personStore.deletePerson(at:indexPath.row)
+            let keys = Array(personStore.persons.keys)
+            guard let person = personStore.get(key: keys[indexPath.row]) else { return } // TODO: cannot get person
+            personStore.deletePerson(person)
         }
         tableView.deleteRows(at: [indexPath], with: .automatic)
     }
@@ -83,8 +97,11 @@ extension PersonsViewController{
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         
+        let keys = Array(personStore.persons.keys)
         tableView.deselectRow(at: indexPath, animated: true)
-        let contact = personStore.persons[indexPath.row].contactValue
+        
+        guard let contact = personStore.get(key: keys[indexPath.row])?.contactValue else { return }// TODO: cannot get person from the contact list
+        
         let nativeContactVC = CNContactViewController(forUnknownContact: contact)
         
         navigationController?.pushViewController(nativeContactVC, animated: true)

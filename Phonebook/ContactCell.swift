@@ -28,7 +28,6 @@ class ContactCell: UITableViewCell {
               let fullname = formatter.string(from: person.contactValue) else { return }
         
         textLabel?.text = fullname
-        // TODO: design things
-        detailTextLabel?.text = "Contact number..."
+        detailTextLabel?.text = person.phoneNumber?.value.stringValue
     }
 }

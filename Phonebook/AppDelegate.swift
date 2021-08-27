@@ -16,15 +16,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         CNContactStore().requestAccess(for: .contacts) { (access, error) in
           print("Access: \(access)")
         }
-        UINavigationBar.appearance().barStyle = .default
-        UINavigationBar.appearance().isOpaque = false
-        //UINavigationBar.appearance().titleTextAttributes = [.foregroundColor: UIColor.white]
-        
         return true
     }
 
     // MARK: UISceneSession Lifecycle
-
+    func applicationWillEnterForeground(_ application: UIApplication) {
+        
+    }
+    
     func application(_ application: UIApplication, configurationForConnecting connectingSceneSession: UISceneSession, options: UIScene.ConnectionOptions) -> UISceneConfiguration {
         // Called when a new scene session is being created.
         // Use this method to select a configuration to create the new scene with.
