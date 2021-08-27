@@ -16,6 +16,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         CNContactStore().requestAccess(for: .contacts) { (access, error) in
           print("Access: \(access)")
         }
+        // fetch data
         return true
     }
 
