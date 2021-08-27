@@ -42,11 +42,7 @@ class PersonsViewController: UITableViewController {
     
     //MARK: Actions
     @IBAction func addNativeContact(sender: UIBarButtonItem){
-        
-        let contactsPicker = CNContactPickerViewController()
-        contactsPicker.delegate = self
-        
-        present(contactsPicker.self,animated: true)
+        personStore.addPerson(Person(random: true))
     }
 
 }
@@ -100,10 +96,12 @@ extension PersonsViewController{
         let keys = Array(personStore.persons.keys)
         tableView.deselectRow(at: indexPath, animated: true)
         
-        guard let contact = personStore.get(key: keys[indexPath.row])?.contactValue else { return }// TODO: cannot get person from the contact list
-        
+        guard let person = personStore.get(key: keys[indexPath.row]) else { return }// TODO: cannot get person from the contact list
+        let contact = person.toCNContact()
         let nativeContactVC = CNContactViewController(forUnknownContact: contact)
-        
+        nativeContactVC.allowsEditing = false
+        nativeContactVC.allowsActions = false
+
         navigationController?.pushViewController(nativeContactVC, animated: true)
     }
 }

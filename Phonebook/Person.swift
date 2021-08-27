@@ -15,7 +15,7 @@ class Person {
     var firstName: String
     var lastName: String
     
-    var storedContactValue: CNContact?
+    var storedContactValue: CNMutableContact?
     var phoneNumber: (CNLabeledValue<CNPhoneNumber>)?
 
     init(random:Bool) {
@@ -43,27 +43,32 @@ extension Person : Equatable{
 }
 
 extension Person{
-    
-    var contactValue: CNContact{
         
-        let contactObj = CNMutableContact()
-        contactObj.givenName = firstName
-        contactObj.familyName = lastName
-        
-        if let phoneNumber = phoneNumber{
-            contactObj.phoneNumbers.append(phoneNumber)
-        }
-        
-        return contactObj.copy() as! CNContact
-    }
-    
     convenience init(contact: CNContact) {
-        
         self.init(firstName: contact.givenName, lastName:contact.familyName)
-        
+        self.uid = contact.identifier
         if let number = contact.phoneNumbers.first{
             self.phoneNumber = number
         }
+        self.storedContactValue = contact.mutableCopy() as? CNMutableContact
+    }
+    
+    func toCNContact() -> CNContact{
+        if let storedContact = storedContactValue{
+            print("stored contact:", storedContact)
+            return storedContact.copy() as! CNContact
+        }
+        // in case when there a contact is not in native App
+        let contactObj = CNMutableContact()
+        contactObj.givenName = firstName
+        contactObj.familyName = lastName
+
+        if let phoneNumber = phoneNumber{
+            contactObj.phoneNumbers.append(phoneNumber)
+        }
+
+        return contactObj.copy() as! CNContact
+
     }
 }
 

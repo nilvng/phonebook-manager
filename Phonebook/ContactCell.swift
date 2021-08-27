@@ -24,10 +24,10 @@ class ContactCell: UITableViewCell {
         let formatter = CNContactFormatter()
         formatter.style = .fullName
         
-        guard let person = person,
-              let fullname = formatter.string(from: person.contactValue) else { return }
-        
-        textLabel?.text = fullname
-        detailTextLabel?.text = person.phoneNumber?.value.stringValue
+        if let person = person{
+            let fullname = person.firstName + " " + person.lastName
+            textLabel?.text = fullname
+            detailTextLabel?.text = person.phoneNumber?.value.stringValue
+        }
     }
 }

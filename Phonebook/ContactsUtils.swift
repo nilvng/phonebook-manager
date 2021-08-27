@@ -5,8 +5,9 @@
 //  Created by Nil Nguyen on 8/26/21.
 //
 
-import Foundation
+import UIKit
 import Contacts
+import ContactsUI
 class ContactsUtils {
     let contactsStore = CNContactStore()
     
@@ -16,10 +17,15 @@ class ContactsUtils {
     }()
     private init(){} // singleton
     
+    func removeContact(_ contact: CNMutableContact) throws {
+        let saveRequest = CNSaveRequest()
+        saveRequest.delete(contact)
+        try contactsStore.execute(saveRequest)
+    }
     func fetchData()-> [CNContact]{
         // fetching all contacts from the Contacts.app
         var results: [CNContact] = []
-        let keysToFetch = [CNContactGivenNameKey, CNContactFamilyNameKey, CNContactPhoneNumbersKey]
+        let keysToFetch = [CNContactGivenNameKey, CNContactMiddleNameKey,CNContactFamilyNameKey,CNContactPhoneNumbersKey, CNContactEmailAddressesKey]
         let fetchRequest = CNContactFetchRequest(keysToFetch: keysToFetch as [CNKeyDescriptor])
         do {
             try self.contactsStore.enumerateContacts(with: fetchRequest, usingBlock: {(contact, stopPointer) in

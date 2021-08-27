@@ -25,7 +25,16 @@ extension PersonStore{
     }
     
     func deletePerson(_ person: Person) {
+        // remove in-memo
         persons.removeValue(forKey: person.uid)
+        // remove in Contacts.app
+        DispatchQueue.global(qos: .utility).async {
+            do{
+                try self.contactsUtils.removeContact(person.storedContactValue!)
+            }catch let err{
+                print("Failed to delete contact in Contacts native app: ",err)
+            }
+        }
     }
     func contains(_ person:Person) -> Bool{
         return persons[person.uid] != nil
