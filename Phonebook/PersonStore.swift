@@ -30,7 +30,7 @@ extension PersonStore{
         // remove in Contacts.app
         DispatchQueue.global(qos: .utility).async {
             do{
-                try self.contactsUtils.removeContact(person.storedContactValue!)
+                try self.contactsUtils.removeContact(person.source?.mutableCopy() as! CNMutableContact)
             }catch let err{
                 print("Failed to delete contact in Contacts native app: ",err)
             }

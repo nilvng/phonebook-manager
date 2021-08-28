@@ -25,8 +25,9 @@ class ContactsUtils {
     func fetchData()-> [CNContact]{
         // fetching all contacts from the Contacts.app
         var results: [CNContact] = []
-        let keysToFetch = [CNContactGivenNameKey, CNContactMiddleNameKey,CNContactFamilyNameKey,CNContactPhoneNumbersKey, CNContactEmailAddressesKey]
-        let fetchRequest = CNContactFetchRequest(keysToFetch: keysToFetch as [CNKeyDescriptor])
+        var keysToFetch : [CNKeyDescriptor] = [CNContactIdentifierKey,CNContactGivenNameKey,CNContactFamilyNameKey,CNContactPhoneNumbersKey, CNContactEmailAddressesKey] as [CNKeyDescriptor]
+        keysToFetch += [CNContactViewController.descriptorForRequiredKeys()]
+        let fetchRequest = CNContactFetchRequest(keysToFetch: keysToFetch)
         do {
             try self.contactsStore.enumerateContacts(with: fetchRequest, usingBlock: {(contact, stopPointer) in
                 results.append(contact)

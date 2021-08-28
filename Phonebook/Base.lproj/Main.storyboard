@@ -16,7 +16,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <prototypes>
-                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="ContactCell" textLabel="ixx-FG-7vJ" detailTextLabel="X0y-tn-uWJ" style="IBUITableViewCellStyleSubtitle" id="dyE-0J-qDU" customClass="ContactCell" customModule="Phonebook" customModuleProvider="target">
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="ContactCell" textLabel="ixx-FG-7vJ" detailTextLabel="X0y-tn-uWJ" style="IBUITableViewCellStyleSubtitle" id="dyE-0J-qDU">
                                 <rect key="frame" x="0.0" y="28" width="414" height="55.5"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="dyE-0J-qDU" id="qdE-PR-Gkg">
@@ -47,14 +47,7 @@
                         </connections>
                     </tableView>
                     <toolbarItems/>
-                    <navigationItem key="navigationItem" title="Phonebook" id="TLS-3s-nz3">
-                        <barButtonItem key="leftBarButtonItem" systemItem="add" id="BRa-dQ-2Vq">
-                            <connections>
-                                <action selector="addNativeContactWithSender:" destination="7Iu-4Q-i4A" id="TiM-3F-L95"/>
-                            </connections>
-                        </barButtonItem>
-                        <barButtonItem key="rightBarButtonItem" title="Edit" id="Kov-C9-XQ4"/>
-                    </navigationItem>
+                    <navigationItem key="navigationItem" title="Phonebook" id="TLS-3s-nz3"/>
                     <simulatedToolbarMetrics key="simulatedBottomBarMetrics"/>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="CZV-zn-Pc6" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>

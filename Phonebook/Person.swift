@@ -15,7 +15,7 @@ class Person {
     var firstName: String
     var lastName: String
     
-    var storedContactValue: CNMutableContact?
+    var source: CNContact?
     var phoneNumber: (CNLabeledValue<CNPhoneNumber>)?
 
     init(random:Bool) {
@@ -50,13 +50,13 @@ extension Person{
         if let number = contact.phoneNumbers.first{
             self.phoneNumber = number
         }
-        self.storedContactValue = contact.mutableCopy() as? CNMutableContact
+        self.source = contact
     }
     
     func toCNContact() -> CNContact{
-        if let storedContact = storedContactValue{
+        if let storedContact = source{
             print("stored contact:", storedContact)
-            return storedContact.copy() as! CNContact
+            return storedContact
         }
         // in case when there a contact is not in native App
         let contactObj = CNMutableContact()
