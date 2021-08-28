@@ -27,8 +27,10 @@ class PersonsViewController: UITableViewController {
     // MARK: Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+        title = "My Phonebook"
         tableView.register(ContactCell.self, forCellReuseIdentifier: cellID)
+        tableView.rowHeight = UITableView.automaticDimension
+        tableView.estimatedRowHeight = 45
         
         personStore.fetchAllContacts{ (fetched) in
             if fetched{

@@ -14,6 +14,7 @@ class Person {
     var uid = UUID().uuidString
     var firstName: String
     var lastName: String
+    var avatarKey: String?
     
     var source: CNContact?
     var phoneNumber: (CNLabeledValue<CNPhoneNumber>)?

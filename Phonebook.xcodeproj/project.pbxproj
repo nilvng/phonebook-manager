@@ -10,6 +10,7 @@
 		C80690EE26D602B000DDAC94 /* ContactCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C80690ED26D602B000DDAC94 /* ContactCell.swift */; };
 		C85A6AD226D8F7CF00349794 /* PhonebookManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = C85A6AD126D8F7CF00349794 /* PhonebookManager.swift */; };
 		C85A6AE026D929EB00349794 /* DetailPersonViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C85A6ADF26D929EB00349794 /* DetailPersonViewController.swift */; };
+		C85A6AF726DA47C700349794 /* UIViewExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = C85A6AF626DA47C700349794 /* UIViewExtension.swift */; };
 		C8A4B9F126D534C20065BB20 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8A4B9F026D534C20065BB20 /* AppDelegate.swift */; };
 		C8A4B9F326D534C20065BB20 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8A4B9F226D534C20065BB20 /* SceneDelegate.swift */; };
 		C8A4B9F526D534C20065BB20 /* PersonsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8A4B9F426D534C20065BB20 /* PersonsViewController.swift */; };
@@ -44,6 +45,7 @@
 		C80690ED26D602B000DDAC94 /* ContactCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactCell.swift; sourceTree = "<group>"; };
 		C85A6AD126D8F7CF00349794 /* PhonebookManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhonebookManager.swift; sourceTree = "<group>"; };
 		C85A6ADF26D929EB00349794 /* DetailPersonViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailPersonViewController.swift; sourceTree = "<group>"; };
+		C85A6AF626DA47C700349794 /* UIViewExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIViewExtension.swift; sourceTree = "<group>"; };
 		C8A4B9ED26D534C20065BB20 /* Phonebook.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Phonebook.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		C8A4B9F026D534C20065BB20 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		C8A4B9F226D534C20065BB20 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -124,6 +126,7 @@
 				C8B86A5C26D7D7CC00F35DF4 /* ContactsUtils.swift */,
 				C85A6AD126D8F7CF00349794 /* PhonebookManager.swift */,
 				C85A6ADF26D929EB00349794 /* DetailPersonViewController.swift */,
+				C85A6AF626DA47C700349794 /* UIViewExtension.swift */,
 			);
 			path = Phonebook;
 			sourceTree = "<group>";
@@ -276,6 +279,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C85A6AF726DA47C700349794 /* UIViewExtension.swift in Sources */,
 				C80690EE26D602B000DDAC94 /* ContactCell.swift in Sources */,
 				C85A6AD226D8F7CF00349794 /* PhonebookManager.swift in Sources */,
 				C8A4B9F526D534C20065BB20 /* PersonsViewController.swift in Sources */,
