@@ -7,26 +7,26 @@
 
 import UIKit
 import Contacts
-class BasePersonStore {
-    var persons = [String:Person]()
+class BaseFriendStore {
+    var friends = [String:Friend]()
     var contactsUtils = ContactsUtils.sharedInstance
 }
-protocol PersonStore : BasePersonStore{
+protocol FriendStore : BaseFriendStore{
     func fetchAllContacts(compilationClosure: @escaping (_  contactsFetched: Bool)->())
-    func addPerson(_ person : Person)
-    func deletePerson(_ person: Person)
-    func contains(_ person:Person) -> Bool
-    func get(key: String) -> Person?
+    func addFriend(_ person : Friend)
+    func deleteFriend(_ person: Friend)
+    func contains(_ person:Friend) -> Bool
+    func get(key: String) -> Friend?
 }
 
-extension PersonStore{
-    func addPerson(_ person: Person) {
-        persons[person.uid] = person
+extension FriendStore{
+    func addFriend(_ person: Friend) {
+        friends[person.uid] = person
     }
     
-    func deletePerson(_ person: Person) {
+    func deleteFriend(_ person: Friend) {
         // remove in-memo
-        persons.removeValue(forKey: person.uid)
+        friends.removeValue(forKey: person.uid)
         // remove in Contacts.app
         DispatchQueue.global(qos: .utility).async {
             do{
@@ -36,46 +36,49 @@ extension PersonStore{
             }
         }
     }
-    func contains(_ person:Person) -> Bool{
-        return persons[person.uid] != nil
+    func contains(_ person:Friend) -> Bool{
+        return friends[person.uid] != nil
     }
-    func get(key: String) -> Person?{
-        return persons[key]
+    func get(key: String) -> Friend?{
+        return friends[key]
     }
     func fetchAllContacts(compilationClosure: @escaping (_ contactsFetched: Bool)->()){
         DispatchQueue.global(qos: .utility).async {
             self.contactsUtils.requestForAccess{ (accessGranted) in
                 if accessGranted{
                     let contacts = self.contactsUtils.fetchData()
-                    self.reloadPersons(cnContacts: contacts)
+                    self.reloadData(cnContacts: contacts)
                 }
                 compilationClosure(accessGranted)
             }
         }
     }
-    func reloadPersons(cnContacts:[CNContact]){
+    func reloadData(cnContacts:[CNContact]){
         // override current list with cnContacts
         for c in cnContacts{
-            persons[c.identifier] = Person(contact: c)
+            friends[c.identifier] = Friend(contact: c)
         }
     }
 }
 
-class InMemoPersonStore : BasePersonStore, PersonStore{
+class InMemoFriendStore : BaseFriendStore, FriendStore{
 
     override init() {
         super.init()
+        for contact in samplePersons{
+            friends[contact.uid] = contact
+        }
     }
 
-    @discardableResult func addRandomPerson()->Person{
-        let p = Person(random: true)
-        addPerson(p)
+    @discardableResult func addRandomPerson()->Friend{
+        let p = Friend(random: true)
+        addFriend(p)
         return p
     }
 
 }
 
-class PlistPersonStore: BasePersonStore,PersonStore {
+class PlistFriendStore: BaseFriendStore,FriendStore {
     let itemArchiveURL : URL = {
         
         let documentDirectories = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)

@@ -9,7 +9,7 @@ import Foundation
 import Contacts
 import UIKit
 
-class Person {
+class Friend {
     
     var uid = UUID().uuidString
     var firstName: String
@@ -35,15 +35,15 @@ class Person {
     }
 }
 
-extension Person : Equatable{
-    static func ==(lhs: Person, rhs: Person) -> Bool{
+extension Friend : Equatable{
+    static func ==(lhs: Friend, rhs: Friend) -> Bool{
         return lhs.firstName == rhs.firstName &&
           lhs.lastName == rhs.lastName &&
             lhs.phoneNumber == rhs.phoneNumber
     }
 }
 
-extension Person{
+extension Friend{
         
     convenience init(contact: CNContact) {
         self.init(firstName: contact.givenName, lastName:contact.familyName)
@@ -75,9 +75,9 @@ extension Person{
 
 #if DEBUG
 let samplePersons = [
-    Person(firstName: "Nil", lastName: "Nguyen"),
-    Person(firstName: "Steve", lastName: "Jobs"),
-    Person(firstName: "Ada", lastName: "Lovelace"),
-    Person(firstName: "Daniel", lastName: "Bourke")
+    Friend(firstName: "Nil", lastName: "Nguyen"),
+    Friend(firstName: "Steve", lastName: "Jobs"),
+    Friend(firstName: "Ada", lastName: "Lovelace"),
+    Friend(firstName: "Daniel", lastName: "Bourke")
 ]
 #endif

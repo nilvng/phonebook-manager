@@ -7,6 +7,6 @@
 
 import UIKit
 
-class DetailPersonViewController: UIViewController {
+class DetailFriendViewController: UIViewController {
 }
 

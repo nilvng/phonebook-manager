@@ -10,7 +10,7 @@ import Contacts
 
 class ContactCell: UITableViewCell {
     
-    var person : Person? {
+    var person : Friend? {
         didSet{
             guard let person = person else {
                 return
@@ -39,6 +39,7 @@ class ContactCell: UITableViewCell {
     private let defaultPhoneNumberLabel: UILabel = {
         let label = UILabel()
         label.font = UIFont.systemFont(ofSize: 14)
+        label.textColor = .gray
         label.textAlignment = .left
         return label
     }()
