@@ -9,14 +9,12 @@ import UIKit
 import Contacts
 
 class ContactCell: UITableViewCell {
-    
+    static let identifier = "ContactCell"
     var person : Friend? {
         didSet{
-            guard let person = person else {
-                return
-            }
+            guard let person = person else { return }
             personNameLabel.text = person.firstName + " " + person.lastName
-            defaultPhoneNumberLabel.text = person.phoneNumber?.value.stringValue
+            defaultPhoneNumberLabel.text = person.phoneNumber
             avatarImage.image = UIImage(named: person.avatarKey ?? "default_avatar")
         }
     }
@@ -31,7 +29,8 @@ class ContactCell: UITableViewCell {
     
     private let avatarImage: UIImageView = {
         let image = UIImageView()
-        image.contentMode = .scaleAspectFit
+        image.contentMode = .scaleAspectFill
+        image.layer.cornerRadius = 30
         image.clipsToBounds = true
         return image
     }()
@@ -44,17 +43,22 @@ class ContactCell: UITableViewCell {
         return label
     }()
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
-            super.init(style: style, reuseIdentifier: reuseIdentifier)
+            
+        super.init(style: style, reuseIdentifier: reuseIdentifier)
+        
         addSubview(avatarImage)
         addSubview(personNameLabel)
         addSubview(defaultPhoneNumberLabel)
         
+        accessoryType = .disclosureIndicator
         avatarImage.anchor(top: topAnchor, left: leftAnchor, bottom: bottomAnchor, right: nil, paddingTop: 5, paddingLeft: 5, paddingBottom: 5, paddingRight: 0, width: 70, height: 70, enableInsets: false)
         personNameLabel.anchor(top: topAnchor, left: avatarImage.rightAnchor, bottom: nil, right: nil, paddingTop: 20, paddingLeft: 10, paddingBottom: 0, paddingRight: 0, width: frame.size.width / 2, height: 0, enableInsets: false)
         defaultPhoneNumberLabel.anchor(top: personNameLabel.bottomAnchor, left: avatarImage.rightAnchor, bottom: nil, right: nil, paddingTop: 0, paddingLeft: 10, paddingBottom: 0, paddingRight: 0, width: frame.size.width / 2, height: 0, enableInsets: false)
                 
+        }
+    override func layoutSubviews() {
+        super.layoutSubviews()
     }
-    
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }

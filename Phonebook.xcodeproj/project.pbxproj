@@ -92,6 +92,34 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		C85A6B0C26DC6AEF00349794 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				C80690ED26D602B000DDAC94 /* ContactCell.swift */,
+				C85A6AF626DA47C700349794 /* UIViewExtension.swift */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		C85A6B0D26DC6AF600349794 /* Controllers */ = {
+			isa = PBXGroup;
+			children = (
+				C85A6ADF26D929EB00349794 /* DetailFriendViewController.swift */,
+				C8A4B9F426D534C20065BB20 /* FriendsViewController.swift */,
+				C85A6B0426DB796C00349794 /* FriendsDataSource.swift */,
+			);
+			path = Controllers;
+			sourceTree = "<group>";
+		};
+		C85A6B0E26DC6AFE00349794 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				C8A4BA2326D534EA0065BB20 /* Friend.swift */,
+				C8A4BA2826D53A3D0065BB20 /* FriendStore.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
 		C8A4B9E426D534C20065BB20 = {
 			isa = PBXGroup;
 			children = (
@@ -115,21 +143,17 @@
 		C8A4B9EF26D534C20065BB20 /* Phonebook */ = {
 			isa = PBXGroup;
 			children = (
+				C85A6B0E26DC6AFE00349794 /* Models */,
+				C85A6B0D26DC6AF600349794 /* Controllers */,
+				C85A6B0C26DC6AEF00349794 /* Views */,
 				C8A4B9F026D534C20065BB20 /* AppDelegate.swift */,
 				C8A4B9F226D534C20065BB20 /* SceneDelegate.swift */,
-				C8A4B9F426D534C20065BB20 /* FriendsViewController.swift */,
-				C85A6B0426DB796C00349794 /* FriendsDataSource.swift */,
+				C85A6AD126D8F7CF00349794 /* PhonebookManager.swift */,
+				C8B86A5C26D7D7CC00F35DF4 /* ContactsUtils.swift */,
 				C8A4B9F626D534C20065BB20 /* Main.storyboard */,
 				C8A4B9F926D534C50065BB20 /* Assets.xcassets */,
 				C8A4B9FB26D534C50065BB20 /* LaunchScreen.storyboard */,
 				C8A4B9FE26D534C50065BB20 /* Info.plist */,
-				C8A4BA2326D534EA0065BB20 /* Friend.swift */,
-				C8A4BA2826D53A3D0065BB20 /* FriendStore.swift */,
-				C80690ED26D602B000DDAC94 /* ContactCell.swift */,
-				C8B86A5C26D7D7CC00F35DF4 /* ContactsUtils.swift */,
-				C85A6AD126D8F7CF00349794 /* PhonebookManager.swift */,
-				C85A6ADF26D929EB00349794 /* DetailFriendViewController.swift */,
-				C85A6AF626DA47C700349794 /* UIViewExtension.swift */,
 			);
 			path = Phonebook;
 			sourceTree = "<group>";

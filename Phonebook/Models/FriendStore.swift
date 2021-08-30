@@ -9,19 +9,20 @@ import UIKit
 import Contacts
 class BaseFriendStore {
     var friends = [String:Friend]()
-    var contactsUtils = ContactsUtils.sharedInstance
+    var contactsUtils = ContactsUtils.shared
 }
 protocol FriendStore : BaseFriendStore{
     func fetchAllContacts(compilationClosure: @escaping (_  contactsFetched: Bool)->())
-    func addFriend(_ person : Friend)
+    @discardableResult func addFriend(_ person : Friend) -> Friend
     func deleteFriend(_ person: Friend)
     func contains(_ person:Friend) -> Bool
     func get(key: String) -> Friend?
 }
 
 extension FriendStore{
-    func addFriend(_ person: Friend) {
+    func addFriend(_ person: Friend) -> Friend{
         friends[person.uid] = person
+        return person
     }
     
     func deleteFriend(_ person: Friend) {
@@ -43,16 +44,15 @@ extension FriendStore{
         return friends[key]
     }
     func fetchAllContacts(compilationClosure: @escaping (_ contactsFetched: Bool)->()){
-        DispatchQueue.global(qos: .utility).async {
-            self.contactsUtils.requestForAccess{ (accessGranted) in
-                if accessGranted{
+        let granted = self.contactsUtils.accessGranted()
+        if granted {
+            DispatchQueue.global(qos: .utility).async {
                     let contacts = self.contactsUtils.fetchData()
                     self.reloadData(cnContacts: contacts)
                 }
-                compilationClosure(accessGranted)
             }
+        compilationClosure(granted)
         }
-    }
     func reloadData(cnContacts:[CNContact]){
         // override current list with cnContacts
         for c in cnContacts{
@@ -69,13 +69,6 @@ class InMemoFriendStore : BaseFriendStore, FriendStore{
             friends[contact.uid] = contact
         }
     }
-
-    @discardableResult func addRandomPerson()->Friend{
-        let p = Friend(random: true)
-        addFriend(p)
-        return p
-    }
-
 }
 
 class PlistFriendStore: BaseFriendStore,FriendStore {

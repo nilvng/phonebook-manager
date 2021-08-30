@@ -17,21 +17,24 @@ class Friend {
     var avatarKey: String?
     
     var source: CNContact?
-    var phoneNumber: (CNLabeledValue<CNPhoneNumber>)?
+    var phoneNumber: String
 
     init(random:Bool) {
         if !random {
             firstName=""
             lastName=""
+            phoneNumber=""
             return
         }
-        self.firstName="Nil"
-        self.lastName="Ng"
+        self.firstName = "Nil"
+        self.lastName = "Ng"
+        self.phoneNumber="911"
     }
     
-    init(firstName: String, lastName: String) {
+    init(firstName: String, lastName: String, phoneNumber:String) {
         self.firstName = firstName
         self.lastName = lastName
+        self.phoneNumber = phoneNumber
     }
 }
 
@@ -46,17 +49,17 @@ extension Friend : Equatable{
 extension Friend{
         
     convenience init(contact: CNContact) {
-        self.init(firstName: contact.givenName, lastName:contact.familyName)
+        let phoneNumberString =  contact.phoneNumbers.first?.value.stringValue ?? ""
+            self.init(firstName: contact.givenName,
+                      lastName:contact.familyName,
+                      phoneNumber: phoneNumberString)
         self.uid = contact.identifier
-        if let number = contact.phoneNumbers.first{
-            self.phoneNumber = number
-        }
         self.source = contact
     }
     
     func toCNContact() -> CNContact{
         if let storedContact = source{
-            print("stored contact:", storedContact)
+            print("use source contact.")
             return storedContact
         }
         // in case when there a contact is not in native App
@@ -64,9 +67,9 @@ extension Friend{
         contactObj.givenName = firstName
         contactObj.familyName = lastName
 
-        if let phoneNumber = phoneNumber{
-            contactObj.phoneNumbers.append(phoneNumber)
-        }
+        let label = CNLabeledValue(label: CNLabelPhoneNumberMain, value: CNPhoneNumber(stringValue: phoneNumber))
+        contactObj.phoneNumbers.append(label)
+            
 
         return contactObj.copy() as! CNContact
 
@@ -75,9 +78,9 @@ extension Friend{
 
 #if DEBUG
 let samplePersons = [
-    Friend(firstName: "Nil", lastName: "Nguyen"),
-    Friend(firstName: "Steve", lastName: "Jobs"),
-    Friend(firstName: "Ada", lastName: "Lovelace"),
-    Friend(firstName: "Daniel", lastName: "Bourke")
+    Friend(firstName: "Nil", lastName: "Nguyen",phoneNumber: "0902801xxx"),
+    Friend(firstName: "Steve", lastName: "Jobs",phoneNumber: "09012345"),
+    Friend(firstName: "Ada", lastName: "Lovelace",phoneNumber: "09023456" ),
+    Friend(firstName: "Daniel", lastName: "Bourke", phoneNumber: "09812345")
 ]
 #endif

@@ -16,11 +16,12 @@ class FriendsViewController : UIViewController {
             friendList = Array(friendStore.friends.values)
         }
     }
-    var friendList = [Friend]()
+    private var friendList = [Friend]()
     
-    var cellID = "ContactCell"
     var tableView : UITableView = {
         let view = UITableView()
+        view.register(ContactCell.self, forCellReuseIdentifier: ContactCell.identifier)
+        // styling
         view.rowHeight = UITableView.automaticDimension
         view.estimatedRowHeight = 45
         view.translatesAutoresizingMaskIntoConstraints = false
@@ -35,7 +36,7 @@ class FriendsViewController : UIViewController {
         navigationItem.leftBarButtonItem = UIBarButtonItem(
             barButtonSystemItem: .add,
             target: self,
-            action: #selector(addNativeContact))
+            action: #selector(addContact))
     }
 
     // MARK: Lifecycle
@@ -46,7 +47,7 @@ class FriendsViewController : UIViewController {
         // set up Table view
         tableView.delegate = self
         tableView.dataSource = self
-        tableView.register(ContactCell.self, forCellReuseIdentifier: cellID)
+        
         view.addSubview(tableView)
         // layout table view
         tableView.topAnchor.constraint(equalTo:view.topAnchor).isActive = true
@@ -64,8 +65,19 @@ class FriendsViewController : UIViewController {
     }
     
     //MARK: Actions
-    @objc func addNativeContact(){
-        friendStore.addFriend(Friend(random: true))
+    @objc func addContact(){
+        // add to the store
+        let newFriend = friendStore.addFriend(Friend(random: true))
+        // update the list
+        friendList = friendStore.friends.map{ $0.value}
+        // update table view
+        if let index = friendList.firstIndex(of: newFriend){
+            let indexPath = IndexPath(row: index, section: 0)
+            tableView.insertRows(at: [indexPath], with: .automatic)
+        }
+    }
+    private func refreshTable(){
+        friendList = friendStore.friends.map{ $0.value}
         tableView.reloadData()
     }
 
@@ -93,7 +105,7 @@ extension FriendsViewController : UITableViewDataSource{
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
-        let cell = tableView.dequeueReusableCell(withIdentifier: cellID,for: indexPath) as! ContactCell
+        let cell = tableView.dequeueReusableCell(withIdentifier: ContactCell.identifier,for: indexPath) as! ContactCell
         cell.person = friendList[indexPath.row]
         return cell
     }

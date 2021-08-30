@@ -11,10 +11,7 @@ import ContactsUI
 class ContactsUtils {
     let contactsStore = CNContactStore()
     
-    static let sharedInstance : ContactsUtils = {
-        let instance = ContactsUtils()
-        return instance
-    }()
+    static let shared = ContactsUtils()
     private init(){} // singleton
     
     func removeContact(_ contact: CNMutableContact) throws {
@@ -38,7 +35,11 @@ class ContactsUtils {
         return results
     }
     
-    func requestForAccess(complitionHandler:@escaping ( _ accessGranted:Bool)->Void)
+    func accessGranted() -> Bool{
+        return CNContactStore.authorizationStatus(for: .contacts) == .authorized
+    }
+    
+    func requestAccess(complitionHandler:@escaping ( _ accessGranted:Bool)->Void)
     {
         // request for access to Contacts.app if it has not been granted
         let authorizationStatus = CNContactStore.authorizationStatus(for: .contacts)
