@@ -22,9 +22,7 @@ class FriendsViewController : UIViewController {
         let view = UITableView()
         view.register(ContactCell.self, forCellReuseIdentifier: ContactCell.identifier)
         // styling
-        view.rowHeight = UITableView.automaticDimension
-        view.estimatedRowHeight = 45
-        view.translatesAutoresizingMaskIntoConstraints = false
+        view.rowHeight = 70
         view.tableFooterView = UIView() // hide extra lines
         return view
     }()
@@ -43,19 +41,19 @@ class FriendsViewController : UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         navigationItem.title = "My Phonebook"
+        
+        view.addSubview(tableView)
 
         // set up Table view
         tableView.delegate = self
         tableView.dataSource = self
         
         view.addSubview(tableView)
-        // layout table view
-        tableView.topAnchor.constraint(equalTo:view.topAnchor).isActive = true
-        tableView.leftAnchor.constraint(equalTo:view.leftAnchor).isActive = true
-        tableView.rightAnchor.constraint(equalTo:view.rightAnchor).isActive = true
-        tableView.bottomAnchor.constraint(equalTo:view.bottomAnchor).isActive = true
-
         
+    }
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        tableView.frame = view.bounds
     }
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
 
@@ -82,20 +80,6 @@ class FriendsViewController : UIViewController {
     }
 
 }
-// MARK: - CNContactPickerDelegate
-extension FriendsViewController : CNContactPickerDelegate{
-    
-    func contactPicker(_ picker: CNContactPickerViewController, didSelect contacts: [CNContact]){
-        let newContacts = contacts.compactMap{Friend(contact: $0)}
-        
-        for c in newContacts{
-            if !friendStore.contains(c){
-                friendStore.addFriend(c)
-            }
-        }
-        tableView.reloadData()
-    }
-}
 
 // MARK: - UITableViewDataSource
 extension FriendsViewController : UITableViewDataSource{
@@ -118,6 +102,7 @@ extension FriendsViewController: UITableViewDelegate{
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == .delete{
             let friend = friendList[indexPath.row]
+            friendList.remove(at: indexPath.row)
             friendStore.deleteFriend(friend)
         }
         tableView.deleteRows(at: [indexPath], with: .automatic)

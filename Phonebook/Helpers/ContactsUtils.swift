@@ -41,7 +41,7 @@ class ContactsUtils {
     
     func requestAccess(complitionHandler:@escaping ( _ accessGranted:Bool)->Void)
     {
-        // request for access to Contacts.app if it has not been granted
+        // Depricated! :request for access to Contacts.app
         let authorizationStatus = CNContactStore.authorizationStatus(for: .contacts)
         switch authorizationStatus
         {

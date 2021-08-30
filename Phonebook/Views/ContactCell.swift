@@ -24,6 +24,7 @@ class ContactCell: UITableViewCell {
         label.textColor = .black
         label.font = UIFont.boldSystemFont(ofSize: 16)
         label.textAlignment = .left
+
         return label
     }()
     
@@ -40,6 +41,7 @@ class ContactCell: UITableViewCell {
         label.font = UIFont.systemFont(ofSize: 14)
         label.textColor = .gray
         label.textAlignment = .left
+
         return label
     }()
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
@@ -51,13 +53,14 @@ class ContactCell: UITableViewCell {
         addSubview(defaultPhoneNumberLabel)
         
         accessoryType = .disclosureIndicator
-        avatarImage.anchor(top: topAnchor, left: leftAnchor, bottom: bottomAnchor, right: nil, paddingTop: 5, paddingLeft: 5, paddingBottom: 5, paddingRight: 0, width: 70, height: 70, enableInsets: false)
-        personNameLabel.anchor(top: topAnchor, left: avatarImage.rightAnchor, bottom: nil, right: nil, paddingTop: 20, paddingLeft: 10, paddingBottom: 0, paddingRight: 0, width: frame.size.width / 2, height: 0, enableInsets: false)
-        defaultPhoneNumberLabel.anchor(top: personNameLabel.bottomAnchor, left: avatarImage.rightAnchor, bottom: nil, right: nil, paddingTop: 0, paddingLeft: 10, paddingBottom: 0, paddingRight: 0, width: frame.size.width / 2, height: 0, enableInsets: false)
-                
+
         }
     override func layoutSubviews() {
         super.layoutSubviews()
+        avatarImage.anchor(top: topAnchor, left: leftAnchor, bottom: nil, right: nil, padding: .init(top: 5, left: 5, bottom: 4, right: 5), size: .init(width: 60, height: 60))
+        personNameLabel.anchor(top: topAnchor, left: avatarImage.rightAnchor, bottom: nil, right: nil, padding: .init(top: 20, left: 10, bottom: 0, right: 0), size: .init( width: frame.size.width / 2, height: 0))
+        defaultPhoneNumberLabel.anchor(top: personNameLabel.bottomAnchor, left: avatarImage.rightAnchor, bottom: nil, right: nil, padding: .init(top: 0, left: 10, bottom: 0, right: 0), size: .init(width: frame.size.width / 2, height: 0))
+                
     }
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
