@@ -57,8 +57,9 @@ class FriendsViewController : UIViewController {
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
 
     }
-    override func viewDidAppear(_ animated: Bool) {
+    override func viewWillAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
+        friendList = PhonebookManager.shared.getContactList().map{ $0.value}
     }
     
     //MARK: Actions
