@@ -22,7 +22,7 @@ class ContactsUtils {
     func getAllContacts()-> [CNContact]{
         // fetching all contacts from the Contacts.app
         var results: [CNContact] = []
-        var keysToFetch : [CNKeyDescriptor] = [CNContactIdentifierKey,CNContactGivenNameKey,CNContactFamilyNameKey,CNContactPhoneNumbersKey, CNContactEmailAddressesKey] as [CNKeyDescriptor]
+        var keysToFetch : [CNKeyDescriptor] = [CNContactIdentifierKey,CNContactGivenNameKey,CNContactFamilyNameKey,CNContactPhoneNumbersKey, CNContactImageDataKey] as [CNKeyDescriptor]
         keysToFetch += [CNContactViewController.descriptorForRequiredKeys()]
         
         let fetchRequest = CNContactFetchRequest(keysToFetch: keysToFetch)

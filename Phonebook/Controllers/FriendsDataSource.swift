@@ -5,6 +5,7 @@
 //  Created by Nil Nguyen on 8/29/21.
 //
 
+// DEPRECATED
 import UIKit
 class FriendsDataSource: NSObject {
     var friends = [Friend]()

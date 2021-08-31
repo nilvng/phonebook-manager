@@ -12,7 +12,6 @@ class BaseFriendStore {
     var contactsUtils = ContactsUtils.shared
 }
 protocol FriendStore : BaseFriendStore{
-    func fetchAllContacts(compilationClosure: @escaping (_  contactsFetched: Bool)->())
     @discardableResult func addFriend(_ person : Friend) -> Friend
     func deleteFriend(_ person: Friend)
     func contains(_ person:Friend) -> Bool
@@ -43,16 +42,6 @@ extension FriendStore{
     func get(key: String) -> Friend?{
         return friends[key]
     }
-    func fetchAllContacts(compilationClosure: @escaping (_ contactsFetched: Bool)->()){
-        let granted = self.contactsUtils.accessGranted()
-        if granted {
-            DispatchQueue.global(qos: .utility).async {
-                let contacts = self.contactsUtils.getAllContacts()
-                    self.reloadData(cnContacts: contacts)
-                }
-            }
-        compilationClosure(granted)
-        }
     func reloadData(cnContacts:[CNContact]) -> [String: Friend]{
         // override current list with cnContacts
         for c in cnContacts{

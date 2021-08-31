@@ -6,6 +6,8 @@
 //
 
 import Foundation
+import Contacts
+
 protocol PhonebookDelegate {
     func contactListRefreshed(contacts: [String: Friend])
     func newContactAdded(contact: Friend)
@@ -18,8 +20,9 @@ class PhonebookManager {
     var delegate: PhonebookDelegate?
     
     static let shared = PhonebookManager()
-    private init(){}
-    
+    private init(){
+        NotificationCenter.default.addObserver(self, selector: #selector(contactDidChange), name: NSNotification.Name.CNContactStoreDidChange, object: nil)
+    }
     func fetchData(_ complilationHandler: @escaping (Result<String,Error>) -> () ){
         var contacts : [String: Friend] = [:]
         // TODO: when contacts list is occupied
@@ -37,7 +40,6 @@ class PhonebookManager {
                 // merge data
                 contacts = self.store.reloadData(cnContacts: cnContacts)
                 // inform table view
-                print(self.delegate ?? "no delegate")
                 self.delegate?.contactListRefreshed(contacts: contacts)
                 complilationHandler(.success("Sync data is completed"))
                 }
@@ -45,11 +47,17 @@ class PhonebookManager {
             complilationHandler(.failure(FetchError.unauthorized))
         }
     }
+    @objc func contactDidChange(noti: NSNotification){
+        print("changes now: \(noti.userInfo)\n \(noti.object)")
+    }
     func addContact(_ contact: Friend){
         
     }
     func deleteContact(_ contact: Friend){
         
+    }
+    func getContactList()->[String: Friend]{
+        return store.friends
     }
 }
 
