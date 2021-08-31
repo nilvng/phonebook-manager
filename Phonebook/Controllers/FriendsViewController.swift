@@ -49,10 +49,6 @@ class FriendsViewController : UIViewController {
         tableView.dataSource = self
         
         view.addSubview(tableView)
-        
-        // set up relationship with Phonebook manager
-        PhonebookManager.shared.delegate = self
-        
     }
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
@@ -63,7 +59,6 @@ class FriendsViewController : UIViewController {
     }
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        friendList = PhonebookManager.shared.getContactList().map {$0.value}
     }
     
     //MARK: Actions

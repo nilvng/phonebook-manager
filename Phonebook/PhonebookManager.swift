@@ -25,3 +25,7 @@ class PhonebookManager {
         }
     }
 }
+enum FetchError: Error{
+    case unauthorized
+    case failed
+}
