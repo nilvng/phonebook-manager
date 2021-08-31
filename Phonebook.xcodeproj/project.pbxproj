@@ -103,8 +103,8 @@
 		C85A6B0D26DC6AF600349794 /* Controllers */ = {
 			isa = PBXGroup;
 			children = (
-				C85A6ADF26D929EB00349794 /* DetailFriendViewController.swift */,
 				C8A4B9F426D534C20065BB20 /* FriendsViewController.swift */,
+				C85A6ADF26D929EB00349794 /* DetailFriendViewController.swift */,
 				C85A6B0426DB796C00349794 /* FriendsDataSource.swift */,
 			);
 			path = Controllers;

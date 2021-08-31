@@ -11,12 +11,8 @@ import Contacts
 
 class FriendsViewController : UIViewController {
     // MARK: Properties
-    var friendStore:FriendStore!{
-        didSet{
-            friendList = Array(friendStore.friends.values)
-        }
-    }
     private var friendList = [Friend]()
+    private var manager = PhonebookManager.shared
     
     var tableView : UITableView = {
         let view = UITableView()
@@ -50,6 +46,9 @@ class FriendsViewController : UIViewController {
         
         view.addSubview(tableView)
         
+        // set up relationship with Phonebook manager
+       // PhonebookManager.shared.delegate = self
+        
     }
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
@@ -58,27 +57,36 @@ class FriendsViewController : UIViewController {
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
 
     }
-    override func viewWillAppear(_ animated: Bool) {
-        
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
     }
     
     //MARK: Actions
     @objc func addContact(){
         // add to the store
-        let newFriend = friendStore.addFriend(Friend(random: true))
-        // update the list
-        friendList = friendStore.friends.map{ $0.value}
+        manager.addContact(Friend(random: true))
+
+    }
+}
+
+extension FriendsViewController: PhonebookDelegate{
+    func contactListRefreshed(contacts: [String : Friend]) {
+        DispatchQueue.main.async {
+            //print(contacts)
+            self.friendList = contacts.map{ $0.value}
+            self.tableView.reloadData()
+        }
+    }
+    func newContactAdded(contact: Friend){
         // update table view
-        if let index = friendList.firstIndex(of: newFriend){
+        if let index = friendList.firstIndex(of: contact){
             let indexPath = IndexPath(row: index, section: 0)
             tableView.insertRows(at: [indexPath], with: .automatic)
         }
     }
-    private func refreshTable(){
-        friendList = friendStore.friends.map{ $0.value}
-        tableView.reloadData()
+    func contactDeleted(contact: Friend){
+        
     }
-
 }
 
 // MARK: - UITableViewDataSource
@@ -103,9 +111,10 @@ extension FriendsViewController: UITableViewDelegate{
         if editingStyle == .delete{
             let friend = friendList[indexPath.row]
             friendList.remove(at: indexPath.row)
-            friendStore.deleteFriend(friend)
+            manager.deleteContact(friend)
+            tableView.deleteRows(at: [indexPath], with: .automatic)
+
         }
-        tableView.deleteRows(at: [indexPath], with: .automatic)
     }
 
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {

@@ -19,11 +19,12 @@ class ContactsUtils {
         saveRequest.delete(contact)
         try contactsStore.execute(saveRequest)
     }
-    func fetchData()-> [CNContact]{
+    func getAllContacts()-> [CNContact]{
         // fetching all contacts from the Contacts.app
         var results: [CNContact] = []
         var keysToFetch : [CNKeyDescriptor] = [CNContactIdentifierKey,CNContactGivenNameKey,CNContactFamilyNameKey,CNContactPhoneNumbersKey, CNContactEmailAddressesKey] as [CNKeyDescriptor]
         keysToFetch += [CNContactViewController.descriptorForRequiredKeys()]
+        
         let fetchRequest = CNContactFetchRequest(keysToFetch: keysToFetch)
         do {
             try self.contactsStore.enumerateContacts(with: fetchRequest, usingBlock: {(contact, stopPointer) in

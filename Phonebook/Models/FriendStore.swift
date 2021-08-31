@@ -47,23 +47,24 @@ extension FriendStore{
         let granted = self.contactsUtils.accessGranted()
         if granted {
             DispatchQueue.global(qos: .utility).async {
-                    let contacts = self.contactsUtils.fetchData()
+                let contacts = self.contactsUtils.getAllContacts()
                     self.reloadData(cnContacts: contacts)
                 }
             }
         compilationClosure(granted)
         }
-    func reloadData(cnContacts:[CNContact]){
+    func reloadData(cnContacts:[CNContact]) -> [String: Friend]{
         // override current list with cnContacts
         for c in cnContacts{
             friends[c.identifier] = Friend(contact: c)
         }
+        return friends
     }
 }
 
 class InMemoFriendStore : BaseFriendStore, FriendStore{
-
-    override init() {
+    static let shared = InMemoFriendStore()
+    private override init() {
         super.init()
         for contact in samplePersons{
             friends[contact.uid] = contact
