@@ -14,7 +14,7 @@ class Friend {
     var uid = UUID().uuidString
     var firstName: String
     var lastName: String
-    var avatarKey: String?
+    var avatarData: Data?
     
     var source: CNContact?
     var phoneNumber: String
@@ -50,11 +50,17 @@ extension Friend{
         
     convenience init(contact: CNContact) {
         let phoneNumberString =  contact.phoneNumbers.first?.value.stringValue ?? ""
-            self.init(firstName: contact.givenName,
-                      lastName:contact.familyName,
-                      phoneNumber: phoneNumberString)
+        
+        self.init(firstName: contact.givenName,
+                  lastName:contact.familyName,
+                  phoneNumber: phoneNumberString)
+        
         self.uid = contact.identifier
         self.source = contact
+        
+        if let photoData = contact.imageData {
+            self.avatarData = photoData
+        }
     }
     
     func toCNContact() -> CNContact{

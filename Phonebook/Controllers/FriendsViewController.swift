@@ -47,7 +47,7 @@ class FriendsViewController : UIViewController {
         view.addSubview(tableView)
         
         // set up relationship with Phonebook manager
-       // PhonebookManager.shared.delegate = self
+        PhonebookManager.shared.delegate = self
         
     }
     override func viewDidLayoutSubviews() {
