@@ -27,14 +27,6 @@ extension FriendStore{
     func deleteFriend(_ person: Friend) {
         // remove in-memo
         friends.removeValue(forKey: person.uid)
-        // remove in Contacts.app
-        DispatchQueue.global(qos: .utility).async {
-            do{
-                try self.contactsUtils.removeContact(person.source?.mutableCopy() as! CNMutableContact)
-            }catch let err{
-                print("Failed to delete contact in Contacts native app: ",err)
-            }
-        }
     }
     func contains(_ person:Friend) -> Bool{
         return friends[person.uid] != nil
@@ -55,9 +47,9 @@ class InMemoFriendStore : BaseFriendStore, FriendStore{
     static let shared = InMemoFriendStore()
     private override init() {
         super.init()
-        for contact in samplePersons{
-            friends[contact.uid] = contact
-        }
+//        for contact in samplePersons{
+//            friends[contact.uid] = contact
+//        }
     }
 }
 

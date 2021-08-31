@@ -21,7 +21,7 @@ class PhonebookManager {
     
     static let shared = PhonebookManager()
     private init(){
-        NotificationCenter.default.addObserver(self, selector: #selector(contactDidChange), name: NSNotification.Name.CNContactStoreDidChange, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(nativeContactsDidChange), name: NSNotification.Name.CNContactStoreDidChange, object: nil)
     }
     func fetchData(_ complilationHandler: @escaping (Result<String,Error>) -> () ){
         var contacts : [String: Friend] = [:]
@@ -47,8 +47,26 @@ class PhonebookManager {
             complilationHandler(.failure(FetchError.unauthorized))
         }
     }
-    @objc func contactDidChange(noti: NSNotification){
-        print("changes now: \(noti.userInfo)\n \(noti.object)")
+    @objc func nativeContactsDidChange(noti: NSNotification){
+        print("native changed.")
+        DispatchQueue.global(qos: .utility).async {
+            // pull data
+            let cnContacts = self.contactsUtils.getAllContacts()
+            // case 1: native contact deleted O(n^2)
+            if cnContacts.count < self.store.friends.count{
+                for current in self.store.friends.values{
+                    if !cnContacts.contains(where: {$0.identifier == current.uid}){
+                        self.store.deleteFriend(current)
+                        }
+                    }
+            }
+            // case 2: native contact added or updated O(n)
+            for cnContact in cnContacts{
+                self.store.friends[cnContact.identifier] = Friend(contact: cnContact)
+            }
+            self.delegate?.contactListRefreshed(contacts: self.store.friends)
+
+        }
     }
     func addContact(_ contact: Friend){
         

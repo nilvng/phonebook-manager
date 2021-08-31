@@ -20,7 +20,7 @@ class ContactCell: UITableViewCell {
                     switch result{
                         case .success(let image):
                             self.avatarImage.image = image
-                    case .failure(_):
+                    case .failure(_): // hanging..
                         self.avatarImage.image = UIImage(named: "default_avatar")
                     }
                 }
