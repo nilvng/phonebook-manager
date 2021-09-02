@@ -14,7 +14,15 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
     func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
         
-        guard let _ = (scene as? UIWindowScene) else { return }
+        guard let winScene = (scene as? UIWindowScene) else { return }
+        
+        // launch home view
+        window = UIWindow(windowScene: winScene)
+        window?.makeKeyAndVisible()
+        
+        let navController = UINavigationController(rootViewController: FriendsViewController())
+        window?.rootViewController = navController
+        navController.navigationBar.largeContentTitle = "Phonebook"
 
     }
 

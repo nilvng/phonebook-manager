@@ -13,6 +13,7 @@ class FriendsViewController : UIViewController {
     // MARK: Properties
     private var friendList = [Friend]()
     private var manager = PhonebookManager.shared
+    private let showDetailSegueIdentifier = "ShowDetailSegueIdentifier"
     
     var tableView : UITableView = {
         let view = UITableView()
@@ -31,6 +32,7 @@ class FriendsViewController : UIViewController {
             barButtonSystemItem: .add,
             target: self,
             action: #selector(addContact))
+        navigationController?.navigationItem.largeTitleDisplayMode = .automatic
     }
 
     // MARK: Lifecycle
@@ -68,6 +70,11 @@ class FriendsViewController : UIViewController {
         manager.addContact(Friend(random: true))
 
     }
+
+    init() {
+        super.init(nibName: nil, bundle: nil)
+        //Do whatever you want here
+    }
 }
 
 extension FriendsViewController: PhonebookDelegate{
@@ -99,7 +106,7 @@ extension FriendsViewController : UITableViewDataSource{
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
         let cell = tableView.dequeueReusableCell(withIdentifier: ContactCell.identifier,for: indexPath) as! ContactCell
-        cell.person = friendList[indexPath.row]
+        cell.configure(with: friendList[indexPath.row])
         return cell
     }
 
@@ -123,7 +130,7 @@ extension FriendsViewController: UITableViewDelegate{
         tableView.deselectRow(at: indexPath, animated: true)
         
         let friend = friendList[indexPath.row]
-        let detailController = CNContactViewController(for: friend.toCNContact())
+        let detailController = FriendDetailViewController(for: friend)
         navigationController?.pushViewController(detailController, animated: true)
     }
 }

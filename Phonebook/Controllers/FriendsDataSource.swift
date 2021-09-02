@@ -20,7 +20,7 @@ extension FriendsDataSource : UITableViewDataSource{
         
         let cell = tableView.dequeueReusableCell(withIdentifier: ContactCell.identifier,for: indexPath) as! ContactCell
         
-        cell.person = friends[indexPath.row]
+        cell.configure(with: friends[indexPath.row])
         return cell
     }
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
