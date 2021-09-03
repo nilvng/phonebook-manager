@@ -11,7 +11,7 @@ import Contacts
 protocol PhonebookDelegate {
     func contactListRefreshed(contacts: [String: Friend])
     func newContactAdded(contact: Friend)
-    func contactDeleted(contact: Friend)
+    func contactDeleted(row: Int)
 }
 class PhonebookManager {
     var store: FriendStore = InMemoFriendStore.shared
@@ -69,13 +69,30 @@ class PhonebookManager {
         }
     }
     func addContact(_ contact: Friend){
-        
+        store.addFriend(contact)
     }
-    func deleteContact(_ contact: Friend){
-        
+    func deleteContact(_ contact: Friend, at: Int? = nil){
+        store.deleteFriend(contact)
     }
+    func updateContact(_ contact: Friend){
+        print("manager update contact...")
+        store.updateFriend(contact)
+        DispatchQueue.global(qos: .utility).async {
+            if let mutableContact = contact.toMutableContact(){
+                do {
+                    try self.contactsUtils.updateContact(mutableContact)
+                } catch (let err){
+                    print("cannot update contact to native database: \(err)")
+                }
+            }
+        }
+    }
+    
     func getContactList()->[String: Friend]{
         return store.friends
+    }
+    func getContact(key: String) -> Friend? {
+        return store.get(key: key)
     }
 }
 

@@ -36,7 +36,7 @@ class FriendsViewController : UIViewController {
     // MARK: Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
-        navigationItem.title = "My Phonebook"
+        navigationItem.title = "Phonebook"
         
         view.addSubview(tableView)
 
@@ -68,12 +68,18 @@ class FriendsViewController : UIViewController {
         manager.addContact(Friend(random: true))
 
     }
+
+    init() {
+        super.init(nibName: nil, bundle: nil)
+        //Do whatever you want here
+    }
 }
 
 extension FriendsViewController: PhonebookDelegate{
+    
     func contactListRefreshed(contacts: [String : Friend]) {
         DispatchQueue.main.async {
-            //print(contacts)
+            // update with the refreshed contact list
             self.friendList = contacts.map{ $0.value}
             self.tableView.reloadData()
         }
@@ -85,8 +91,9 @@ extension FriendsViewController: PhonebookDelegate{
             tableView.insertRows(at: [indexPath], with: .automatic)
         }
     }
-    func contactDeleted(contact: Friend){
-        
+    func contactDeleted(row: Int){
+        let indexPath = IndexPath(row: row, section: 0)
+        tableView.deleteRows(at: [indexPath], with: .automatic)
     }
 }
 
@@ -99,7 +106,7 @@ extension FriendsViewController : UITableViewDataSource{
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
         let cell = tableView.dequeueReusableCell(withIdentifier: ContactCell.identifier,for: indexPath) as! ContactCell
-        cell.person = friendList[indexPath.row]
+        cell.configure(with: friendList[indexPath.row])
         return cell
     }
 
@@ -111,9 +118,7 @@ extension FriendsViewController: UITableViewDelegate{
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == .delete{
             let friend = friendList[indexPath.row]
-            friendList.remove(at: indexPath.row)
-            manager.deleteContact(friend)
-            tableView.deleteRows(at: [indexPath], with: .automatic)
+            manager.deleteContact(friend, at: indexPath.row)
 
         }
     }
@@ -123,7 +128,7 @@ extension FriendsViewController: UITableViewDelegate{
         tableView.deselectRow(at: indexPath, animated: true)
         
         let friend = friendList[indexPath.row]
-        let detailController = CNContactViewController(for: friend.toCNContact())
+        let detailController = FriendDetailViewController(for: friend)
         navigationController?.pushViewController(detailController, animated: true)
     }
 }

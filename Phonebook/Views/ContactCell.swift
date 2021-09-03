@@ -10,9 +10,9 @@ import Contacts
 
 class ContactCell: UITableViewCell {
     static let identifier = "ContactCell"
-    var person : Friend? {
+    private var friend : Friend? {
         didSet{
-            guard let person = person else { return }
+            guard let person = friend else { return }
             personNameLabel.text = person.firstName + " " + person.lastName
             defaultPhoneNumberLabel.text = person.phoneNumber
             if let avatarData = person.avatarData{
@@ -35,7 +35,7 @@ class ContactCell: UITableViewCell {
         label.textColor = .black
         label.font = UIFont.boldSystemFont(ofSize: 16)
         label.textAlignment = .left
-
+        label.numberOfLines = 0
         return label
     }()
     
@@ -55,6 +55,10 @@ class ContactCell: UITableViewCell {
 
         return label
     }()
+    
+    func configure(with friend: Friend){
+        self.friend = friend
+    }
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
             
         super.init(style: style, reuseIdentifier: reuseIdentifier)

@@ -19,7 +19,7 @@ class Friend {
     var source: CNContact?
     var phoneNumber: String
 
-    init(random:Bool) {
+    init(random:Bool=false) {
         if !random {
             firstName=""
             lastName=""
@@ -36,11 +36,20 @@ class Friend {
         self.lastName = lastName
         self.phoneNumber = phoneNumber
     }
+    
+    func copy() -> Friend {
+        let copy = Friend(firstName: self.firstName, lastName: self.lastName, phoneNumber: self.phoneNumber)
+        copy.uid = self.uid
+        copy.source = self.source
+        copy.avatarData = self.avatarData
+        return copy
+    }
 }
 
 extension Friend : Equatable{
     static func ==(lhs: Friend, rhs: Friend) -> Bool{
-        return lhs.firstName == rhs.firstName &&
+        return lhs.uid == rhs.uid &&
+            lhs.firstName == rhs.firstName &&
           lhs.lastName == rhs.lastName &&
             lhs.phoneNumber == rhs.phoneNumber
     }
@@ -80,7 +89,18 @@ extension Friend{
         return contactObj.copy() as! CNContact
 
     }
+    
+    func toMutableContact() -> CNMutableContact? {
+        // TODO: testing only
+        guard let source = source else {
+            let contact = toCNContact()
+            return contact.mutableCopy() as? CNMutableContact
+        }
+        return source.mutableCopy() as? CNMutableContact
+    }
 }
+
+
 
 #if DEBUG
 let samplePersons = [

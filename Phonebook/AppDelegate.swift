@@ -11,8 +11,9 @@ import Contacts
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
-
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
+        
+        // ask for access to Contacts
         CNContactStore().requestAccess(for: .contacts) { (access, error) in
           print("Access: \(access)")
             if access {
