@@ -8,14 +8,14 @@
 import UIKit
 
 class FriendEditViewController: UITableViewController {
-    private var friend : Friend?
+
+    private var editedFriend : Friend = .init(random: false)
     
-    func configure(with friend: Friend){
-        self.friend = friend
-    }
-    init(for friend: Friend) {
+    init(for friend: Friend?) {
         super.init(nibName: nil, bundle: nil)
-        configure(with: friend)
+        if let friend = friend {
+            editedFriend = friend.copy()
+        }
     }
     
     required init?(coder: NSCoder) {
@@ -23,25 +23,51 @@ class FriendEditViewController: UITableViewController {
     }
     
     override func viewDidLoad() {
-        tableView.register(UITableViewCell.self, forCellReuseIdentifier: FriendDetailViewController.identifier)
+        tableView.register(FriendTextEditCell.self, forCellReuseIdentifier: FriendTextEditCell.identifier)
         
         tableView.tableFooterView = UIView()
+        tableView.allowsSelection = false
     }
     
     
-    public enum FriendDetail: Int, CaseIterable{
+    public enum FriendTextDetail: Int, CaseIterable{
         case firstname
         case lastname
         case phonenumber
         
-        func displayText(for friend: Friend?) -> String? {
+        func displayText(for friend: Friend) -> String? {
+            guard (friend != nil) else {
+                return self.displayPlaceholder()
+            }
             switch self {
             case .firstname:
-                return friend?.firstName
+                return friend.firstName
             case .lastname:
-                return friend?.lastName
+                return friend.lastName
             case .phonenumber:
-                return friend?.phoneNumber
+                return friend.phoneNumber
+            }
+        }
+        func displayPlaceholder() -> String?{
+            switch self {
+            case .firstname:
+                return "First name"
+            case .lastname:
+                return "Last name"
+            case .phonenumber:
+                return "Phone number"
+            }
+        }
+        
+        func setValue(for friend: Friend, newValue: String){
+            switch self {
+            case .firstname:
+                friend.firstName = newValue
+            case .lastname:
+                friend.lastName = newValue
+            case .phonenumber:
+                friend.phoneNumber = newValue
+
             }
         }
         var cellIcon: UIImage?{
@@ -56,18 +82,27 @@ class FriendEditViewController: UITableViewController {
             }
         }
 }
-
+// MARK: - UITableViewDataSource
 extension FriendEditViewController{
-    static let identifier = "ContactDetailCell"
+    static let identifier = "ContactEditDetailCell"
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return FriendDetail.allCases.count
+        return FriendTextDetail.allCases.count + 1
     }
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: FriendDetailViewController.identifier, for: indexPath)
-        let detail = FriendDetail(rawValue: indexPath.row)
-        cell.textLabel?.text = detail?.displayText(for: friend)
-        cell.imageView?.image = detail?.cellIcon
+        let cell = tableView.dequeueReusableCell(withIdentifier: FriendTextEditCell.identifier, for: indexPath) as! FriendTextEditCell
+        guard let detail = FriendTextDetail(rawValue: indexPath.row) else {return UITableViewCell()}
+        
+        let text = detail.displayText(for: editedFriend) ?? ""
+        cell.delegate = self
+        cell.configure(for: detail, with: text, isPlaceholder: false)
         return cell
     }
 }
 
+
+extension FriendEditViewController: TextEditCellDelegate {
+    func textEndEditing(for attr: FriendTextDetail, newValue: String) {
+        print("set this attr \(attr): \(newValue).")
+        attr.setValue(for: editedFriend, newValue: newValue)
+    }
+}

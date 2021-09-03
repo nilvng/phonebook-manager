@@ -7,8 +7,8 @@
 
 import UIKit
 
-class FriendDetailAvatarHeader: UITableViewHeaderFooterView {
-    static let identifier = "AvatarHeader"
+class FriendDetailAvatarCell: UITableViewCell {
+    static let identifier = "AvatarCell"
     
     private var avatarView : UIImageView = {
        let view = UIImageView()
@@ -25,23 +25,32 @@ class FriendDetailAvatarHeader: UITableViewHeaderFooterView {
         return label
     }()
     
-    override init(reuseIdentifier: String?) {
-        super.init(reuseIdentifier: reuseIdentifier)
-        contentView.addSubview(avatarView)
-        contentView.addSubview(nameLabel)
-        contentView.backgroundColor = .systemTeal
+    override init(style: UITableViewCell.CellStyle,reuseIdentifier: String?) {
+        super.init(style: style, reuseIdentifier: reuseIdentifier)
+        addSubview(avatarView)
+        addSubview(nameLabel)
+        backgroundColor = .systemTeal
     }
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    func configure(avatar data: Data, fullname: String){
-        let image = UIImage(data: data)
-        avatarView.image = image
+    func configure(avatar data: Data?, fullname: String){
+        if let data = data{
+            let image = UIImage(data: data)
+            avatarView.image = image
+        } else {
+            avatarView.image = UIImage(named: "default_avatar")
+        }
         nameLabel.text = fullname
     }
+    
     override func layoutSubviews() {
         super.layoutSubviews()
+        setupAvatarView()
+        setupNameLabel()
+    }
+    private func setupAvatarView(){
         let avatarConstraints = [
             avatarView.centerYAnchor.constraint(equalTo: centerYAnchor, constant: -20),
             avatarView.centerXAnchor.constraint(equalTo: centerXAnchor),
@@ -49,9 +58,13 @@ class FriendDetailAvatarHeader: UITableViewHeaderFooterView {
             avatarView.heightAnchor.constraint(equalToConstant: 100)
         ]
         NSLayoutConstraint.activate(avatarConstraints)
+    }
+    
+    private func setupNameLabel(){
         
         nameLabel.topAnchor.constraint(equalTo: avatarView.bottomAnchor, constant: 10).isActive = true
         nameLabel.centerXAnchor.constraint(equalTo: avatarView.centerXAnchor).isActive = true
+
     }
 }
 

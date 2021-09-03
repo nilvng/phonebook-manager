@@ -13,7 +13,6 @@ class FriendsViewController : UIViewController {
     // MARK: Properties
     private var friendList = [Friend]()
     private var manager = PhonebookManager.shared
-    private let showDetailSegueIdentifier = "ShowDetailSegueIdentifier"
     
     var tableView : UITableView = {
         let view = UITableView()
@@ -32,13 +31,13 @@ class FriendsViewController : UIViewController {
             barButtonSystemItem: .add,
             target: self,
             action: #selector(addContact))
-        navigationController?.navigationItem.largeTitleDisplayMode = .automatic
     }
 
     // MARK: Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
-        navigationItem.title = "My Phonebook"
+        navigationItem.title = "Phonebook"
+        navigationController?.navigationBar.prefersLargeTitles = true
         
         view.addSubview(tableView)
 
@@ -80,7 +79,7 @@ class FriendsViewController : UIViewController {
 extension FriendsViewController: PhonebookDelegate{
     func contactListRefreshed(contacts: [String : Friend]) {
         DispatchQueue.main.async {
-            //print(contacts)
+            // update with the refreshed contact list
             self.friendList = contacts.map{ $0.value}
             self.tableView.reloadData()
         }

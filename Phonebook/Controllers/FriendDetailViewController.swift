@@ -15,7 +15,10 @@ class FriendDetailViewController: UITableViewController {
     }
     init(for friend: Friend) {
         super.init(nibName: nil, bundle: nil)
-        navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .edit, target: self, action: #selector(onEditButtonPressed))
+        navigationItem.rightBarButtonItem = UIBarButtonItem(
+            barButtonSystemItem: .edit,
+            target: self,
+            action: #selector(onEditButtonPressed))
         configure(with: friend)
     }
     
@@ -25,10 +28,13 @@ class FriendDetailViewController: UITableViewController {
     
     override func viewDidLoad() {
         tableView.register(UITableViewCell.self, forCellReuseIdentifier: FriendDetailViewController.identifier)
-        tableView.register(FriendDetailAvatarHeader.self, forHeaderFooterViewReuseIdentifier: FriendDetailAvatarHeader.identifier)
+        
+        tableView.register(FriendDetailAvatarCell.self, forCellReuseIdentifier: FriendDetailAvatarCell.identifier)
         
         tableView.allowsSelection = false
         tableView.tableFooterView = UIView()
+        
+        navigationItem.largeTitleDisplayMode = .never
         
     }
     
@@ -37,47 +43,61 @@ class FriendDetailViewController: UITableViewController {
         let editViewController = FriendEditViewController(for: friend)
         present(editViewController, animated: true, completion: nil)
     }
+}
+
+// MARK: - FriendDetailView
+
+extension FriendDetailViewController{
+    static let identifier = "ContactDetailCell"
     
     public enum FriendDetail: Int, CaseIterable{
+        case avatar
         case phonenumber
         
         func displayText(for friend: Friend?) -> String? {
             switch self {
             case .phonenumber:
                 return friend?.phoneNumber
+            case .avatar:
+                return nil
             }
         }
         var cellIcon: UIImage?{
             switch self {
             case .phonenumber:
                 return UIImage(systemName: "phone")
+            case .avatar:
+                return nil
                 }
             }
         }
-}
 
-extension FriendDetailViewController{
-    static let identifier = "ContactDetailCell"
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return FriendDetail.allCases.count
     }
+    
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        if indexPath.row == 0 {
+            // first cell is contact avatar
+            let cell = tableView.dequeueReusableCell(withIdentifier: FriendDetailAvatarCell.identifier, for: indexPath) as! FriendDetailAvatarCell
+            if let contact = friend{
+                cell.configure(avatar: contact.avatarData,
+                               fullname: "\(contact.firstName) \(contact.lastName)")
+                return cell
+            } else {
+                return UITableViewCell()
+            }
+        }
         let cell = tableView.dequeueReusableCell(withIdentifier: FriendDetailViewController.identifier, for: indexPath)
         let detail = FriendDetail(rawValue: indexPath.row)
-        cell.textLabel?.text = detail?.displayText(for: friend)
+        cell.textLabel?.text = detail?.displayText(for: self.friend)
         cell.imageView?.image = detail?.cellIcon
         return cell
     }
-    override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        let headerView = tableView.dequeueReusableHeaderFooterView(withIdentifier: FriendDetailAvatarHeader.identifier) as! FriendDetailAvatarHeader
-        if let contact = friend, let imageData = contact.avatarData{
-            headerView.configure(avatar: imageData,
-                                 fullname: "\(contact.firstName) \(contact.lastName)")
-            return headerView
+    override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        if indexPath.row == 0{
+            return 200 // height for avatar cell
         }
-        return nil
-    }
-    override func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        200
+        return 65
     }
 }

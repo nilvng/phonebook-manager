@@ -22,7 +22,6 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         
         let navController = UINavigationController(rootViewController: FriendsViewController())
         window?.rootViewController = navController
-        navController.navigationBar.largeContentTitle = "Phonebook"
 
     }
 
