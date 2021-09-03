@@ -37,7 +37,6 @@ class FriendsViewController : UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         navigationItem.title = "Phonebook"
-        navigationController?.navigationBar.prefersLargeTitles = true
         
         view.addSubview(tableView)
 
@@ -77,6 +76,7 @@ class FriendsViewController : UIViewController {
 }
 
 extension FriendsViewController: PhonebookDelegate{
+    
     func contactListRefreshed(contacts: [String : Friend]) {
         DispatchQueue.main.async {
             // update with the refreshed contact list
@@ -91,8 +91,9 @@ extension FriendsViewController: PhonebookDelegate{
             tableView.insertRows(at: [indexPath], with: .automatic)
         }
     }
-    func contactDeleted(contact: Friend){
-        
+    func contactDeleted(row: Int){
+        let indexPath = IndexPath(row: row, section: 0)
+        tableView.deleteRows(at: [indexPath], with: .automatic)
     }
 }
 
@@ -117,9 +118,7 @@ extension FriendsViewController: UITableViewDelegate{
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == .delete{
             let friend = friendList[indexPath.row]
-            friendList.remove(at: indexPath.row)
-            manager.deleteContact(friend)
-            tableView.deleteRows(at: [indexPath], with: .automatic)
+            manager.deleteContact(friend, at: indexPath.row)
 
         }
     }

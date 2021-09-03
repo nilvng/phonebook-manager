@@ -14,6 +14,7 @@ class BaseFriendStore {
 protocol FriendStore : BaseFriendStore{
     @discardableResult func addFriend(_ person : Friend) -> Friend
     func deleteFriend(_ person: Friend)
+    func updateFriend(_ person: Friend)
     func contains(_ person:Friend) -> Bool
     func get(key: String) -> Friend?
 }
@@ -27,6 +28,10 @@ extension FriendStore{
     func deleteFriend(_ person: Friend) {
         // remove in-memo
         friends.removeValue(forKey: person.uid)
+    }
+    
+    func updateFriend(_ person: Friend){
+        friends[person.uid] = person
     }
     func contains(_ person:Friend) -> Bool{
         return friends[person.uid] != nil

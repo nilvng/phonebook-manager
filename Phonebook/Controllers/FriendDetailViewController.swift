@@ -41,8 +41,22 @@ class FriendDetailViewController: UITableViewController {
     @objc func onEditButtonPressed(){
         guard let friend = friend else {return }
         let editViewController = FriendEditViewController(for: friend)
-        present(editViewController, animated: true, completion: nil)
+        editViewController.delegate = self
+        navigationController?.pushViewController(editViewController, animated: true)
+        //present(editViewController, animated: true, completion: nil)
     }
+    
+}
+
+// MARK: EditViewDelegate
+extension FriendDetailViewController : EditViewDelegate {
+    
+    func changesSubmitted(item updatedFriend: Friend){
+        self.friend = updatedFriend
+        tableView.reloadData()
+        PhonebookManager.shared.updateContact(updatedFriend)
+    }
+
 }
 
 // MARK: - FriendDetailView

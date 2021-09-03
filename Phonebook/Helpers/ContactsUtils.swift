@@ -19,6 +19,12 @@ class ContactsUtils {
         saveRequest.delete(contact)
         try contactsStore.execute(saveRequest)
     }
+    
+    func updateContact(_ contact: CNMutableContact) throws {
+        let request = CNSaveRequest()
+        request.update(contact)
+        try contactsStore.execute(request)
+    }
     func getAllContacts()-> [CNContact]{
         // fetching all contacts from the Contacts.app
         var results: [CNContact] = []

@@ -89,6 +89,15 @@ extension Friend{
         return contactObj.copy() as! CNContact
 
     }
+    
+    func toMutableContact() -> CNMutableContact? {
+        // TODO: testing only
+        guard let source = source else {
+            let contact = toCNContact()
+            return contact.mutableCopy() as? CNMutableContact
+        }
+        return source.mutableCopy() as? CNMutableContact
+    }
 }
 
 
