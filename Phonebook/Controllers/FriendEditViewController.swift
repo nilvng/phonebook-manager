@@ -51,6 +51,7 @@ class FriendEditViewController: UITableViewController {
     }
     
     @objc func onSubmitChanges(){
+        print("In edit view: \(editedFriend.phoneNumber)")
         delegate?.changesSubmitted(item: editedFriend)
         navigationController?.popViewController(animated: true)
         //dismiss(animated: true, completion:nil)

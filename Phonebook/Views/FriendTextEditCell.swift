@@ -42,7 +42,7 @@ class FriendTextEditCell: UITableViewCell, UITextFieldDelegate {
         textfield.resignFirstResponder()
         return true
     }
-    
+        
     override func layoutSubviews() {
         super.layoutSubviews()
         setupTextfield()

@@ -49,24 +49,24 @@ class PhonebookManager {
     }
     @objc func nativeContactsDidChange(noti: NSNotification){
         print("native changed.")
-        DispatchQueue.global(qos: .utility).async {
-            // pull data
-            let cnContacts = self.contactsUtils.getAllContacts()
-            // case 1: native contact deleted O(n^2)
-            if cnContacts.count < self.store.friends.count{
-                for current in self.store.friends.values{
-                    if !cnContacts.contains(where: {$0.identifier == current.uid}){
-                        self.store.deleteFriend(current)
-                        }
-                    }
-            }
-            // case 2: native contact added or updated O(n)
-            for cnContact in cnContacts{
-                self.store.friends[cnContact.identifier] = Friend(contact: cnContact)
-            }
-            self.delegate?.contactListRefreshed(contacts: self.store.friends)
-
-        }
+//        DispatchQueue.global(qos: .utility).async {
+//            // pull data
+//            let cnContacts = self.contactsUtils.getAllContacts()
+//            // case 1: native contact deleted O(n^2)
+//            if cnContacts.count < self.store.friends.count{
+//                for current in self.store.friends.values{
+//                    if !cnContacts.contains(where: {$0.identifier == current.uid}){
+//                        self.store.deleteFriend(current)
+//                        }
+//                    }
+//            }
+//            // case 2: native contact added or updated O(n)
+//            for cnContact in cnContacts{
+//                self.store.friends[cnContact.identifier] = Friend(contact: cnContact)
+//            }
+//            self.delegate?.contactListRefreshed(contacts: self.store.friends)
+//
+//        }
     }
     func addContact(_ contact: Friend){
         store.addFriend(contact)
@@ -75,7 +75,7 @@ class PhonebookManager {
         store.deleteFriend(contact)
     }
     func updateContact(_ contact: Friend){
-        print("manager update contact...")
+        print("manager update contact: \(contact.uid) - \(contact.phoneNumber)")
         store.updateFriend(contact)
         DispatchQueue.global(qos: .utility).async {
             if let mutableContact = contact.toMutableContact(){
