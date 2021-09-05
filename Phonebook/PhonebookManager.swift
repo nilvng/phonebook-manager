@@ -71,8 +71,20 @@ class PhonebookManager {
     func addContact(_ contact: Friend){
         store.addFriend(contact)
     }
-    func deleteContact(_ contact: Friend, at: Int? = nil){
+    func deleteContact(_ contact: Friend, at index: Int? = nil){
         store.deleteFriend(contact)
+        
+        DispatchQueue.global(qos: .utility).async {
+            do{
+                try self.contactsUtils.removeContact(contact.toMutableContact()!)
+            }catch let err{
+                print("Failed to delete contact in Contacts native app: ",err)
+            }
+            if let row = index {
+                self.delegate?.contactDeleted(row: row)
+            }
+        }
+
     }
     func updateContact(_ contact: Friend){
         print("manager update contact: \(contact.uid) - \(contact.phoneNumber)")

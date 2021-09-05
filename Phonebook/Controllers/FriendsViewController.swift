@@ -25,20 +25,28 @@ class FriendsViewController : UIViewController {
         return view
     }()
     
+    init() {
+        super.init(nibName: nil, bundle: nil)
+        
+    }
+    
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
-
-        navigationItem.rightBarButtonItem = editButtonItem
-        navigationItem.leftBarButtonItem = UIBarButtonItem(
-            barButtonSystemItem: .add,
-            target: self,
-            action: #selector(addContact))
     }
+
+
 
     // MARK: Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
         navigationItem.title = "Phonebook"
+        let rightButton = UIBarButtonItem(title: "Edit", style: UIBarButtonItem.Style.plain, target: self, action: #selector(toggleEditMode))
+        
+        navigationItem.rightBarButtonItem = rightButton
+        navigationItem.leftBarButtonItem = UIBarButtonItem(
+            barButtonSystemItem: .add,
+            target: self,
+            action: #selector(addContact))
         
         view.addSubview(tableView)
 
@@ -54,14 +62,14 @@ class FriendsViewController : UIViewController {
     }
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
-        tableView.frame = view.bounds
+        tableView.anchor(top: view.topAnchor, left: view.leftAnchor, bottom: view.bottomAnchor, right: view.rightAnchor)
     }
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         print("friends list will appear...")
         friendList = PhonebookManager.shared.getContactList().map{ $0.value}
-        tableView.reloadData() // TODO: not efficient
+        tableView.reloadData()
         
     }
     
@@ -71,10 +79,16 @@ class FriendsViewController : UIViewController {
         manager.addContact(Friend(random: true))
 
     }
+    
+    @objc func toggleEditMode(){
+        if (tableView.isEditing  == true) {
+            tableView.setEditing(false, animated: true)
+            self.navigationItem.rightBarButtonItem?.title = "Edit"
 
-    init() {
-        super.init(nibName: nil, bundle: nil)
-        //Do whatever you want here
+        } else {
+            tableView.setEditing(true, animated: true)
+            self.navigationItem.rightBarButtonItem?.title = "Done"
+        }
     }
 }
 
@@ -91,12 +105,17 @@ extension FriendsViewController: PhonebookDelegate{
         // update table view
         if let index = friendList.firstIndex(of: contact){
             let indexPath = IndexPath(row: index, section: 0)
-            tableView.insertRows(at: [indexPath], with: .automatic)
+            DispatchQueue.main.async {
+                self.tableView.insertRows(at: [indexPath], with: .automatic)
+            }
         }
     }
     func contactDeleted(row: Int){
+        self.friendList.remove(at: row)
         let indexPath = IndexPath(row: row, section: 0)
-        tableView.deleteRows(at: [indexPath], with: .automatic)
+        DispatchQueue.main.async {
+            self.tableView.deleteRows(at: [indexPath], with: .automatic)
+        }
     }
 }
 
@@ -120,7 +139,7 @@ extension FriendsViewController: UITableViewDelegate{
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == .delete{
             let friend = friendList[indexPath.row]
-            manager.deleteContact(friend, at: indexPath.row)
+            PhonebookManager.shared.deleteContact(friend, at: indexPath.row)
 
         }
     }

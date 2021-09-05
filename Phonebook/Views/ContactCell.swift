@@ -63,17 +63,17 @@ class ContactCell: UITableViewCell {
             
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         
-        addSubview(avatarImage)
-        addSubview(personNameLabel)
-        addSubview(defaultPhoneNumberLabel)
+        contentView.addSubview(avatarImage)
+        contentView.addSubview(personNameLabel)
+        contentView.addSubview(defaultPhoneNumberLabel)
         
         accessoryType = .disclosureIndicator
 
         }
     override func layoutSubviews() {
         super.layoutSubviews()
-        avatarImage.anchor(top: topAnchor, left: leftAnchor, bottom: nil, right: nil, padding: .init(top: 5, left: 5, bottom: 0, right: 0), size: .init(width: 60, height: 60))
-        personNameLabel.anchor(top: topAnchor, left: avatarImage.rightAnchor, bottom: nil, right: nil, padding: .init(top: 20, left: 10, bottom: 0, right: 10), size: .init( width: frame.size.width / 2, height: 0))
+        avatarImage.anchor(top: contentView.topAnchor, left:  contentView.leftAnchor, bottom: nil, right: nil, padding: .init(top: 5, left: 5, bottom: 0, right: 0), size: .init(width: 60, height: 60))
+        personNameLabel.anchor(top:  contentView.topAnchor, left: avatarImage.rightAnchor, bottom: nil, right: nil, padding: .init(top: 20, left: 10, bottom: 0, right: 10), size: .init( width: frame.size.width / 2, height: 0))
         defaultPhoneNumberLabel.anchor(top: personNameLabel.bottomAnchor, left: avatarImage.rightAnchor, bottom: nil, right: nil, padding: .init(top: 5, left: 10, bottom: 10, right: 0), size: .init(width: frame.size.width / 2, height: 0))
                 
     }

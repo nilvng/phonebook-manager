@@ -128,8 +128,8 @@
 				C8A4B9F426D534C20065BB20 /* FriendsViewController.swift */,
 				C85A6ADF26D929EB00349794 /* FriendDetailViewController.swift */,
 				C8F25E2826E0AA92000EA9CC /* FriendEditViewController.swift */,
-				C85A6B0426DB796C00349794 /* FriendsDataSource.swift */,
 				C8F25E5826E115AA000EA9CC /* EditStackViewController.swift */,
+				C85A6B0426DB796C00349794 /* FriendsDataSource.swift */,
 			);
 			path = Controllers;
 			sourceTree = "<group>";
