@@ -18,6 +18,8 @@ class FriendsViewController : UIViewController {
         let view = UITableView()
         view.register(ContactCell.self, forCellReuseIdentifier: ContactCell.identifier)
         // styling
+//        view.rowHeight = UITableView.automaticDimension
+//        view.estimatedRowHeight = 108
         view.rowHeight = 70
         view.tableFooterView = UIView() // hide extra lines
         return view
@@ -59,6 +61,7 @@ class FriendsViewController : UIViewController {
         super.viewWillAppear(animated)
         print("friends list will appear...")
         friendList = PhonebookManager.shared.getContactList().map{ $0.value}
+        tableView.reloadData() // TODO: not efficient
         
     }
     
@@ -78,9 +81,9 @@ class FriendsViewController : UIViewController {
 extension FriendsViewController: PhonebookDelegate{
     
     func contactListRefreshed(contacts: [String : Friend]) {
-        DispatchQueue.main.async {
             // update with the refreshed contact list
-            self.friendList = contacts.map{ $0.value}
+        self.friendList = contacts.map{ $0.value}
+        DispatchQueue.main.async {
             self.tableView.reloadData()
         }
     }
@@ -109,7 +112,6 @@ extension FriendsViewController : UITableViewDataSource{
         cell.configure(with: friendList[indexPath.row])
         return cell
     }
-
 }
 
 // MARK: - UITableViewDelegate

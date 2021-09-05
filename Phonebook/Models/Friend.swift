@@ -91,12 +91,19 @@ extension Friend{
     }
     
     func toMutableContact() -> CNMutableContact? {
-        // TODO: testing only
         guard let source = source else {
             let contact = toCNContact()
             return contact.mutableCopy() as? CNMutableContact
         }
-        return source.mutableCopy() as? CNMutableContact
+        let mutableCopy =  source.mutableCopy() as? CNMutableContact
+        mutableCopy?.givenName = firstName
+        mutableCopy?.familyName = lastName
+
+        // TODO: filter number that is modified
+        let label = CNLabeledValue(label: CNLabelPhoneNumberMain, value: CNPhoneNumber(stringValue: phoneNumber))
+        mutableCopy?.phoneNumbers.append(label)
+        
+        return mutableCopy
     }
 }
 

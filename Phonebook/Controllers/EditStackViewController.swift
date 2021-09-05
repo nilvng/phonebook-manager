@@ -9,7 +9,9 @@ import UIKit
 
 class EditStackViewController: UIViewController {
     
-    private var contact : Friend?
+    private var contact : Friend!
+    var delegate : EditViewDelegate?
+    
     private let stackView : UIStackView = {
         let view = UIStackView()
         view.axis          = .vertical
@@ -25,6 +27,8 @@ class EditStackViewController: UIViewController {
         view.layoutMargins    = .zero
         return view
     }()
+    
+    private var stackSubViews : [UITextField] = []
     
     public enum ContactDetail: Int, CaseIterable{
         case firstname
@@ -43,7 +47,7 @@ class EditStackViewController: UIViewController {
         }
         func customTextField(text: String, placeholder: String) -> UITextField{
             let textfield = UITextField()
-            textfield.layer.cornerRadius                        = 10
+            textfield.layer.cornerRadius                        = 5
             textfield.translatesAutoresizingMaskIntoConstraints = false
             textfield.backgroundColor                           = .white
             textfield.isUserInteractionEnabled                  = true
@@ -53,6 +57,18 @@ class EditStackViewController: UIViewController {
             
             return textfield
         }
+        func setValue(newValue: String, for contact: Friend){
+            switch self {
+            case .firstname:
+                contact.firstName = newValue
+            case .lastname:
+                contact.lastName = newValue
+            case .phonenumber:
+                contact.phoneNumber = newValue
+            }
+
+        }
+        
     }
 
     init(for contact: Friend) {
@@ -65,6 +81,16 @@ class EditStackViewController: UIViewController {
             action: #selector(onSubmitChanges))
  
 
+    }
+    
+    @objc func onSubmitChanges(){
+        for i in 0..<stackSubViews.count {
+            guard let detail = ContactDetail.init(rawValue: i),
+                  let newValue =  stackSubViews[i].text else {continue}
+            detail.setValue(newValue: newValue, for: self.contact)
+        }
+        delegate?.changesSubmitted(item: self.contact)
+        navigationController?.popViewController(animated: true)
     }
     
     required init?(coder: NSCoder) {
@@ -82,6 +108,11 @@ class EditStackViewController: UIViewController {
         setupStackView()
 
 
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
     }
     
     private func setupScrollView(){
@@ -108,9 +139,11 @@ class EditStackViewController: UIViewController {
         }
         for field in ContactDetail.allCases{
             let fview = field.getView(for: c)
-            
+            stackSubViews.append(fview as! UITextField)
             stackView.addArrangedSubview(fview)
+
         }
+        
     }
     
     
