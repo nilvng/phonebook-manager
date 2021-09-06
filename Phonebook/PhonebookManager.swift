@@ -70,26 +70,36 @@ class PhonebookManager {
     }
     func addContact(_ contact: Friend){
         store.addFriend(contact)
+        DispatchQueue.global(qos: .background).async {
+            do{
+                try self.contactsUtils.addContact(contact)
+            }catch let err{
+                print("Failed to delete contact in Contacts native app: ",err)
+            }
+            
+            self.delegate?.newContactAdded(contact: contact)
+        }
     }
     func deleteContact(_ contact: Friend, at index: Int? = nil){
         store.deleteFriend(contact)
         
-        DispatchQueue.global(qos: .utility).async {
-            do{
-                try self.contactsUtils.removeContact(contact.toMutableContact()!)
-            }catch let err{
-                print("Failed to delete contact in Contacts native app: ",err)
-            }
-            if let row = index {
-                self.delegate?.contactDeleted(row: row)
+        DispatchQueue.global(qos: .background).async {
+            if let mutableContact = contact.toMutableContact(){
+                do{
+                    try self.contactsUtils.removeContact(mutableContact)
+                }catch let err{
+                    print("Failed to delete contact in Contacts native app: ",err)
+                }
+                if let row = index {
+                    self.delegate?.contactDeleted(row: row)
+                }
             }
         }
-
     }
     func updateContact(_ contact: Friend){
         print("manager update contact: \(contact.uid) - \(contact.phoneNumber)")
         store.updateFriend(contact)
-        DispatchQueue.global(qos: .utility).async {
+        DispatchQueue.global(qos: .background).async {
             if let mutableContact = contact.toMutableContact(){
                 do {
                     try self.contactsUtils.updateContact(mutableContact)

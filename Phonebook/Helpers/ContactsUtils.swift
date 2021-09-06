@@ -14,6 +14,11 @@ class ContactsUtils {
     static let shared = ContactsUtils()
     private init(){} // singleton
     
+    func addContact(_ contact: Friend) throws {
+        let request = CNSaveRequest()
+        request.add(contact.toMutableContact()!, toContainerWithIdentifier: nil)
+        try contactsStore.execute(request)
+    }
     func removeContact(_ contact: CNMutableContact) throws {
         let saveRequest = CNSaveRequest()
         saveRequest.delete(contact)

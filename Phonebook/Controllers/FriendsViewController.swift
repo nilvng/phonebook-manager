@@ -76,7 +76,7 @@ class FriendsViewController : UIViewController {
     //MARK: Actions
     @objc func addContact(){
         // add to the store
-        manager.addContact(Friend(random: true))
+        PhonebookManager.shared.addContact(Friend(random: true))
 
     }
     
@@ -97,22 +97,25 @@ extension FriendsViewController: PhonebookDelegate{
     func contactListRefreshed(contacts: [String : Friend]) {
             // update with the refreshed contact list
         self.friendList = contacts.map{ $0.value}
+        
         DispatchQueue.main.async {
             self.tableView.reloadData()
         }
     }
     func newContactAdded(contact: Friend){
-        // update table view
-        if let index = friendList.firstIndex(of: contact){
-            let indexPath = IndexPath(row: index, section: 0)
-            DispatchQueue.main.async {
-                self.tableView.insertRows(at: [indexPath], with: .automatic)
-            }
+        // update data source
+        self.friendList.append(contact)
+        let index = self.friendList.count - 1 // add new contact to the end of list
+        let indexPath = IndexPath(row: index, section: 0)
+        // refresh table
+        DispatchQueue.main.async {
+            self.tableView.insertRows(at: [indexPath], with: .automatic)
         }
     }
     func contactDeleted(row: Int){
         self.friendList.remove(at: row)
         let indexPath = IndexPath(row: row, section: 0)
+        
         DispatchQueue.main.async {
             self.tableView.deleteRows(at: [indexPath], with: .automatic)
         }
