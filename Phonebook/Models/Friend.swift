@@ -14,31 +14,46 @@ class Friend {
     var uid = UUID().uuidString
     var firstName: String
     var lastName: String
+    var phoneNumbers: [String]
     var avatarData: Data?
     
     var source: CNContact?
-    var phoneNumber: String
+    var mutableCopy : CNMutableContact {
+        let contactObj : CNMutableContact
+        if let source = source {
+            contactObj = source.mutableCopy() as! CNMutableContact
+        } else{
+            contactObj = CNMutableContact()
+        }
+        
+        contactObj.givenName = firstName
+        contactObj.familyName = lastName
+
+        contactObj.phoneNumbers = phoneNumbers.map {
+            return CNLabeledValue(label: CNLabelPhoneNumberMain, value: CNPhoneNumber(stringValue: $0))}
+        return contactObj
+    }
 
     init(random:Bool=false) {
         if !random {
             firstName=""
             lastName=""
-            phoneNumber=""
+            phoneNumbers=[]
             return
         }
         self.firstName = "Nil"
         self.lastName = "Ng"
-        self.phoneNumber="911"
+        self.phoneNumbers=["911"]
     }
     
-    init(firstName: String, lastName: String, phoneNumber:String) {
+    init(firstName: String, lastName: String, phoneNumbers:[String]) {
         self.firstName = firstName
         self.lastName = lastName
-        self.phoneNumber = phoneNumber
+        self.phoneNumbers = phoneNumbers
     }
     
     func copy() -> Friend {
-        let copy = Friend(firstName: self.firstName, lastName: self.lastName, phoneNumber: self.phoneNumber)
+        let copy = Friend(firstName: self.firstName, lastName: self.lastName, phoneNumbers: self.phoneNumbers)
         copy.uid = self.uid
         copy.source = self.source
         copy.avatarData = self.avatarData
@@ -51,18 +66,18 @@ extension Friend : Equatable{
         return lhs.uid == rhs.uid &&
             lhs.firstName == rhs.firstName &&
           lhs.lastName == rhs.lastName &&
-            lhs.phoneNumber == rhs.phoneNumber
+            lhs.phoneNumbers == rhs.phoneNumbers
     }
 }
 
 extension Friend{
         
     convenience init(contact: CNContact) {
-        let phoneNumberString =  contact.phoneNumbers.first?.value.stringValue ?? ""
+        let numbers =  contact.phoneNumbers.map { $0.value.stringValue }
         
         self.init(firstName: contact.givenName,
                   lastName:contact.familyName,
-                  phoneNumber: phoneNumberString)
+                  phoneNumbers: numbers)
         
         self.uid = contact.identifier
         self.source = contact
@@ -72,37 +87,15 @@ extension Friend{
         }
     }
     
-    func toCNContact() -> CNContact{
+    func toCNContact() -> CNContact {
         if let storedContact = source{
-            print("use source contact.")
             return storedContact
         }
         // in case when there a contact is not in native App
-        let contactObj = CNMutableContact()
-        contactObj.givenName = firstName
-        contactObj.familyName = lastName
-
-        let label = CNLabeledValue(label: CNLabelPhoneNumberMain, value: CNPhoneNumber(stringValue: phoneNumber))
-        contactObj.phoneNumbers.append(label)
-            
-
-        return contactObj.copy() as! CNContact
-
+        return mutableCopy as CNContact
     }
     
     func toMutableContact() -> CNMutableContact? {
-        guard let source = source else {
-            let contact = toCNContact()
-            return contact.mutableCopy() as? CNMutableContact
-        }
-        let mutableCopy =  source.mutableCopy() as? CNMutableContact
-        mutableCopy?.givenName = firstName
-        mutableCopy?.familyName = lastName
-
-        // TODO: filter number that is modified
-        let label = CNLabeledValue(label: CNLabelPhoneNumberMain, value: CNPhoneNumber(stringValue: phoneNumber))
-        mutableCopy?.phoneNumbers.append(label)
-        
         return mutableCopy
     }
 }
@@ -111,9 +104,9 @@ extension Friend{
 
 #if DEBUG
 let samplePersons = [
-    Friend(firstName: "Nil", lastName: "Nguyen",phoneNumber: "0902801xxx"),
-    Friend(firstName: "Steve", lastName: "Jobs",phoneNumber: "09012345"),
-    Friend(firstName: "Ada", lastName: "Lovelace",phoneNumber: "09023456" ),
-    Friend(firstName: "Daniel", lastName: "Bourke", phoneNumber: "09812345")
+    Friend(firstName: "Nil", lastName: "Nguyen",phoneNumbers: ["0902801xxx"]),
+    Friend(firstName: "Steve", lastName: "Jobs",phoneNumbers: ["09012345"]),
+    Friend(firstName: "Ada", lastName: "Lovelace",phoneNumbers: ["09023456"] ),
+    Friend(firstName: "Daniel", lastName: "Bourke", phoneNumbers: ["09812345"])
 ]
 #endif

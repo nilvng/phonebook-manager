@@ -55,7 +55,6 @@ class FriendDetailViewController: UITableViewController {
 extension FriendDetailViewController : EditViewDelegate {
     
     func changesSubmitted(item updatedFriend: Friend){
-        print("in detail view: \(updatedFriend.phoneNumber)")
         self.friend = updatedFriend
         tableView.reloadData()
         PhonebookManager.shared.updateContact(updatedFriend)
@@ -75,7 +74,7 @@ extension FriendDetailViewController{
         func displayText(for friend: Friend?) -> String? {
             switch self {
             case .phonenumber:
-                return friend?.phoneNumber
+                return friend?.phoneNumbers[0]
             case .avatar:
                 return nil
             }

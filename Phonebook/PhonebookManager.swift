@@ -26,6 +26,7 @@ class PhonebookManager {
     private init(){}
     
     func fetchData(_ complilationHandler: @escaping (Result<String,Error>) -> () ){
+        print("Fetching data..")
         var contacts : [String: Friend] = [:]
         // TODO: when contacts list is occupied
         // 0. pull data from local database
@@ -52,7 +53,10 @@ class PhonebookManager {
     }
     func refreshData(){
         var dataDidChange = false
-
+        print("Refreshing data...")
+        guard CNContactStore.authorizationStatus(for: .contacts) == .authorized else {
+            return
+        }
         DispatchQueue.global(qos: .utility).async {
             // pull data
             let cnContacts = self.getAllContactsFromNative()
@@ -73,8 +77,9 @@ class PhonebookManager {
                 self.friendStore.friends[cnContact.identifier] = Friend(contact: cnContact)
                 }
             }
+            
             if dataDidChange {
-                print("data did change")
+                print("Data did change.")
                 self.delegate?.contactListRefreshed(contacts: self.friendStore.friends)
             }
         }
@@ -89,9 +94,8 @@ class PhonebookManager {
             }catch let err{
                 print("Failed to delete contact in Contacts native app: ",err)
             }
-            
-            self.delegate?.newContactAdded(contact: contact)
         }
+        self.delegate?.newContactAdded(contact: contact)
     }
     func deleteContact(_ contact: Friend, at index: Int? = nil){
         friendStore.deleteFriend(contact)
@@ -122,7 +126,7 @@ class PhonebookManager {
                     request.update(mutableContact)
                     try self.nativeStore.execute(request)
                 } catch (let err){
-                    print("cannot update contact to native database: \(err)")
+                    print("Cannot update contact to native database: \(err)")
                 }
             }
         }

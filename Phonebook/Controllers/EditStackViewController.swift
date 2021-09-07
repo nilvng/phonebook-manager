@@ -42,7 +42,7 @@ class EditStackViewController: UIViewController {
             case .lastname:
                 return self.customTextField(text: contact.lastName, placeholder: "Last name")
             case .phonenumber:
-                return self.customTextField(text: contact.phoneNumber, placeholder: "Phone number")
+                return self.customTextField(text: contact.phoneNumbers[0], placeholder: "Phone number")
             }
         }
         func customTextField(text: String, placeholder: String) -> UITextField{
@@ -64,7 +64,7 @@ class EditStackViewController: UIViewController {
             case .lastname:
                 contact.lastName = newValue
             case .phonenumber:
-                contact.phoneNumber = newValue
+                contact.phoneNumbers[0] = newValue
             }
 
         }

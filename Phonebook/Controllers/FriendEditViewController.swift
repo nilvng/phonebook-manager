@@ -51,7 +51,6 @@ class FriendEditViewController: UITableViewController {
     }
     
     @objc func onSubmitChanges(){
-        print("In edit view: \(editedFriend.phoneNumber)")
         delegate?.changesSubmitted(item: editedFriend)
         navigationController?.popViewController(animated: true)
         //dismiss(animated: true, completion:nil)
@@ -70,7 +69,7 @@ class FriendEditViewController: UITableViewController {
             case .lastname:
                 return friend.lastName
             case .phonenumber:
-                return friend.phoneNumber
+                return friend.phoneNumbers.first
             }
         }
         func displayPlaceholder() -> String?{
@@ -91,7 +90,7 @@ class FriendEditViewController: UITableViewController {
             case .lastname:
                 friend.lastName = newValue
             case .phonenumber:
-                friend.phoneNumber = newValue
+                friend.phoneNumbers[0] = newValue
 
             }
         }
