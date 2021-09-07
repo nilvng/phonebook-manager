@@ -13,19 +13,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         
-        // ask for access to Contacts
-        CNContactStore().requestAccess(for: .contacts) { (access, error) in
-          print("Access: \(access)")
-            if access {
-                PhonebookManager.shared.fetchData { result in
-                    switch result {
-                        case .success(let msg):
-                            print(msg)
-                        case .failure(let err):
-                            print(err)
-                    }
+        // Get the latest contacts
+        PhonebookManager.shared.fetchData { result in
+            switch result {
+            case .success(let msg):
+                print(msg)
+            case .failure(let err):
+                print(err)
                 }
-            }
         }
         return true
     }

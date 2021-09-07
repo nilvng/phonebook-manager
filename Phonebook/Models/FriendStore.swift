@@ -9,7 +9,6 @@ import UIKit
 import Contacts
 class BaseFriendStore {
     var friends = [String:Friend]()
-    var contactsUtils = ContactsUtils.shared
 }
 protocol FriendStore : BaseFriendStore{
     @discardableResult func addFriend(_ person : Friend) -> Friend

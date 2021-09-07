@@ -22,7 +22,6 @@
 		C8A4BA1326D534C50065BB20 /* PhonebookUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8A4BA1226D534C50065BB20 /* PhonebookUITests.swift */; };
 		C8A4BA2426D534EA0065BB20 /* Friend.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8A4BA2326D534EA0065BB20 /* Friend.swift */; };
 		C8A4BA2926D53A3D0065BB20 /* FriendStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8A4BA2826D53A3D0065BB20 /* FriendStore.swift */; };
-		C8B86A5D26D7D7CC00F35DF4 /* ContactsUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8B86A5C26D7D7CC00F35DF4 /* ContactsUtils.swift */; };
 		C8F25E2926E0AA92000EA9CC /* FriendEditViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8F25E2826E0AA92000EA9CC /* FriendEditViewController.swift */; };
 		C8F25E2A26E0AA92000EA9CC /* FriendEditViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8F25E2826E0AA92000EA9CC /* FriendEditViewController.swift */; };
 		C8F25E2B26E0AA92000EA9CC /* FriendEditViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8F25E2826E0AA92000EA9CC /* FriendEditViewController.swift */; };
@@ -78,7 +77,6 @@
 		C8A4BA1426D534C50065BB20 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		C8A4BA2326D534EA0065BB20 /* Friend.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Friend.swift; sourceTree = "<group>"; };
 		C8A4BA2826D53A3D0065BB20 /* FriendStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendStore.swift; sourceTree = "<group>"; };
-		C8B86A5C26D7D7CC00F35DF4 /* ContactsUtils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactsUtils.swift; sourceTree = "<group>"; };
 		C8F25E2826E0AA92000EA9CC /* FriendEditViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendEditViewController.swift; sourceTree = "<group>"; };
 		C8F25E2F26E0D0A8000EA9CC /* FriendTextEditCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendTextEditCell.swift; sourceTree = "<group>"; };
 		C8F25E3626E0D0E4000EA9CC /* FriendAvatarCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendAvatarCell.swift; sourceTree = "<group>"; };
@@ -203,7 +201,6 @@
 			isa = PBXGroup;
 			children = (
 				C85A6AF626DA47C700349794 /* UIViewExtension.swift */,
-				C8B86A5C26D7D7CC00F35DF4 /* ContactsUtils.swift */,
 			);
 			path = Helpers;
 			sourceTree = "<group>";
@@ -350,7 +347,6 @@
 				C8A4B9F326D534C20065BB20 /* SceneDelegate.swift in Sources */,
 				C85A6B0526DB796C00349794 /* FriendsDataSource.swift in Sources */,
 				C8F25E3726E0D0E4000EA9CC /* FriendAvatarCell.swift in Sources */,
-				C8B86A5D26D7D7CC00F35DF4 /* ContactsUtils.swift in Sources */,
 				C8A4BA2926D53A3D0065BB20 /* FriendStore.swift in Sources */,
 				C8F25E2926E0AA92000EA9CC /* FriendEditViewController.swift in Sources */,
 				C85A6AE026D929EB00349794 /* FriendDetailViewController.swift in Sources */,

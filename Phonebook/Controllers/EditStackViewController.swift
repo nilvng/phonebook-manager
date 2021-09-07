@@ -85,6 +85,7 @@ class EditStackViewController: UIViewController {
     
     @objc func onSubmitChanges(){
         for i in 0..<stackSubViews.count {
+            print(i)
             guard let detail = ContactDetail.init(rawValue: i),
                   let newValue =  stackSubViews[i].text else {continue}
             detail.setValue(newValue: newValue, for: self.contact)

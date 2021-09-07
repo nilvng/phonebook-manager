@@ -74,10 +74,10 @@ class ContactCell: UITableViewCell {
         super.layoutSubviews()
         avatarImage.anchor(top: contentView.topAnchor, left:  contentView.leftAnchor, bottom: nil, right: nil, padding: .init(top: 5, left: 5, bottom: 0, right: 0), size: .init(width: 60, height: 60))
         personNameLabel.anchor(top:  contentView.topAnchor, left: avatarImage.rightAnchor, bottom: nil, right: nil, padding: .init(top: 20, left: 10, bottom: 0, right: 10), size: .init( width: frame.size.width / 2, height: 0))
-        defaultPhoneNumberLabel.anchor(top: personNameLabel.bottomAnchor, left: avatarImage.rightAnchor, bottom: nil, right: nil, padding: .init(top: 5, left: 10, bottom: 10, right: 0), size: .init(width: frame.size.width / 2, height: 0))
-                
+        defaultPhoneNumberLabel.anchor(top: personNameLabel.bottomAnchor, left: avatarImage.rightAnchor, bottom: contentView.bottomAnchor, right: nil, padding: .init(top: 5, left: 10, bottom: 10, right: 0))
     }
-    private func prepareAvatar(_ data: Data, completion: @escaping (Result<UIImage,Error>)->Void){
+    private func prepareAvatar(_ data: Data,
+                               completion: @escaping (Result<UIImage,Error>)->Void){
         guard let image = UIImage(data: data) else {
             completion(.failure(FetchError.failed))
             return

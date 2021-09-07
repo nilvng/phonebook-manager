@@ -18,8 +18,8 @@ class FriendsViewController : UIViewController {
         let view = UITableView()
         view.register(ContactCell.self, forCellReuseIdentifier: ContactCell.identifier)
         // styling
-//        view.rowHeight = UITableView.automaticDimension
-//        view.estimatedRowHeight = 108
+        //view.rowHeight = UITableView.automaticDimension
+        //view.estimatedRowHeight = 100
         view.rowHeight = 70
         view.tableFooterView = UIView() // hide extra lines
         return view
@@ -76,7 +76,9 @@ class FriendsViewController : UIViewController {
     //MARK: Actions
     @objc func addContact(){
         // add to the store
-        PhonebookManager.shared.addContact(Friend(random: true))
+        
+        //let addView = EditStackViewController()
+        //PhonebookManager.shared.addContact(Friend(random: true))
 
     }
     
@@ -92,7 +94,7 @@ class FriendsViewController : UIViewController {
     }
 }
 
-extension FriendsViewController: PhonebookDelegate{
+extension FriendsViewController: PhonebookManagerDelegate{
     
     func contactListRefreshed(contacts: [String : Friend]) {
             // update with the refreshed contact list
@@ -119,6 +121,19 @@ extension FriendsViewController: PhonebookDelegate{
         DispatchQueue.main.async {
             self.tableView.deleteRows(at: [indexPath], with: .automatic)
         }
+    }
+    func contactUpdated(_ contact: Friend){
+        guard let rowToUpdate = friendList.firstIndex(where: {$0.uid == contact.uid}) else {return }
+        
+        friendList[rowToUpdate] = contact
+        
+        let indexPath = IndexPath(row: rowToUpdate, section: 0)
+//        self.friendList = PhonebookManager.shared.getContactList().map { $0.value }
+        DispatchQueue.main.async {
+            self.tableView.reloadRows(at: [indexPath], with: .automatic)
+            //self.tableView.reloadData()
+        }
+        
     }
 }
 
