@@ -13,8 +13,12 @@ protocol EditViewDelegate {
 
 class FriendEditViewController: UITableViewController {
 
+    typealias FriendChangeAction = (Friend) -> Void
+    
     private var editedFriend : Friend = .init(random: false)
+    private var isNew : Bool = false
     var delegate : EditViewDelegate?
+    var friendAddAction : FriendChangeAction?
     
     private let doneButton: UIButton = {
         let button = UIButton()
@@ -36,6 +40,11 @@ class FriendEditViewController: UITableViewController {
             target: self,
             action: #selector(onSubmitChanges))
  
+    }
+    
+    func configure(for friend: Friend, addAction: FriendChangeAction? = nil){
+        self.editedFriend = friend
+        self.friendAddAction = addAction
     }
     
     required init?(coder: NSCoder) {

@@ -40,7 +40,8 @@ class FriendDetailViewController: UITableViewController {
     
     @objc func onEditButtonPressed(){
         guard let f = friend else {return }
-        let stackView = EditStackViewController(for: f)
+        let stackView = EditStackViewController()
+        stackView.configure(for: f)
         stackView.delegate = self
         navigationController?.pushViewController(stackView, animated: true)
 //        let editViewController = FriendEditViewController(for: friend)

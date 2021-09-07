@@ -76,9 +76,11 @@ class FriendsViewController : UIViewController {
     //MARK: Actions
     @objc func addContact(){
         // add to the store
-        
-        //let addView = EditStackViewController()
-        //PhonebookManager.shared.addContact(Friend(random: true))
+        let addView = EditStackViewController(for: Friend())
+        addView.configure(for: Friend(), isNew: true, addAction: { friend in
+            PhonebookManager.shared.addContact(friend)
+        })
+        present(UINavigationController(rootViewController: addView), animated: true, completion: nil)
 
     }
     

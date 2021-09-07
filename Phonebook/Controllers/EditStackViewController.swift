@@ -9,8 +9,13 @@ import UIKit
 
 class EditStackViewController: UIViewController {
     
+    typealias FriendChangeAction = (Friend) -> Void
+    private var isNew : Bool = false
+
     private var contact : Friend!
     var delegate : EditViewDelegate?
+    var friendAddAction : FriendChangeAction?
+
     
     private let stackView : UIStackView = {
         let view = UIStackView()
@@ -71,9 +76,8 @@ class EditStackViewController: UIViewController {
         
     }
 
-    init(for contact: Friend) {
+    init() {
         super.init(nibName: nil, bundle: nil)
-        self.contact = contact
         
         navigationItem.rightBarButtonItem = UIBarButtonItem(
             barButtonSystemItem: .done,
@@ -82,13 +86,24 @@ class EditStackViewController: UIViewController {
  
 
     }
+    func configure(for friend: Friend, isNew: Bool = false, addAction: FriendChangeAction? = nil){
+        self.contact = friend
+        self.isNew = isNew
+        self.friendAddAction = addAction
+    }
+
     
     @objc func onSubmitChanges(){
         for i in 0..<stackSubViews.count {
-            print(i)
             guard let detail = ContactDetail.init(rawValue: i),
                   let newValue =  stackSubViews[i].text else {continue}
             detail.setValue(newValue: newValue, for: self.contact)
+        }
+        if isNew {
+            dismiss(animated: true){
+                self.friendAddAction?(self.contact)
+            }
+            return
         }
         delegate?.changesSubmitted(item: self.contact)
         navigationController?.popViewController(animated: true)

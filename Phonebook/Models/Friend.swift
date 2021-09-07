@@ -38,7 +38,7 @@ class Friend {
         if !random {
             firstName=""
             lastName=""
-            phoneNumbers=[]
+            phoneNumbers=[""]
             return
         }
         self.firstName = "Nil"
