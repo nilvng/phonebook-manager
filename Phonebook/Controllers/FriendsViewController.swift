@@ -76,7 +76,7 @@ class FriendsViewController : UIViewController {
     //MARK: Actions
     @objc func addContact(){
         // add to the store
-        let addView = EditStackViewController(for: Friend())
+        let addView = EditStackViewController()
         addView.configure(for: Friend(), isNew: true, addAction: { friend in
             PhonebookManager.shared.addContact(friend)
         })
@@ -169,7 +169,10 @@ extension FriendsViewController: UITableViewDelegate{
         tableView.deselectRow(at: indexPath, animated: true)
         
         let friend = friendList[indexPath.row]
-        let detailController = FriendDetailViewController(for: friend)
+        let detailController = FriendDetailViewController()
+        detailController.configure(with: friend){ friend in
+            PhonebookManager.shared.updateContact(friend)
+        }
         navigationController?.pushViewController(detailController, animated: true)
     }
 }

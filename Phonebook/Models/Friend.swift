@@ -53,7 +53,7 @@ class Friend {
     }
     
     func copy() -> Friend {
-        let copy = Friend(firstName: self.firstName, lastName: self.lastName, phoneNumbers: self.phoneNumbers)
+        var copy = Friend(firstName: self.firstName, lastName: self.lastName, phoneNumbers: self.phoneNumbers)
         copy.uid = self.uid
         copy.source = self.source
         copy.avatarData = self.avatarData

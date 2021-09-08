@@ -7,15 +7,14 @@
 
 import UIKit
 
-protocol TextEditCellDelegate {
-    func textEndEditing(for: FriendEditViewController.FriendTextDetail,newValue: String)
-}
 
-class FriendTextEditCell: UITableViewCell, UITextFieldDelegate {
+class FriendTextEditCell: UITableViewCell {
+    typealias TitleChangeAction = (String) -> Void
+    private var titleChangeAction: TitleChangeAction?
+
     static let identifier = "TextEditCell"
-    var delegate : TextEditCellDelegate? = nil
+
     private let textfield = UITextField()
-    private var attribute: FriendEditViewController.FriendTextDetail? = nil
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -23,24 +22,13 @@ class FriendTextEditCell: UITableViewCell, UITextFieldDelegate {
         contentView.addSubview(textfield)
         textfield.delegate = self
     }
-    func configure(for attr:  FriendEditViewController.FriendTextDetail,
-                   with text: String,
-                   placeholder: String){
+    func configure(with text: String,
+                   placeholder: String,
+                   changeAction: @escaping TitleChangeAction){
         
-        self.attribute = attr
         textfield.placeholder = placeholder
         textfield.text = text
-    }
-    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-        delegate?.textEndEditing(for: attribute!, newValue: textfield.text ?? "")
-        textfield.resignFirstResponder()
-        return true
-
-    }
-    func textFieldShouldEndEditing(_ textField: UITextField) -> Bool {
-        delegate?.textEndEditing(for: attribute!, newValue: textfield.text ?? "")
-        textfield.resignFirstResponder()
-        return true
+        self.titleChangeAction = changeAction
     }
         
     override func layoutSubviews() {
@@ -60,4 +48,13 @@ class FriendTextEditCell: UITableViewCell, UITextFieldDelegate {
         fatalError("init(coder:) has not been implemented")
     }
     
+}
+extension FriendTextEditCell : UITextFieldDelegate {
+    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
+        if let originalText = textField.text {
+            let title = (originalText as NSString).replacingCharacters(in: range, with: string)
+            titleChangeAction?(title)
+        }
+        return true
+    }
 }

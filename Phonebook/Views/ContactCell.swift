@@ -68,7 +68,7 @@ class ContactCell: UITableViewCell {
         contentView.addSubview(defaultPhoneNumberLabel)
         
         accessoryType = .disclosureIndicator
-
+        
         }
     override func layoutSubviews() {
         super.layoutSubviews()
