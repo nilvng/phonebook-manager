@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import Foundation
 
 class EditStackViewController: UIViewController {
     
@@ -28,7 +29,7 @@ class EditStackViewController: UIViewController {
     }()
     private let scrollView : UIScrollView = {
         let view = UIScrollView()
-        view.backgroundColor  = .clear
+        view.backgroundColor  = .white
         view.layoutMargins    = .zero
         return view
     }()
@@ -53,9 +54,13 @@ class EditStackViewController: UIViewController {
         func customTextField(text: String, placeholder: String) -> UITextField{
             let textfield = UITextField()
             textfield.layer.cornerRadius                        = 5
-            textfield.translatesAutoresizingMaskIntoConstraints = false
             textfield.backgroundColor                           = .white
             textfield.isUserInteractionEnabled                  = true
+            
+            textfield.borderStyle = UITextField.BorderStyle.roundedRect
+            var frameRect =  textfield.frame
+            frameRect.size.height = 70
+            textfield.frame = frameRect
             
             textfield.text = text
             textfield.placeholder = placeholder
@@ -115,7 +120,6 @@ class EditStackViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = .systemGray5
         
         view.addSubview(scrollView)
         scrollView.addSubview(stackView)
@@ -135,7 +139,7 @@ class EditStackViewController: UIViewController {
         scrollView.anchor(top: view.topAnchor,
                          left: view.leftAnchor,
                          bottom: view.bottomAnchor,
-                         right: view.rightAnchor, padding: .init(top: 5, left: 5, bottom: 0, right: 5))
+                         right: view.rightAnchor)
     }
 
     private func setupStackView(){
@@ -143,7 +147,7 @@ class EditStackViewController: UIViewController {
                          left: scrollView.leftAnchor,
                          bottom: scrollView.bottomAnchor,
                          right: scrollView.rightAnchor,
-                         padding: .init(top: 0, left: 0, bottom: 0, right: 0))
+                         padding: .init(top: 10, left: 0, bottom: 0, right: 0))
         
         stackView.widthAnchor.constraint(equalTo: scrollView.widthAnchor).isActive = true
         configureStack()
