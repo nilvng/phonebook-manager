@@ -19,46 +19,18 @@ class FriendEditDataSource : NSObject {
         case firstname
         case lastname
         case phonenumber
-
-        func setValue(newValue: String, for contact: Friend){
-
-            switch self {
-            case .avatar:
-                fatalError()
-            case .firstname:
-                contact.firstName = newValue
-            case .lastname:
-                contact.lastName = newValue
-            case .phonenumber:
-                contact.phoneNumbers[0] = newValue
-            }
-
-        }
-        func getValue(for friend: Friend) -> String? {
-            switch self {
-            case .avatar:
-                return nil
-            case .firstname:
-                return friend.firstName
-            case .lastname:
-                return friend.lastName
-            case .phonenumber:
-                return friend.phoneNumbers[0]
-            }
-        }
         
-        func getPlaceholder(for friend: Friend) -> String? {
+        func getCellId() -> String {
             switch self {
             case .avatar:
-                return nil
+                return FriendAvatarEditCell.identifier
             case .firstname:
-                return "First name"
+                return FriendTextEditCell.identifier
             case .lastname:
-                return "Last name"
+                return FriendTextEditCell.identifier
             case .phonenumber:
-                return "Phone number"
+                return FriendTextEditCell.identifier
             }
-
         }
         
     }
@@ -78,20 +50,40 @@ extension FriendEditDataSource : UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        if indexPath.row == 0 {
-            // first cell is contact avatar
-            let cell = tableView.dequeueReusableCell(withIdentifier: FriendAvatarEditCell.identifier, for: indexPath) as! FriendAvatarEditCell
-           
-            cell.configure(avatar: friend.avatarData)
-            return cell
+        guard let detail = ContactDetail.init(rawValue: indexPath.row) else {
+            fatalError("friend detail is out of range.")
         }
 
-        let cell = tableView.dequeueReusableCell(withIdentifier: FriendTextEditCell.identifier) as! FriendTextEditCell
-        let detail = ContactDetail.init(rawValue: indexPath.row)!
-        cell.configure(with: detail.getValue(for: self.friend) ?? "",
-                       placeholder: detail.getPlaceholder(for: self.friend) ?? ""){ value in
-            detail.setValue(newValue: value, for: self.friend)
-            self.changeAction?(self.friend)
+        let cell = tableView.dequeueReusableCell(withIdentifier: detail.getCellId(), for: indexPath)
+        
+        switch detail {
+        case .avatar:
+            // first cell is contact avatar
+            if let avatarCell = cell as? FriendAvatarEditCell{
+                avatarCell.configure(avatar: friend.avatarData)
+            }
+        case .firstname:
+            if let fnameCell = cell as? FriendTextEditCell{
+                fnameCell.configure(with: friend.firstName, placeholder: "First name"){ value in
+                    self.friend.firstName = value
+                    self.changeAction?(self.friend)
+                }
+            }
+        case .lastname:
+            if let lnameCell = cell as? FriendTextEditCell{
+                lnameCell.configure(with: self.friend.lastName, placeholder: "Last name"){ lastname in
+                    self.friend.lastName = lastname
+                    self.changeAction?(self.friend)
+                }
+            }
+        case .phonenumber:
+            if let phoneNumberCell = cell as? FriendTextEditCell{
+                phoneNumberCell.configure(with: self.friend.phoneNumbers[0], placeholder: "Phone number"){ value in
+                    self.friend.phoneNumbers[0] = value
+                    self.changeAction?(self.friend)
+
+                }
+            }
         }
         return cell
     }

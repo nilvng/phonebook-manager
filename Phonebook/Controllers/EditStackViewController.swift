@@ -99,17 +99,26 @@ class EditStackViewController: UIViewController {
 
     
     @objc func onSubmitChanges(){
+        var didChange = false
+        // check if user did enter any field : Input validation!
         for i in 0..<stackSubViews.count {
             guard let detail = ContactDetail.init(rawValue: i),
                   let newValue =  stackSubViews[i].text else {continue}
-            detail.setValue(newValue: newValue, for: self.contact)
+            didChange = newValue != ""
+            if didChange{
+                detail.setValue(newValue: newValue, for: self.contact)
+            }
         }
+        // Add new contact
         if isNew {
             dismiss(animated: true){
-                self.friendAddAction?(self.contact)
+                if didChange{
+                    self.friendAddAction?(self.contact)
+                }
             }
             return
         }
+        // Edit existing contact
         delegate?.changesSubmitted(item: self.contact)
         navigationController?.popViewController(animated: true)
     }
