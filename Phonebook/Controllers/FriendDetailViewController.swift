@@ -44,10 +44,6 @@ class FriendDetailViewController: UITableViewController {
         stackView.configure(for: f)
         stackView.delegate = self
         navigationController?.pushViewController(stackView, animated: true)
-//        let editViewController = FriendEditViewController(for: friend)
-//        editViewController.delegate = self
-//        navigationController?.pushViewController(editViewController, animated: true)
-        //present(editViewController, animated: true, completion: nil)
     }
     
 }
@@ -58,7 +54,7 @@ extension FriendDetailViewController : EditViewDelegate {
     func changesSubmitted(item updatedFriend: Friend){
         self.friend = updatedFriend
         tableView.reloadData()
-        PhonebookManager.shared.updateContact(updatedFriend)
+        PhonebookManager.shared.update(updatedFriend)
     }
 
 }

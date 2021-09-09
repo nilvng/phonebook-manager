@@ -67,18 +67,18 @@ class FriendsViewController : UIViewController {
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        print("friends list will appear...")
-        friendList = PhonebookManager.shared.getContactList().map{ $0.value}
-        tableView.reloadData()
-        
+        DispatchQueue.main.async {
+            self.friendList = PhonebookManager.shared.getContactList().map{ $0.value}
+            self.tableView.reloadData()
+        }
     }
     
     //MARK: Actions
     @objc func addContact(){
         // add to the store
-        let addView = EditStackViewController(for: Friend())
+        let addView = EditStackViewController()
         addView.configure(for: Friend(), isNew: true, addAction: { friend in
-            PhonebookManager.shared.addContact(friend)
+            PhonebookManager.shared.add(friend)
         })
         present(UINavigationController(rootViewController: addView), animated: true, completion: nil)
 
@@ -100,40 +100,36 @@ extension FriendsViewController: PhonebookManagerDelegate{
     
     func contactListRefreshed(contacts: [String : Friend]) {
             // update with the refreshed contact list
-        self.friendList = contacts.map{ $0.value}
-        
         DispatchQueue.main.async {
+            self.friendList = contacts.map{ $0.value}
             self.tableView.reloadData()
         }
     }
     func newContactAdded(contact: Friend){
-        // update data source
-        self.friendList.append(contact)
-        let index = self.friendList.count - 1 // add new contact to the end of list
-        let indexPath = IndexPath(row: index, section: 0)
-        // refresh table
+ 
         DispatchQueue.main.async {
+            // update data source
+            self.friendList.append(contact)
+            let index = self.friendList.count - 1 // add new contact to the end of list
+            let indexPath = IndexPath(row: index, section: 0)
+            // refresh table
             self.tableView.insertRows(at: [indexPath], with: .automatic)
         }
     }
     func contactDeleted(row: Int){
-        self.friendList.remove(at: row)
-        let indexPath = IndexPath(row: row, section: 0)
-        
         DispatchQueue.main.async {
+            self.friendList.remove(at: row)
+            let indexPath = IndexPath(row: row, section: 0)
             self.tableView.deleteRows(at: [indexPath], with: .automatic)
         }
     }
     func contactUpdated(_ contact: Friend){
         guard let rowToUpdate = friendList.firstIndex(where: {$0.uid == contact.uid}) else {return }
-        
         friendList[rowToUpdate] = contact
-        
         let indexPath = IndexPath(row: rowToUpdate, section: 0)
-//        self.friendList = PhonebookManager.shared.getContactList().map { $0.value }
+        
         DispatchQueue.main.async {
             self.tableView.reloadRows(at: [indexPath], with: .automatic)
-            //self.tableView.reloadData()
         }
         
     }
@@ -159,8 +155,7 @@ extension FriendsViewController: UITableViewDelegate{
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == .delete{
             let friend = friendList[indexPath.row]
-            PhonebookManager.shared.deleteContact(friend, at: indexPath.row)
-
+            PhonebookManager.shared.delete(friend, at: indexPath.row)
         }
     }
 
@@ -168,7 +163,7 @@ extension FriendsViewController: UITableViewDelegate{
         
         tableView.deselectRow(at: indexPath, animated: true)
         
-        let friend = friendList[indexPath.row]
+        let friend = self.friendList[indexPath.row]
         let detailController = FriendDetailViewController(for: friend)
         navigationController?.pushViewController(detailController, animated: true)
     }

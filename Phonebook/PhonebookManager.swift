@@ -20,6 +20,16 @@ class PhonebookManager {
     private var friendStore: FriendStore = InMemoFriendStore.shared
     private let nativeStore = CNContactStore()
     
+    private var isAuthorized = {
+        CNContactStore.authorizationStatus(for: .contacts) == .authorized
+    }()
+
+    let friendsQueue = DispatchQueue(
+        label: "zalo.phonebook.friendList",
+        qos: .utility,
+        autoreleaseFrequency: .workItem,
+        target: nil)
+    
     var delegate: PhonebookManagerDelegate?
     
     static let shared = PhonebookManager()
@@ -35,21 +45,20 @@ class PhonebookManager {
         // 1b. record existed
         
         // Fetch data from native Contacts app
-        nativeStore.requestAccess(for: .contacts) { (access, error) in
-            if access {
-                DispatchQueue.global(qos: .utility).async {
-                    // pull data
-                    let cnContacts = self.getAllContactsFromNative()
-                    // merge data
-                    contacts = self.friendStore.reloadData(cnContacts: cnContacts)
-                    // inform table view
-                    self.delegate?.contactListRefreshed(contacts: contacts)
-                    complilationHandler(.success("Sync data is completed"))
-                    }
-            } else{
-                complilationHandler(.failure(FetchError.unauthorized))
-            }
+        guard isAuthorized else {
+            complilationHandler(.failure(FetchError.unauthorized))
+            return
         }
+
+        self.friendsQueue.async {
+            // pull data
+            let cnContacts = self.getAllContactsFromNative()
+            // merge data
+            contacts = self.friendStore.reloadData(cnContacts: cnContacts) // writer
+            // inform table view
+            self.delegate?.contactListRefreshed(contacts: contacts)
+            complilationHandler(.success("Sync data is completed"))
+            }
     }
     func refreshData(){
         var dataDidChange = false
@@ -57,12 +66,12 @@ class PhonebookManager {
         guard CNContactStore.authorizationStatus(for: .contacts) == .authorized else {
             return
         }
-        DispatchQueue.global(qos: .utility).async {
+        self.friendsQueue.async {
             // pull data
             let cnContacts = self.getAllContactsFromNative()
             // case 1: native contact deleted O(n^2)
             if cnContacts.count < self.friendStore.friends.count{
-                for current in self.friendStore.friends.values{
+                for current in self.friendStore.friends.values{ // reader
                     if !cnContacts.contains(where: {$0.identifier == current.uid}){
                         dataDidChange = true
                         self.friendStore.deleteFriend(current)
@@ -84,64 +93,66 @@ class PhonebookManager {
             }
         }
     }
-    func addContact(_ contact: Friend){
-        friendStore.addFriend(contact)
-        DispatchQueue.global(qos: .background).async {
-            do{
-                let request = CNSaveRequest()
-                request.add(contact.toMutableContact()!, toContainerWithIdentifier: nil)
-                try self.nativeStore.execute(request)
-            }catch let err{
-                print("Failed to delete contact in Contacts native app: ",err)
-            }
-        }
-        self.delegate?.newContactAdded(contact: contact)
-    }
-    func deleteContact(_ contact: Friend, at index: Int? = nil){
-        friendStore.deleteFriend(contact)
-        
-        DispatchQueue.global(qos: .background).async {
-            if let mutableContact = contact.toMutableContact(){
-                do{
-                    let request = CNSaveRequest()
-                    request.delete(mutableContact)
-                    try self.nativeStore.execute(request)
-                }catch let err{
-                    print("Failed to delete contact in Contacts native app: ",err)
+    func add(_ contact: Friend ){
+        self.friendsQueue.async {
+            // save copy in database
+            self.friendStore.addFriend(contact)
+            self.delegate?.newContactAdded(contact: contact)
+            // save copy in database
+            self.saveContact(contact){ success in
+                if success {
+                    print("Completed save update to native.")
                 }
             }
         }
-        if let row = index {
+    }
+    func delete(_ contact: Friend, at row: Int){
+        self.friendsQueue.async {
+            // delete copy in database
+            self.friendStore.deleteFriend(contact)
             self.delegate?.contactDeleted(row: row)
-        }
-    }
-    func updateContact(_ contact: Friend){
-        // update copy in memory
-        friendStore.updateFriend(contact)
-        // update copy in native database
-        DispatchQueue.global(qos: .background).async {
-            if let mutableContact = contact.toMutableContact(){
-                do {
-                    let request = CNSaveRequest()
-                    request.update(mutableContact)
-                    try self.nativeStore.execute(request)
-                } catch (let err){
-                    print("Cannot update contact to native database: \(err)")
+            // delete copy in native database
+            self.updateContact(contact){ success in
+                if success {
+                    print("Completed delete update from native.")
                 }
             }
         }
-        self.delegate?.contactUpdated(contact)
+    }
+    func update(_ contact: Friend){
+        self.friendsQueue.async {
+            // update copy in database
+            self.friendStore.updateFriend(contact)
+            self.delegate?.contactUpdated(contact)
+            // update copy in native database
+            self.updateContact(contact){ success in
+                if success {
+                    print("Completed update contact to native.")
+                }
+            }
+        }
     }
     
     func getContactList()->[String: Friend]{
-        return friendStore.friends
-    }
-    func getContact(key: String) -> Friend? {
-        return friendStore.get(key: key)
+        let immutableList = friendStore.friends // Copying this variable into a new variable for immutability
+        return self.friendsQueue.sync {
+            return immutableList
+        }
     }
     
+    func getContact(key: String) -> Friend? {
+        return self.friendsQueue.sync {
+            return friendStore.get(key: key)
+        }
+    }
 
-    func getAllContactsFromNative()-> [CNContact]{
+}
+
+// MARK: - methods for CnContactStore
+
+extension PhonebookManager {
+
+    private func getAllContactsFromNative()-> [CNContact]{
         // fetching all contacts from the Contacts.app
         var results: [CNContact] = []
         var keysToFetch : [CNKeyDescriptor] = [CNContactIdentifierKey,CNContactGivenNameKey,CNContactFamilyNameKey,CNContactPhoneNumbersKey, CNContactImageDataKey] as [CNKeyDescriptor]
@@ -157,9 +168,61 @@ class PhonebookManager {
         }
         return results
     }
+    
+    private func saveContact(_ contact: Friend, completition: @escaping (Bool) -> Void) {
+        guard isAuthorized else {
+            completition(false)
+            return
+        }
+        do{
+            let request = CNSaveRequest()
+            request.add(contact.toMutableContact()!, toContainerWithIdentifier: nil)
+            try self.nativeStore.execute(request)
+            completition(true)
+        }catch let err{
+            print("Failed to save contact in Contacts native app: ",err)
+            completition(false)
+        }
+    }
+    
+    private func removeContact(_ contact: Friend, completition: @escaping (Bool) -> Void) {
+        guard isAuthorized else {
+            completition(false)
+            return
+        }
+        if let mutableContact = contact.toMutableContact(){
+            do{
+                let request = CNSaveRequest()
+                request.delete(mutableContact)
+                try self.nativeStore.execute(request)
+                completition(true)
+            }catch let err{
+                print("Failed to delete contact in Contacts native app: ",err)
+                completition(false)
+            }
+        }
+    }
+    
+    private func updateContact(_ contact: Friend, completition: @escaping (Bool) -> Void) {
+        guard isAuthorized else {
+            completition(false)
+            return
+        }
+        do{
+            let request = CNSaveRequest()
+            request.update(contact.toMutableContact()!)
+            try self.nativeStore.execute(request)
+            completition(true)
+        }catch let err{
+            print("Failed to update contact in Contacts native app: ",err)
+            completition(false)
+        }
+    }
 }
 
 enum FetchError: Error {
     case unauthorized
     case failed
 }
+
+
