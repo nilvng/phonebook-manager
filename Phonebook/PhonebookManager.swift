@@ -44,12 +44,13 @@ class PhonebookManager {
         // 1a. record is new
         // 1b. record existed
         
-        // Fetch data from native Contacts app
+        // Populate Table with persisted data
+        self.delegate?.contactListRefreshed(contacts:self.friendStore.friends)
+        
         guard isAuthorized else {
             complilationHandler(.failure(FetchError.unauthorized))
             return
         }
-
         self.friendsQueue.async {
             // pull data
             let cnContacts = self.getAllContactsFromNative()
@@ -69,7 +70,17 @@ class PhonebookManager {
         self.friendsQueue.async {
             // pull data
             let cnContacts = self.getAllContactsFromNative()
-            // case 1: native contact deleted O(n^2)
+            
+            // case 1: native contact added or updated O(n)
+            for cnContact in cnContacts{
+                let nativeFriend = Friend(contact: cnContact)
+                if let localCopy = self.friendStore.friends[nativeFriend.uid], localCopy != nativeFriend {
+                    dataDidChange = true
+                self.friendStore.friends[cnContact.identifier] = Friend(contact: cnContact)
+                }
+            }
+
+            // case 2: native contact deleted O(n^2)
             if cnContacts.count < self.friendStore.friends.count{
                 for current in self.friendStore.friends.values{ // reader
                     if !cnContacts.contains(where: {$0.identifier == current.uid}){
@@ -77,14 +88,6 @@ class PhonebookManager {
                         self.friendStore.deleteFriend(current)
                         }
                     }
-            }
-            // case 2: native contact added or updated O(n)
-            for cnContact in cnContacts{
-                let nativeFriend = Friend(contact: cnContact)
-                if let localCopy = self.friendStore.friends[nativeFriend.uid], localCopy != nativeFriend {
-                    dataDidChange = true
-                self.friendStore.friends[cnContact.identifier] = Friend(contact: cnContact)
-                }
             }
             
             if dataDidChange {
