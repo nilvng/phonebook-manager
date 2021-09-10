@@ -8,7 +8,7 @@
 import Foundation
 import Contacts
 import ContactsUI
-
+import CoreData
 
 protocol PhonebookManagerDelegate {
     func contactListRefreshed(contacts: [String: Friend])
@@ -32,8 +32,22 @@ class PhonebookManager {
     
     var delegate: PhonebookManagerDelegate?
     
+    lazy var persistentContainer: NSPersistentContainer = {
+        let container = NSPersistentContainer(name: "Phonebook")
+        container.loadPersistentStores { description, error in
+            if let error = error {
+                fatalError("Unable to load persistent stores: \(error)")
+            }
+        }
+        return container
+    }()
+
     static let shared = PhonebookManager()
     private init(){}
+    
+    private func createPrivateContext() -> NSManagedObjectContext {
+        return persistentContainer.newBackgroundContext()
+    }
     
     func fetchData(_ complilationHandler: @escaping (Result<String,Error>) -> () ){
         print("Fetching data..")
@@ -63,30 +77,47 @@ class PhonebookManager {
     func refreshData(){
         var dataDidChange = false
         print("Refreshing data...")
-        guard CNContactStore.authorizationStatus(for: .contacts) == .authorized else {
-            return
-        }
+        
+        let context = persistentContainer.viewContext // warning: main thread
+            
         self.friendsQueue.async {
+            guard CNContactStore.authorizationStatus(for: .contacts) == .authorized else {
+                return
+            }
             // pull data
             let cnContacts = self.getAllContactsFromNative()
-            // case 1: native contact deleted O(n^2)
+            let localContacts = self.friendStore.getAll()
+ 
+            // case 1: native contact added or updated O(n)
+            for cnContact in cnContacts{
+                if let localCopy = localContacts[cnContact.identifier],
+                   localCopy.firstName != cnContact.givenName,
+                   localCopy.lastName != cnContact.familyName{
+                    // Updated contact
+                    dataDidChange = true
+                    self.friendStore.updateFriend(localCopy)
+                } else {
+                dataDidChange = true
+                    context.performAndWait {
+                    self.friendStore.addFriend(Friend(contact: cnContact, context: context))
+                    }
+                }
+            }
+            // case 2: native contact deleted O(n^2)
             if cnContacts.count < self.friendStore.friends.count{
-                for current in self.friendStore.friends.values{ // reader
+                for current in localContacts.values{ // reader
                     if !cnContacts.contains(where: {$0.identifier == current.uid}){
                         dataDidChange = true
                         self.friendStore.deleteFriend(current)
                         }
                     }
             }
-            // case 2: native contact added or updated O(n)
-            for cnContact in cnContacts{
-                let nativeFriend = Friend(contact: cnContact)
-                if let localCopy = self.friendStore.friends[nativeFriend.uid], localCopy != nativeFriend {
-                    dataDidChange = true
-                self.friendStore.friends[cnContact.identifier] = Friend(contact: cnContact)
-                }
+            do {
+                try context.save()
+            } catch {
+                print("Error saving to Core Data: \(error).")
             }
-            
+
             if dataDidChange {
                 print("Data did change.")
                 self.delegate?.contactListRefreshed(contacts: self.friendStore.friends)

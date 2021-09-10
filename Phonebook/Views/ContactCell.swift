@@ -14,7 +14,12 @@ class ContactCell: UITableViewCell {
         didSet{
             guard let person = friend else { return }
             personNameLabel.text = person.firstName + " " + person.lastName
-            defaultPhoneNumberLabel.text = person.phoneNumbers[0]
+            if person.phoneNumbers.count > 0 {
+                defaultPhoneNumberLabel.text = person.phoneNumbers[0]
+            } else {
+                defaultPhoneNumberLabel.text = "missing"
+
+            }
             if let avatarData = person.avatarData{
                 prepareAvatar(avatarData){ result in
                     switch result{

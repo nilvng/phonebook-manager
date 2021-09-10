@@ -18,6 +18,7 @@ protocol FriendStore : BaseFriendStore{
     func updateFriend(_ person: Friend)
     func contains(_ person:Friend) -> Bool
     func get(key: String) -> Friend?
+    func getAll() -> [String: Friend]
     func saveChanges() -> Bool
 }
 
@@ -43,9 +44,13 @@ extension FriendStore{
     }
     func reloadData(cnContacts:[CNContact]) -> [String: Friend]{
         // override current list with cnContacts
-        for c in cnContacts{
-            friends[c.identifier] = Friend(contact: c)
-        }
+//        for c in cnContacts{
+//            friends[c.identifier] = Friend(contact: c)
+//        }
+        return friends
+    }
+    
+    func getAll() -> [String: Friend]{
         return friends
     }
 }
@@ -69,29 +74,30 @@ class PlistFriendStore: BaseFriendStore,FriendStore {
         
     @objc func saveChanges() -> Bool {
         print("Saving items to: \(itemArchiveURL)")
-
-        do{
-            let encoder = PropertyListEncoder()
-            let data = try encoder.encode(friends)
-            try data.write(to: itemArchiveURL)
-            print("Saved all items")
-            return true
-        } catch let encodingError{
-            print("Error encoding items: \(encodingError)")
-            return false
-        }
+        fatalError()
+//
+//        do{
+//            let encoder = PropertyListEncoder()
+//            let data = try encoder.encode(friends)
+//            try data.write(to: itemArchiveURL)
+//            print("Saved all items")
+//            return true
+//        } catch let encodingError{
+//            print("Error encoding items: \(encodingError)")
+//            return false
+//        }
     }
     
     func loadData(){
-        do {
-            let data = try Data(contentsOf: itemArchiveURL)
-            let unarchiver = PropertyListDecoder()
-            let persons = try unarchiver.decode([String: Friend].self, from: data)
-            self.friends = persons
-
-        } catch let error {
-            print("Error reading in save file: \(error)")
-        }
+//        do {
+//            let data = try Data(contentsOf: itemArchiveURL)
+//            let unarchiver = PropertyListDecoder()
+//            let persons = try unarchiver.decode([String: Friend].self, from: data)
+//            self.friends = persons
+//
+//        } catch let error {
+//            print("Error reading in save file: \(error)")
+//        }
 }
     override init() {
         super.init()
@@ -107,5 +113,16 @@ class PlistFriendStore: BaseFriendStore,FriendStore {
     deinit {
         NotificationCenter.default.removeObserver(self, name: UIScene.didEnterBackgroundNotification, object: nil)
     }
+    
+}
+
+
+class CoreDataFriendStore : BaseFriendStore, FriendStore {
+    
+
+    func saveChanges() -> Bool {
+        fatalError()
+    }
+    
     
 }
