@@ -64,14 +64,6 @@ class FriendsViewController : UIViewController {
         super.viewDidLayoutSubviews()
         tableView.anchor(top: view.topAnchor, left: view.leftAnchor, bottom: view.bottomAnchor, right: view.rightAnchor)
     }
-
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        DispatchQueue.main.async {
-            self.friendList = PhonebookManager.shared.getContactList().map{ $0.value}
-            self.tableView.reloadData()
-        }
-    }
     
     //MARK: Actions
     @objc func addContact(){

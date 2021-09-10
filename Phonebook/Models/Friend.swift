@@ -5,11 +5,10 @@
 //  Created by Nil Nguyen on 8/24/21.
 //
 
-import Foundation
 import Contacts
 import UIKit
 
-class Friend {
+class Friend : Codable{
     
     var uid = UUID().uuidString
     var firstName: String
@@ -58,6 +57,28 @@ class Friend {
         copy.source = self.source
         copy.avatarData = self.avatarData
         return copy
+    }
+    
+    enum CodingKeys : String, CodingKey {
+        case uid
+        case firstName
+        case lastName
+        case phoneNumbers
+    }
+    
+    func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encode(firstName, forKey: .firstName)
+        try container.encode(lastName, forKey: .lastName)
+        try container.encode(uid, forKey: .uid)
+        try container.encode(phoneNumbers, forKey: .phoneNumbers)
+    }
+    required init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        firstName = try container.decode(String.self, forKey: .firstName)
+        lastName = try container.decode(String.self, forKey: .lastName)
+        uid = try container.decode(String.self, forKey: .uid)
+        phoneNumbers = try container.decode([String].self, forKey: .phoneNumbers)
     }
 }
 

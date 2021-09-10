@@ -17,7 +17,7 @@ protocol PhonebookManagerDelegate {
     func contactUpdated(_ contact: Friend)
 }
 class PhonebookManager {
-    private var friendStore: FriendStore = InMemoFriendStore.shared
+    private var friendStore: FriendStore = PlistFriendStore()
     private let nativeStore = CNContactStore()
     
     private var isAuthorized = {
