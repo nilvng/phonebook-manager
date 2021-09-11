@@ -8,7 +8,7 @@
 import Foundation
 import Contacts
 import ContactsUI
-
+import CoreData
 
 protocol PhonebookManagerDelegate {
     func contactListRefreshed(contacts: [String: Friend])
@@ -17,8 +17,14 @@ protocol PhonebookManagerDelegate {
     func contactUpdated(_ contact: Friend)
 }
 class PhonebookManager {
-    private var friendStore: FriendStore = PlistFriendStore()
+    var friendStore: FriendStore! {
+        didSet{
+            self.friends = self.listToDict(listFriend: self.friendStore.getAll())
+        }
+    }
     private let nativeStore = CNContactStore()
+    
+    private var friends : [String: Friend] = [:]
     
     private var isAuthorized = {
         CNContactStore.authorizationStatus(for: .contacts) == .authorized
@@ -31,76 +37,77 @@ class PhonebookManager {
         target: nil)
     
     var delegate: PhonebookManagerDelegate?
-    
+
     static let shared = PhonebookManager()
     private init(){}
     
-    func fetchData(_ complilationHandler: @escaping (Result<String,Error>) -> () ){
+    
+    func fetchData(forceReload :Bool = false,_ complilationHandler: @escaping (Result<String,Error>) -> () ){
+        var dataDidChange = false
+
         print("Fetching data..")
-        var contacts : [String: Friend] = [:]
         // TODO: when contacts list is occupied
         // 0. pull data from local database
         // 1. upload current list to Contacts.app
         // 1a. record is new
         // 1b. record existed
-        
-        // Populate Table with persisted data
-        self.delegate?.contactListRefreshed(contacts:self.friendStore.friends)
-        
+
+        // Fetch data from native Contacts app
         guard isAuthorized else {
             complilationHandler(.failure(FetchError.unauthorized))
             return
         }
         self.friendsQueue.async {
-            // pull data
             let cnContacts = self.getAllContactsFromNative()
-            // merge data
-            contacts = self.friendStore.reloadData(cnContacts: cnContacts) // writer
-            // inform table view
-            self.delegate?.contactListRefreshed(contacts: contacts)
-            complilationHandler(.success("Sync data is completed"))
-            }
-    }
-    func refreshData(){
-        var dataDidChange = false
-        print("Refreshing data...")
-        guard CNContactStore.authorizationStatus(for: .contacts) == .authorized else {
-            return
-        }
-        self.friendsQueue.async {
-            // pull data
-            let cnContacts = self.getAllContactsFromNative()
-            
             // case 1: native contact added or updated O(n)
             for cnContact in cnContacts{
-                let nativeFriend = Friend(contact: cnContact)
-                if let localCopy = self.friendStore.friends[nativeFriend.uid], localCopy != nativeFriend {
+                if let localCopy = self.friends[cnContact.identifier] {
+                    /// assign native source
+                    localCopy.source = cnContact
+                    if localCopy.firstName != cnContact.givenName && localCopy.lastName != cnContact.familyName { // hanging...: check for changes
+                        /// Edited contact
+                        dataDidChange = true
+                        self.updateFriend(localCopy)
+                        self.friendStore.updateFriend(localCopy)
+                   }
+                }else {
+                    /// New contact
                     dataDidChange = true
-                self.friendStore.friends[cnContact.identifier] = Friend(contact: cnContact)
+                    let friend = Friend(contact: cnContact)
+                    self.addFriend(friend)
+                    self.friendStore.addFriend(friend)
                 }
             }
-
             // case 2: native contact deleted O(n^2)
-            if cnContacts.count < self.friendStore.friends.count{
-                for current in self.friendStore.friends.values{ // reader
+            if cnContacts.count < self.friends.count{
+                for current in self.friends.values{ // reader
                     if !cnContacts.contains(where: {$0.identifier == current.uid}){
+                        /// Deleted contact
                         dataDidChange = true
+                        self.deleteFriend(current)
                         self.friendStore.deleteFriend(current)
                         }
                     }
             }
-            
-            if dataDidChange {
+
+            if forceReload || dataDidChange {
                 print("Data did change.")
-                self.delegate?.contactListRefreshed(contacts: self.friendStore.friends)
+                self.friendStore.saveChanges() // hanging: may not able to persist
+                self.delegate?.contactListRefreshed(contacts: self.friends)
             }
         }
+            
     }
+
     func add(_ contact: Friend ){
         self.friendsQueue.async {
+            // save copy in memo
+            self.addFriend(contact)
             // save copy in database
             self.friendStore.addFriend(contact)
+            // qualified to delegate now...
             self.delegate?.newContactAdded(contact: contact)
+            
             // save copy in database
             self.saveContact(contact){ success in
                 if success {
@@ -111,22 +118,30 @@ class PhonebookManager {
     }
     func delete(_ contact: Friend, at row: Int){
         self.friendsQueue.async {
+            // delete copy in memory
+            self.deleteFriend(contact)
             // delete copy in database
             self.friendStore.deleteFriend(contact)
+            // qualified to delegate now...
             self.delegate?.contactDeleted(row: row)
+            
             // delete copy in native database
-            self.updateContact(contact){ success in
+            self.removeContact(contact){ success in
                 if success {
-                    print("Completed delete update from native.")
+                    print("Completed delete from native.")
                 }
             }
         }
     }
     func update(_ contact: Friend){
         self.friendsQueue.async {
+            // update copy in memory
+            self.updateFriend(contact)
             // update copy in database
             self.friendStore.updateFriend(contact)
+            // qualified to delegate now...
             self.delegate?.contactUpdated(contact)
+            
             // update copy in native database
             self.updateContact(contact){ success in
                 if success {
@@ -137,18 +152,48 @@ class PhonebookManager {
     }
     
     func getContactList()->[String: Friend]{
-        let immutableList = friendStore.friends // Copying this variable into a new variable for immutability
-        return self.friendsQueue.sync {
-            return immutableList
-        }
+        let immutableList = self.friends // Copying this variable into a new variable for immutability
+        return immutableList
     }
     
     func getContact(key: String) -> Friend? {
-        return self.friendsQueue.sync {
-            return friendStore.get(key: key)
+        return self.friends[key]
+    }
+    
+    func listToDict(listFriend: [Friend]) -> [String:Friend]{
+        var dict : [String: Friend] = [:]
+        for i in listFriend{
+            dict[i.uid] = i
         }
+        return dict
     }
 
+}
+
+// MARK: - In-memo Store
+extension PhonebookManager {
+
+    func addFriend(_ person: Friend){
+        friends[person.uid] = person
+    }
+    
+    func deleteFriend(_ person: Friend) {
+        // remove in-memo
+        friends.removeValue(forKey: person.uid)
+    }
+    
+    func updateFriend(_ person: Friend){
+        friends[person.uid] = person
+    }
+    func contains(_ person:Friend) -> Bool{
+        return friends[person.uid] != nil
+    }
+    func get(key: String) -> Friend?{
+        return friends[key]
+    }
+    func getAll() -> [String: Friend]{
+        return friends
+    }
 }
 
 // MARK: - methods for CnContactStore
@@ -179,7 +224,7 @@ extension PhonebookManager {
         }
         do{
             let request = CNSaveRequest()
-            request.add(contact.toMutableContact()!, toContainerWithIdentifier: nil)
+            request.add(contact.toMutableContact(), toContainerWithIdentifier: nil)
             try self.nativeStore.execute(request)
             completition(true)
         }catch let err{
@@ -193,7 +238,7 @@ extension PhonebookManager {
             completition(false)
             return
         }
-        if let mutableContact = contact.toMutableContact(){
+        let mutableContact = contact.toMutableContact()
             do{
                 let request = CNSaveRequest()
                 request.delete(mutableContact)
@@ -203,7 +248,6 @@ extension PhonebookManager {
                 print("Failed to delete contact in Contacts native app: ",err)
                 completition(false)
             }
-        }
     }
     
     private func updateContact(_ contact: Friend, completition: @escaping (Bool) -> Void) {
@@ -213,7 +257,7 @@ extension PhonebookManager {
         }
         do{
             let request = CNSaveRequest()
-            request.update(contact.toMutableContact()!)
+            request.update(contact.toMutableContact())
             try self.nativeStore.execute(request)
             completition(true)
         }catch let err{

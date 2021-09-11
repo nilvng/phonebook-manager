@@ -15,7 +15,7 @@ class FriendEditViewController: UITableViewController {
 
     typealias FriendChangeAction = (Friend) -> Void
     
-    private var editedFriend : Friend = .init(random: false)
+    private var editedFriend : Friend?
     private var isNew : Bool = false
     var delegate : EditViewDelegate?
     var friendAddAction : FriendChangeAction?
@@ -30,10 +30,7 @@ class FriendEditViewController: UITableViewController {
     
     init(for friend: Friend?) {
         super.init(nibName: nil, bundle: nil)
-        if let friend = friend {
-            editedFriend = friend.copy()
-        }
-        
+        editedFriend = friend
         
         navigationItem.rightBarButtonItem = UIBarButtonItem(
             barButtonSystemItem: .done,
@@ -53,14 +50,17 @@ class FriendEditViewController: UITableViewController {
     
     override func viewDidLoad() {
         tableView.register(FriendTextEditCell.self, forCellReuseIdentifier: FriendTextEditCell.identifier)
-        
 
+        
         tableView.rowHeight = 65
         tableView.separatorStyle = .none
     }
     
     @objc func onSubmitChanges(){
-        delegate?.changesSubmitted(item: editedFriend)
+        guard let friend = editedFriend else {
+            fatalError()
+        }
+        delegate?.changesSubmitted(item: friend)
         navigationController?.popViewController(animated: true)
         //dismiss(animated: true, completion:nil)
             
@@ -125,7 +125,7 @@ extension FriendEditViewController{
         let cell = tableView.dequeueReusableCell(withIdentifier: FriendTextEditCell.identifier, for: indexPath) as! FriendTextEditCell
         guard let detail = FriendTextDetail(rawValue: indexPath.row) else {return UITableViewCell()}
         
-        let text = detail.displayText(for: editedFriend) ?? ""
+        let text = detail.displayText(for: editedFriend!) ?? ""
         let placeholder = detail.displayPlaceholder() ?? ""
         cell.selectionStyle = .none
         cell.backgroundColor = .systemGray
@@ -139,6 +139,6 @@ extension FriendEditViewController{
 extension FriendEditViewController: TextEditCellDelegate {
     func textEndEditing(for attr: FriendTextDetail, newValue: String) {
         print("set this attr \(attr): \(newValue).")
-        attr.setValue(for: editedFriend, newValue: newValue)
+        attr.setValue(for: editedFriend!, newValue: newValue)
     }
 }

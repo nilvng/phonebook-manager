@@ -7,6 +7,7 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
+<<<<<<< HEAD
             uuid = "E1EAAD23-56EF-469F-80DC-05141F49125A"
             shouldBeEnabled = "No"
             ignoreCount = "0"
@@ -39,6 +40,8 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
+=======
+>>>>>>> persistence
             uuid = "62354593-A941-44CD-AB55-FE97532F3FDC"
             shouldBeEnabled = "No"
             ignoreCount = "0"
@@ -46,9 +49,15 @@
             filePath = "Phonebook/Models/Friend.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
+<<<<<<< HEAD
             startingLineNumber = "75"
             endingLineNumber = "75"
             landmarkName = "encode(to:)"
+=======
+            startingLineNumber = "51"
+            endingLineNumber = "51"
+            landmarkName = "init(contact:)"
+>>>>>>> persistence
             landmarkType = "7">
             <Locations>
                <Location
@@ -94,6 +103,7 @@
             filePath = "Phonebook/PhonebookManager.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
+<<<<<<< HEAD
             startingLineNumber = "197"
             endingLineNumber = "197"
             landmarkName = "removeContact(_:completition:)"
@@ -113,6 +123,11 @@
             startingLineNumber = "70"
             endingLineNumber = "70"
             landmarkName = "refreshData()"
+=======
+            startingLineNumber = "214"
+            endingLineNumber = "214"
+            landmarkName = "getAllContactsFromNative()"
+>>>>>>> persistence
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
