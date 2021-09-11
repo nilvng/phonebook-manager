@@ -60,6 +60,13 @@ class FriendsViewController : UIViewController {
         PhonebookManager.shared.delegate = self
         
     }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        let contacts = PhonebookManager.shared.getAll()
+        self.friendList = contacts.map{ $0.value}
+        self.tableView.reloadData()
+    }
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         tableView.anchor(top: view.topAnchor, left: view.leftAnchor, bottom: view.bottomAnchor, right: view.rightAnchor)
