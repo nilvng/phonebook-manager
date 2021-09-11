@@ -12,9 +12,14 @@
 		C85A6AE026D929EB00349794 /* FriendDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C85A6ADF26D929EB00349794 /* FriendDetailViewController.swift */; };
 		C85A6AF726DA47C700349794 /* UIViewExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = C85A6AF626DA47C700349794 /* UIViewExtension.swift */; };
 		C85A6B0526DB796C00349794 /* FriendsDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = C85A6B0426DB796C00349794 /* FriendsDataSource.swift */; };
+<<<<<<< HEAD
 		C897BF7126EBAB5B00ABCF18 /* FriendPlist.swift in Sources */ = {isa = PBXBuildFile; fileRef = C897BF7026EBAB5B00ABCF18 /* FriendPlist.swift */; };
 		C89807BB26EA4B5800B00A6E /* Phonebook.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = C89807B926EA4B5800B00A6E /* Phonebook.xcdatamodeld */; };
 		C89807C626EA5D2F00B00A6E /* FriendCoreData.swift in Sources */ = {isa = PBXBuildFile; fileRef = C89807C526EA5D2F00B00A6E /* FriendCoreData.swift */; };
+=======
+		C89F6D7E26E832780044A83E /* FriendEditDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = C89F6D7D26E832780044A83E /* FriendEditDataSource.swift */; };
+		C89F6D8326E832880044A83E /* FriendDetailDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = C89F6D8226E832880044A83E /* FriendDetailDataSource.swift */; };
+>>>>>>> add-contact
 		C8A4B9F126D534C20065BB20 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8A4B9F026D534C20065BB20 /* AppDelegate.swift */; };
 		C8A4B9F326D534C20065BB20 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8A4B9F226D534C20065BB20 /* SceneDelegate.swift */; };
 		C8A4B9F526D534C20065BB20 /* FriendsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8A4B9F426D534C20065BB20 /* FriendsViewController.swift */; };
@@ -64,9 +69,14 @@
 		C85A6ADF26D929EB00349794 /* FriendDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendDetailViewController.swift; sourceTree = "<group>"; };
 		C85A6AF626DA47C700349794 /* UIViewExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIViewExtension.swift; sourceTree = "<group>"; };
 		C85A6B0426DB796C00349794 /* FriendsDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendsDataSource.swift; sourceTree = "<group>"; };
+<<<<<<< HEAD
 		C897BF7026EBAB5B00ABCF18 /* FriendPlist.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendPlist.swift; sourceTree = "<group>"; };
 		C89807BA26EA4B5800B00A6E /* Friend.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Friend.xcdatamodel; sourceTree = "<group>"; };
 		C89807C526EA5D2F00B00A6E /* FriendCoreData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendCoreData.swift; sourceTree = "<group>"; };
+=======
+		C89F6D7D26E832780044A83E /* FriendEditDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendEditDataSource.swift; sourceTree = "<group>"; };
+		C89F6D8226E832880044A83E /* FriendDetailDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendDetailDataSource.swift; sourceTree = "<group>"; };
+>>>>>>> add-contact
 		C8A4B9ED26D534C20065BB20 /* Phonebook.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Phonebook.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		C8A4B9F026D534C20065BB20 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		C8A4B9F226D534C20065BB20 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -134,6 +144,8 @@
 				C8F25E2826E0AA92000EA9CC /* FriendEditViewController.swift */,
 				C8F25E5826E115AA000EA9CC /* EditStackViewController.swift */,
 				C85A6B0426DB796C00349794 /* FriendsDataSource.swift */,
+				C89F6D7D26E832780044A83E /* FriendEditDataSource.swift */,
+				C89F6D8226E832880044A83E /* FriendDetailDataSource.swift */,
 			);
 			path = Controllers;
 			sourceTree = "<group>";
@@ -361,6 +373,8 @@
 				C897BF7126EBAB5B00ABCF18 /* FriendPlist.swift in Sources */,
 				C8A4BA2926D53A3D0065BB20 /* FriendStore.swift in Sources */,
 				C8F25E2926E0AA92000EA9CC /* FriendEditViewController.swift in Sources */,
+				C89F6D8326E832880044A83E /* FriendDetailDataSource.swift in Sources */,
+				C89F6D7E26E832780044A83E /* FriendEditDataSource.swift in Sources */,
 				C85A6AE026D929EB00349794 /* FriendDetailViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

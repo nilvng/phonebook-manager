@@ -7,19 +7,33 @@
 
 import UIKit
 
-class FriendDetailViewController: UITableViewController {
-    private var friend : Friend?
+class FriendDetailViewController: UIViewController {
+    typealias FriendChangeAction = (Friend) -> Void
+    private var changeAction : FriendChangeAction?
     
-    func configure(with friend: Friend){
+    private var friend : Friend?
+    private var tempFriend : Friend?
+    private var dataSource : UITableViewDataSource?
+    private var tableView : UITableView = {
+       let view = UITableView()
+        view.rowHeight = UITableView.automaticDimension
+        view.estimatedRowHeight = 70
+        view.register(UITableViewCell.self, forCellReuseIdentifier: FriendDetailDataSource.identifier)
+        view.register(FriendTextEditCell.self, forCellReuseIdentifier: FriendTextEditCell.identifier)
+        view.register(FriendDetailAvatarCell.self, forCellReuseIdentifier: FriendDetailAvatarCell.identifier)
+        view.register(FriendAvatarEditCell.self, forCellReuseIdentifier: FriendAvatarEditCell.identifier)
+
+        view.tableFooterView = UIView()
+        return view
+    }()
+    
+    func configure(with friend: Friend, changeAction: @escaping FriendChangeAction){
         self.friend = friend
+        self.changeAction = changeAction
     }
-    init(for friend: Friend) {
+    
+    init() {
         super.init(nibName: nil, bundle: nil)
-        navigationItem.rightBarButtonItem = UIBarButtonItem(
-            barButtonSystemItem: .edit,
-            target: self,
-            action: #selector(onEditButtonPressed))
-        configure(with: friend)
     }
     
     required init?(coder: NSCoder) {
@@ -27,25 +41,66 @@ class FriendDetailViewController: UITableViewController {
     }
     
     override func viewDidLoad() {
-        tableView.register(UITableViewCell.self, forCellReuseIdentifier: FriendDetailViewController.identifier)
-        
-        tableView.register(FriendDetailAvatarCell.self, forCellReuseIdentifier: FriendDetailAvatarCell.identifier)
-        
-        tableView.allowsSelection = false
-        tableView.tableFooterView = UIView()
-        
+        super.viewDidLoad()
+        view.addSubview(tableView)
+        tableView.frame = view.layer.bounds
+        tableView.delegate = self
+
+        setEditing(false, animated: false)
+
         navigationItem.largeTitleDisplayMode = .never
+        navigationItem.rightBarButtonItem = editButtonItem
         
     }
     
     @objc func onEditButtonPressed(){
-        guard let f = friend else {return }
-        let stackView = EditStackViewController()
-        stackView.configure(for: f)
-        stackView.delegate = self
-        navigationController?.pushViewController(stackView, animated: true)
+        if tableView.isEditing {
+            self.setEditing(false, animated: true)
+        } else {
+            self.setEditing(true, animated: true)
+        }
     }
     
+    override func setEditing(_ isEditing: Bool, animated: Bool){
+        super.setEditing(isEditing, animated: animated)
+        
+        if isEditing {
+            transitionToEditMode()
+        } else {
+            // done editing existing contact
+            if let temp = tempFriend {
+                self.friend = temp
+                self.tempFriend = nil
+                self.changeAction?(temp)
+            }
+            transitionToDetailMode()
+        }
+        tableView.dataSource = dataSource
+        tableView.reloadData()
+    }
+    
+    fileprivate func transitionToDetailMode(){
+        dataSource = FriendDetailDataSource(friend: self.friend!)
+        tableView.allowsSelection = false
+        navigationItem.title = NSLocalizedString("View Contact", comment: "nav title for detail view")
+        navigationItem.leftBarButtonItem = nil
+        navigationItem.rightBarButtonItem?.isEnabled = true
+    }
+    
+    fileprivate func transitionToEditMode(){
+        dataSource = FriendEditDataSource(friend: self.friend!){ friend in
+            print("Editing in detail...")
+            self.tempFriend = friend
+        }
+        navigationItem.title = NSLocalizedString("Edit Reminder", comment: "edit reminder nav title")
+        navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .cancel, target: self, action: #selector(cancelButtonTrigger))
+    }
+    @objc
+    func cancelButtonTrigger() {
+        tempFriend = nil
+        setEditing(false, animated: true)
+    }
+
 }
 
 // MARK: EditViewDelegate
@@ -59,59 +114,13 @@ extension FriendDetailViewController : EditViewDelegate {
 
 }
 
-// MARK: - FriendDetailView
 
-extension FriendDetailViewController{
-    static let identifier = "ContactDetailCell"
-    
-    public enum FriendDetail: Int, CaseIterable{
-        case avatar
-        case phonenumber
-        
-        func displayText(for friend: Friend?) -> String? {
-            switch self {
-            case .phonenumber:
-                return friend?.phoneNumbers[0]
-            case .avatar:
-                return nil
-            }
-        }
-        var cellIcon: UIImage?{
-            switch self {
-            case .phonenumber:
-                return UIImage(systemName: "phone")
-            case .avatar:
-                return nil
-                }
-            }
-        }
-
-    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return FriendDetail.allCases.count
-    }
-    
-    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+extension FriendDetailViewController : UITableViewDelegate {
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         if indexPath.row == 0 {
-            // first cell is contact avatar
-            let cell = tableView.dequeueReusableCell(withIdentifier: FriendDetailAvatarCell.identifier, for: indexPath) as! FriendDetailAvatarCell
-            if let contact = friend{
-                cell.configure(avatar: contact.avatarData,
-                               fullname: "\(contact.firstName) \(contact.lastName)")
-                return cell
-            } else {
-                return UITableViewCell()
-            }
-        }
-        let cell = tableView.dequeueReusableCell(withIdentifier: FriendDetailViewController.identifier, for: indexPath)
-        let detail = FriendDetail(rawValue: indexPath.row)
-        cell.textLabel?.text = detail?.displayText(for: self.friend)
-        cell.imageView?.image = detail?.cellIcon
-        return cell
-    }
-    override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        if indexPath.row == 0{
-            return 200 // height for avatar cell
+            return 200
         }
         return 65
     }
 }
+

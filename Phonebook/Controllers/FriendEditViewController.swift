@@ -129,16 +129,6 @@ extension FriendEditViewController{
         let placeholder = detail.displayPlaceholder() ?? ""
         cell.selectionStyle = .none
         cell.backgroundColor = .systemGray
-        cell.delegate = self
-        cell.configure(for: detail, with: text, placeholder: placeholder)
         return cell
-    }
-}
-
-
-extension FriendEditViewController: TextEditCellDelegate {
-    func textEndEditing(for attr: FriendTextDetail, newValue: String) {
-        print("set this attr \(attr): \(newValue).")
-        attr.setValue(for: editedFriend!, newValue: newValue)
     }
 }

@@ -35,6 +35,9 @@ class Friend{
     func copy() -> Friend {
         let copy = Friend()
         copy.uid = self.uid
+        copy.firstName = self.firstName
+        copy.lastName = self.lastName
+        copy.phoneNumbers = self.phoneNumbers
         copy.source = self.source
         copy.avatarData = self.avatarData
         return copy
