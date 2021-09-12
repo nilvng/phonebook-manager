@@ -13,16 +13,26 @@ import CoreData
 class AppDelegate: UIResponder, UIApplicationDelegate {
     
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
-        PhonebookManager.shared.friendStore = PlistFriendStore()
-        // Get the latest contacts
-        PhonebookManager.shared.fetchData(forceReload: true) { result in
-            switch result {
-            case .success(let msg):
-                print(msg)
-            case .failure(let err):
-                print(err)
+        
+        PhonebookManager.shared.friendStore = CoreDataFriendStore()
+        
+        // Ask for permission to access Contacts
+        CNContactStore().requestAccess(for: CNEntityType.contacts){ res,err  in
+            if res {
+                print("Permission granted.")
+                // Get the latest contacts
+                PhonebookManager.shared.fetchData(forceReload: true) { result in
+                    switch result {
+                    case .success(let msg):
+                        print(msg)
+                    case .failure(let err):
+                        print(err)
+                        }
                 }
+            }
         }
+        
+
         return true
     }
 

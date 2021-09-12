@@ -163,8 +163,10 @@ extension FriendsViewController: UITableViewDelegate{
         tableView.deselectRow(at: indexPath, animated: true)
         
         let friend = friendList[indexPath.row]
+        print(friend)
+        
         let detailController = FriendDetailViewController()
-        detailController.configure(with: friend){ friend in
+        detailController.configure(with: friend.copy()){ friend in
             PhonebookManager.shared.update(friend)
         }
         navigationController?.pushViewController(detailController, animated: true)

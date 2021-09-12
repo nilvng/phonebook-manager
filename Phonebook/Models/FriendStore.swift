@@ -16,7 +16,7 @@ protocol FriendStore {
     func contains(_ person:Friend) -> Bool
     func get(key: String) -> Friend?
     func getAll() -> [Friend]
-    func saveChanges() -> Bool
+    func saveChanges(completion: @escaping (Bool) ->Void)
     func loadData()-> Result<[Friend], Error>
 }
 
@@ -57,26 +57,26 @@ class PlistFriendStore: FriendStore {
     }()
 
         
-    @objc func saveChanges() -> Bool {
+    @objc func saveChanges(completion: @escaping (Bool) ->Void) {
         print("Saving items to: \(itemArchiveURL)")
         do{
             let encoder = PropertyListEncoder()
             let data = try encoder.encode(friends)
             try data.write(to: itemArchiveURL)
             print("Saved all items")
-            return true
+            completion(true)
         } catch let encodingError{
             print("Error encoding items: \(encodingError)")
-            return false
+            completion(false)
         }
     }
     
-    func loadData()-> Result<[Friend], Error>{
+    @discardableResult func loadData()-> Result<[Friend], Error>{
         do {
-            let data = try Data(contentsOf: itemArchiveURL)
-            let unarchiver = PropertyListDecoder()
-            let persons = try unarchiver.decode([FriendPlist].self, from: data)
-            self.friends = persons
+            let data        = try Data(contentsOf: itemArchiveURL)
+            let unarchiver  = PropertyListDecoder()
+            let persons     = try unarchiver.decode([FriendPlist].self, from: data)
+            self.friends    = persons
             
             let universalTypeFriends : [Friend] = self.convertToFriendList()
             return .success(universalTypeFriends)
@@ -134,7 +134,7 @@ class PlistFriendStore: FriendStore {
 class CoreDataFriendStore: FriendStore {
     
     // MARK: Properties
-    lazy var persistentContainer: NSPersistentContainer = {
+    let persistentContainer: NSPersistentContainer = {
         let container = NSPersistentContainer(name: "Phonebook")
         container.loadPersistentStores { description, error in
             if let error = error {
@@ -144,23 +144,25 @@ class CoreDataFriendStore: FriendStore {
         return container
     }()
     
-    private func createPrivateContext() -> NSManagedObjectContext {
-        return persistentContainer.newBackgroundContext()
+    private func getContext() -> NSManagedObjectContext {
+       // return persistentContainer.newBackgroundContext()
+        return persistentContainer.viewContext
     }
     // MARK: APIs
     func loadData()-> Result<[Friend], Error> {
-        let  context = persistentContainer.viewContext
-        let request : NSFetchRequest<FriendCoreData> =  NSFetchRequest()
+        let  context = getContext()
+        let request : NSFetchRequest<FriendCoreData> = FriendCoreData.fetchRequest()
         var universalTypeFriends : [Friend] = []
         context.performAndWait {
             do {
                 let allFriends = try context.fetch(request)
                 universalTypeFriends = allFriends.compactMap {f in
                     let friend = Friend()
-                    friend.firstName = f.firstName
-                    friend.lastName = f.lastName
-                    friend.phoneNumbers = f.phoneNumbers
-                    friend.uid = f.uid
+                    friend.firstName    = f.firstName ?? ""
+                    friend.lastName     = f.lastName ?? ""
+                    friend.phoneNumbers = f.phoneNumbers ?? [""]
+                    friend.uid          = f.uid ?? UUID().uuidString
+                    print("Load from Core Data: \(friend)")
                     return friend
                 }
 
@@ -171,12 +173,12 @@ class CoreDataFriendStore: FriendStore {
         return .success(universalTypeFriends)
     }
 
-    func saveChanges() -> Bool {
-        print("Save changes to Core Data: hanging...")
-        return true
+    @objc func saveChanges(completion: @escaping (Bool) ->Void) {
+        print("Save changes to Core Data manually: hanging...")
+        completion(false)
     }
     @discardableResult func addFriend(_ person : Friend) -> Friend{
-        let context = persistentContainer.viewContext
+        let context =  getContext()
         var friend : FriendCoreData!
         context.performAndWait {
         friend = FriendCoreData(context: context)
@@ -193,18 +195,22 @@ class CoreDataFriendStore: FriendStore {
         return person
     }
     func deleteFriend(_ person: Friend){
-        let context = persistentContainer.viewContext
-        var friend : FriendCoreData!
-        friend = FriendCoreData(context: context)
-        friend.firstName = person.firstName
-        friend.lastName = person.lastName
-        friend.phoneNumbers = person.phoneNumbers
-        friend.uid = person.uid
-        
-        persistentContainer.viewContext.delete(friend)
+        let context = getContext()
+        let fetchRequest: NSFetchRequest<FriendCoreData> = FriendCoreData.fetchRequest()
+        fetchRequest.predicate = NSPredicate.init(format: "uid == %@",person.uid)
+
+        do {
+            let objects = try context.fetch(fetchRequest)
+            for object in objects {
+                context.delete(object)
+            }
+            try context.save()
+        } catch (let err) {
+            print("Error in adding contact: \(err)")
+        }
     }
     func updateFriend(_ person: Friend){
-        let context = persistentContainer.viewContext
+        let context =  getContext()
         var friend : FriendCoreData!
         context.performAndWait {
         friend = FriendCoreData(context: context)
@@ -228,6 +234,12 @@ class CoreDataFriendStore: FriendStore {
     }
     
     func getAll() -> [Friend]{
-        fatalError()
+        let res = self.loadData()
+        switch res {
+        case .success(let friends):
+            return friends
+        default:
+            return [] // hanging: return empty list if cannot fetch data
+        }
     }
 }

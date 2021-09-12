@@ -57,6 +57,8 @@ class PhonebookManager {
             complilationHandler(.failure(FetchError.unauthorized))
             return
         }
+        
+
         self.friendsQueue.async {
             let cnContacts = self.getAllContactsFromNative()
             // case 1: native contact added or updated O(n)
@@ -69,6 +71,7 @@ class PhonebookManager {
                         dataDidChange = true
                         self.updateFriend(localCopy)
                         self.friendStore.updateFriend(localCopy)
+                        print("updated contact:\(localCopy)")
                    }
                 }else {
                     /// New contact
@@ -76,23 +79,27 @@ class PhonebookManager {
                     let friend = Friend(contact: cnContact)
                     self.addFriend(friend)
                     self.friendStore.addFriend(friend)
+                    print("new contact:\(friend)")
                 }
             }
             // case 2: native contact deleted O(n^2)
             if cnContacts.count < self.friends.count{
-                for current in self.friends.values{ // reader
-                    if !cnContacts.contains(where: {$0.identifier == current.uid}){
+                for localCopy in self.friends.values{ // reader
+                    if !cnContacts.contains(where: {$0.identifier == localCopy.uid}){
                         /// Deleted contact
                         dataDidChange = true
-                        self.deleteFriend(current)
-                        self.friendStore.deleteFriend(current)
+                        self.deleteFriend(localCopy)
+                        self.friendStore.deleteFriend(localCopy)
+                        print("deleted contact:\(localCopy)")
                         }
                     }
             }
 
             if forceReload || dataDidChange {
                 print("Data did change.")
-                self.friendStore.saveChanges() // hanging: may not able to persist
+                self.friendStore.saveChanges(){ res in
+                    print("Done persist data: \(res)")
+                }// hanging: may not able to persist
                 self.delegate?.contactListRefreshed(contacts: self.friends)
             }
         }
@@ -111,7 +118,8 @@ class PhonebookManager {
             // save copy in database
             self.saveContact(contact){ success in
                 if success {
-                    print("Completed save update to native.")
+                    // TODO: update uid to match native contact identifier
+                    print("Successfully Add contact to native.")
                 }
             }
         }
@@ -128,7 +136,7 @@ class PhonebookManager {
             // delete copy in native database
             self.removeContact(contact){ success in
                 if success {
-                    print("Completed delete from native.")
+                    print("Successfully Delete from native.")
                 }
             }
         }
@@ -145,7 +153,7 @@ class PhonebookManager {
             // update copy in native database
             self.updateContact(contact){ success in
                 if success {
-                    print("Completed update contact to native.")
+                    print("Successfully Update contact to native.")
                 }
             }
         }

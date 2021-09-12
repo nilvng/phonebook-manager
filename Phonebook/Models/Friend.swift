@@ -26,7 +26,7 @@ class Friend{
     }
 
     init() {
-        uid = ""
+        uid = UUID().uuidString
         firstName = ""
         lastName = ""
         phoneNumbers = [""]
@@ -41,6 +41,25 @@ class Friend{
         copy.source = self.source
         copy.avatarData = self.avatarData
         return copy
+    }
+    
+    func getPhoneNumber(index: Int) -> String{
+        guard index > -1 else {
+            print("Warning: access phone number out of range.")
+            return ""
+        }
+        guard  phoneNumbers.count > index else {
+            return ""
+        }
+        return phoneNumbers[index]
+    }
+    
+    func setPhoneNumber(_ value :String ,at index: Int) {
+        if phoneNumbers.count <= index {
+            phoneNumbers.append(value)
+        } else {
+            phoneNumbers[index] = value
+        }
     }
 }
 
@@ -81,5 +100,11 @@ extension Friend{
             return CNLabeledValue(label: CNLabelPhoneNumberMain, value: CNPhoneNumber(stringValue: $0))}
         return contactObj
 
+    }
+}
+
+extension Friend : CustomStringConvertible {
+    var description: String{
+        "id: \(uid); name: \(firstName) \(lastName); \(phoneNumbers)"
     }
 }

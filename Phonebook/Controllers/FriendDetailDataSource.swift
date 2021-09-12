@@ -18,7 +18,7 @@ class FriendDetailDataSource : NSObject, UITableViewDataSource {
         func displayText(for friend: Friend?) -> String? {
             switch self {
             case .phonenumber:
-                return friend?.phoneNumbers[0]
+                return friend?.getPhoneNumber(index: 0)
             case .avatar:
                 return nil
             }

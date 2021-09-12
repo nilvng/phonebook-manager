@@ -8,6 +8,10 @@
 import UIKit
 import Foundation
 
+protocol EditViewDelegate {
+    func changesSubmitted(item: Friend)
+}
+
 class EditStackViewController: UIViewController {
     
     typealias FriendChangeAction = (Friend) -> Void
@@ -48,7 +52,7 @@ class EditStackViewController: UIViewController {
             case .lastname:
                 return self.customTextField(text: contact.lastName, placeholder: "Last name")
             case .phonenumber:
-                return self.customTextField(text: contact.phoneNumbers[0], placeholder: "Phone number")
+                return self.customTextField(text: contact.getPhoneNumber(index: 0), placeholder: "Phone number")
             }
         }
         func customTextField(text: String, placeholder: String) -> UITextField{
@@ -74,11 +78,9 @@ class EditStackViewController: UIViewController {
             case .lastname:
                 contact.lastName = newValue
             case .phonenumber:
-                contact.phoneNumbers[0] = newValue
+                contact.setPhoneNumber(newValue, at: 0)
             }
-
         }
-        
     }
 
     init() {
@@ -116,7 +118,6 @@ class EditStackViewController: UIViewController {
                     self.friendAddAction?(self.contact)
                 }
             }
-            return
         }
         // Edit existing contact
         delegate?.changesSubmitted(item: self.contact)

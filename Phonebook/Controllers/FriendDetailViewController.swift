@@ -88,11 +88,10 @@ class FriendDetailViewController: UIViewController {
     }
     
     fileprivate func transitionToEditMode(){
-        dataSource = FriendEditDataSource(friend: self.friend!){ friend in
-            print("Editing in detail...")
+        dataSource = FriendEditDataSource(friend: self.friend!.copy()){ friend in
             self.tempFriend = friend
         }
-        navigationItem.title = NSLocalizedString("Edit Reminder", comment: "edit reminder nav title")
+        navigationItem.title = NSLocalizedString("Edit Contact", comment: "edit reminder nav title")
         navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .cancel, target: self, action: #selector(cancelButtonTrigger))
     }
     @objc
