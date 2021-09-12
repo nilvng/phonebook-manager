@@ -63,23 +63,24 @@ class PhonebookManager {
             let cnContacts = self.getAllContactsFromNative()
             // case 1: native contact added or updated O(n)
             for cnContact in cnContacts{
+                let nativeFriend = Friend(contact: cnContact)
                 if let localCopy = self.friends[cnContact.identifier] {
                     /// assign native source
                     localCopy.source = cnContact
-                    if localCopy.firstName != cnContact.givenName && localCopy.lastName != cnContact.familyName { // hanging...: check for changes
-                        /// Edited contact
+                    // notice changes from native
+                    if nativeFriend != localCopy {
+                        /// Edited contact if we have a record with this id but the record's content is not the same
                         dataDidChange = true
-                        self.updateFriend(localCopy)
-                        self.friendStore.updateFriend(localCopy)
-                        print("updated contact:\(localCopy)")
+                        self.updateFriend(nativeFriend)
+                        self.friendStore.updateFriend(nativeFriend)
+                        print("updated contact:\(nativeFriend)")
                    }
                 }else {
-                    /// New contact
+                    /// New contact if we didn't have record that has this contact id
                     dataDidChange = true
-                    let friend = Friend(contact: cnContact)
-                    self.addFriend(friend)
-                    self.friendStore.addFriend(friend)
-                    print("new contact:\(friend)")
+                    self.addFriend(nativeFriend)
+                    self.friendStore.addFriend(nativeFriend)
+                    print("new contact:\(nativeFriend)")
                 }
             }
             // case 2: native contact deleted O(n^2)

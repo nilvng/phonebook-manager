@@ -103,6 +103,15 @@ extension Friend{
     }
 }
 
+extension Friend : Equatable {
+    static func == (lhs: Friend, rhs: Friend) -> Bool {
+        return lhs.uid == rhs.uid &&
+            lhs.firstName == rhs.firstName &&
+            lhs.lastName == rhs.lastName &&
+            lhs.phoneNumbers == rhs.phoneNumbers
+    }
+}
+
 extension Friend : CustomStringConvertible {
     var description: String{
         "id: \(uid); name: \(firstName) \(lastName); \(phoneNumbers)"

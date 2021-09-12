@@ -63,9 +63,9 @@ class FriendsViewController : UIViewController {
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        let contacts = PhonebookManager.shared.getAll()
-        self.friendList = contacts.map{ $0.value}
-        self.tableView.reloadData()
+        let contacts = PhonebookManager.shared.getAll().map{ $0.value}
+
+        refreshViewWith(data: contacts)
     }
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
@@ -93,16 +93,26 @@ class FriendsViewController : UIViewController {
             self.navigationItem.rightBarButtonItem?.title = "Done"
         }
     }
+    
+    func refreshViewWith(data: [Friend]){
+        let differences = data.difference(from: self.friendList)
+        if self.friendList != data {
+            print("Reload table.")
+            self.friendList = data
+            DispatchQueue.main.async {
+                self.tableView.reloadData()
+            }
+        }
+        
+    }
 }
 
 extension FriendsViewController: PhonebookManagerDelegate{
     
     func contactListRefreshed(contacts: [String : Friend]) {
             // update with the refreshed contact list
-        DispatchQueue.main.async {
-            self.friendList = contacts.map{ $0.value}
-            self.tableView.reloadData()
-        }
+        let contactList = contacts.map{ $0.value}
+        refreshViewWith(data: contactList)
     }
     func newContactAdded(contact: Friend){
  

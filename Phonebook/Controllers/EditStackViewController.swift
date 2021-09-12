@@ -8,17 +8,12 @@
 import UIKit
 import Foundation
 
-protocol EditViewDelegate {
-    func changesSubmitted(item: Friend)
-}
-
 class EditStackViewController: UIViewController {
     
     typealias FriendChangeAction = (Friend) -> Void
     private var isNew : Bool = false
 
     private var contact : Friend!
-    var delegate : EditViewDelegate?
     var friendAddAction : FriendChangeAction?
 
     
@@ -120,7 +115,7 @@ class EditStackViewController: UIViewController {
             }
         }
         // Edit existing contact
-        delegate?.changesSubmitted(item: self.contact)
+        //delegate?.changesSubmitted(item: self.contact)
         navigationController?.popViewController(animated: true)
     }
     

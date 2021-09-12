@@ -15,6 +15,8 @@
 		C899494226ECA7DE005E2735 /* Phonebook.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = C899493F26ECA7DE005E2735 /* Phonebook.xcdatamodeld */; };
 		C899494826ECED2A005E2735 /* FriendCoreData+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = C899494626ECED2A005E2735 /* FriendCoreData+CoreDataClass.swift */; };
 		C899494926ECED2A005E2735 /* FriendCoreData+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = C899494726ECED2A005E2735 /* FriendCoreData+CoreDataProperties.swift */; };
+		C899496326EDBC69005E2735 /* CoreDataFriendStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = C899496226EDBC69005E2735 /* CoreDataFriendStore.swift */; };
+		C899496826EDBC97005E2735 /* PlistFriendStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = C899496726EDBC97005E2735 /* PlistFriendStore.swift */; };
 		C89F6D7E26E832780044A83E /* FriendEditDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = C89F6D7D26E832780044A83E /* FriendEditDataSource.swift */; };
 		C89F6D8326E832880044A83E /* FriendDetailDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = C89F6D8226E832880044A83E /* FriendDetailDataSource.swift */; };
 		C8A4B9F126D534C20065BB20 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8A4B9F026D534C20065BB20 /* AppDelegate.swift */; };
@@ -67,6 +69,8 @@
 		C899494126ECA7DE005E2735 /* Friend.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Friend.xcdatamodel; sourceTree = "<group>"; };
 		C899494626ECED2A005E2735 /* FriendCoreData+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "FriendCoreData+CoreDataClass.swift"; sourceTree = "<group>"; };
 		C899494726ECED2A005E2735 /* FriendCoreData+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "FriendCoreData+CoreDataProperties.swift"; sourceTree = "<group>"; };
+		C899496226EDBC69005E2735 /* CoreDataFriendStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataFriendStore.swift; sourceTree = "<group>"; };
+		C899496726EDBC97005E2735 /* PlistFriendStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlistFriendStore.swift; sourceTree = "<group>"; };
 		C89F6D7D26E832780044A83E /* FriendEditDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendEditDataSource.swift; sourceTree = "<group>"; };
 		C89F6D8226E832880044A83E /* FriendDetailDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendDetailDataSource.swift; sourceTree = "<group>"; };
 		C8A4B9ED26D534C20065BB20 /* Phonebook.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Phonebook.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -144,6 +148,8 @@
 			children = (
 				C8A4BA2326D534EA0065BB20 /* Friend.swift */,
 				C8A4BA2826D53A3D0065BB20 /* FriendStore.swift */,
+				C899496226EDBC69005E2735 /* CoreDataFriendStore.swift */,
+				C899496726EDBC97005E2735 /* PlistFriendStore.swift */,
 				C899494626ECED2A005E2735 /* FriendCoreData+CoreDataClass.swift */,
 				C899494726ECED2A005E2735 /* FriendCoreData+CoreDataProperties.swift */,
 				C897BF7026EBAB5B00ABCF18 /* FriendPlist.swift */,
@@ -356,12 +362,14 @@
 				C8A4B9F126D534C20065BB20 /* AppDelegate.swift in Sources */,
 				C8A4BA2426D534EA0065BB20 /* Friend.swift in Sources */,
 				C8F25E3E26E0D991000EA9CC /* FriendAvatarEditCell.swift in Sources */,
+				C899496826EDBC97005E2735 /* PlistFriendStore.swift in Sources */,
 				C8A4B9F326D534C20065BB20 /* SceneDelegate.swift in Sources */,
 				C8F25E3726E0D0E4000EA9CC /* FriendAvatarCell.swift in Sources */,
 				C897BF7126EBAB5B00ABCF18 /* FriendPlist.swift in Sources */,
 				C8A4BA2926D53A3D0065BB20 /* FriendStore.swift in Sources */,
 				C899494226ECA7DE005E2735 /* Phonebook.xcdatamodeld in Sources */,
 				C899494926ECED2A005E2735 /* FriendCoreData+CoreDataProperties.swift in Sources */,
+				C899496326EDBC69005E2735 /* CoreDataFriendStore.swift in Sources */,
 				C89F6D8326E832880044A83E /* FriendDetailDataSource.swift in Sources */,
 				C89F6D7E26E832780044A83E /* FriendEditDataSource.swift in Sources */,
 				C85A6AE026D929EB00349794 /* FriendDetailViewController.swift in Sources */,

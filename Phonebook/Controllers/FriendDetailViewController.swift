@@ -102,18 +102,6 @@ class FriendDetailViewController: UIViewController {
 
 }
 
-// MARK: EditViewDelegate
-extension FriendDetailViewController : EditViewDelegate {
-    
-    func changesSubmitted(item updatedFriend: Friend){
-        self.friend = updatedFriend
-        tableView.reloadData()
-        PhonebookManager.shared.update(updatedFriend)
-    }
-
-}
-
-
 extension FriendDetailViewController : UITableViewDelegate {
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         if indexPath.row == 0 {
