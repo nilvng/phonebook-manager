@@ -38,7 +38,7 @@ class CoreDataFriendStoreAdapter: FriendStore {
     }
     
     func toFriend(_ person: FriendCoreData) -> Friend {
-        let friend = Friend()
+        var friend = Friend()
         friend.uid = person.uid!
         friend.firstName = person.firstName!
         friend.lastName = person.lastName!
@@ -110,7 +110,7 @@ class PlistFriendStoreAdapter : FriendStore{
     
     func convertToFriendList(_ plistFriends: [FriendPlist]) -> [Friend] {
         let friendList : [Friend] = plistFriends.compactMap {f in
-            let friend = Friend()
+            var friend = Friend()
             friend.firstName = f.firstName
             friend.lastName = f.lastName
             friend.phoneNumbers = f.phoneNumbers
@@ -121,7 +121,7 @@ class PlistFriendStoreAdapter : FriendStore{
     }
     
     func convertToFriend(_ f : FriendPlist) -> Friend {
-            let friend = Friend()
+            var friend = Friend()
             friend.firstName = f.firstName
             friend.lastName = f.lastName
             friend.phoneNumbers = f.phoneNumbers

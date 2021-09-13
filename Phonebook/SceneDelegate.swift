@@ -45,14 +45,14 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     func sceneWillEnterForeground(_ scene: UIScene) {
         // Called as the scene transitions from the background to the foreground.
         // Use this method to undo the changes made on entering the background.
-        PhonebookManager.shared.fetchData(forceReload: false) { result in
-            switch result {
-            case .success(let msg):
-                print(msg)
-            case .failure(let err):
-                print(err)
-                }
-        }
+//        PhonebookManager.shared.fetchData(forceReload: false) { result in
+//            switch result {
+//            case .success(let msg):
+//                print(msg)
+//            case .failure(let err):
+//                print(err)
+//                }
+//        }
     }
 
     func sceneDidEnterBackground(_ scene: UIScene) {

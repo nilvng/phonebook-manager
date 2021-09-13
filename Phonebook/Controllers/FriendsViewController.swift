@@ -63,9 +63,10 @@ class FriendsViewController : UIViewController {
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        let contacts = PhonebookManager.shared.getAll().map{ $0.value}
-
-        refreshViewWith(data: contacts)
+        let contacts = PhonebookManager.shared.getAll()
+//        refreshViewWith(data: contacts)
+        self.friendList = contacts.compactMap { $0.value }
+        self.tableView.reloadData()
     }
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
@@ -75,8 +76,8 @@ class FriendsViewController : UIViewController {
     //MARK: Actions
     @objc func addContact(){
         // add to the store
-        let addView = EditStackViewController()
-        addView.configure(for: Friend(), isNew: true, addAction: { friend in
+        let addView = FriendDetailViewController()
+        addView.configure(with: Friend(), isNew: true, changeAction: { friend in
             PhonebookManager.shared.add(friend)
         })
         present(UINavigationController(rootViewController: addView), animated: true, completion: nil)
@@ -94,16 +95,17 @@ class FriendsViewController : UIViewController {
         }
     }
     
-    func refreshViewWith(data: [Friend]){
-        let differences = data.difference(from: self.friendList)
-        if self.friendList != data {
-            print("Reload table.")
-            self.friendList = data
-            DispatchQueue.main.async {
-                self.tableView.reloadData()
+    func refreshViewWith(data: [String: Friend]){
+        for e in self.friendList {
+            if data[e.uid] == nil || data[e.uid] != e{
+                DispatchQueue.main.async {
+                    print("Refresh table.")
+                    self.friendList = data.compactMap { $0.value }
+                    self.tableView.reloadData()
+                }
+                return
             }
         }
-        
     }
 }
 
@@ -111,8 +113,7 @@ extension FriendsViewController: PhonebookManagerDelegate{
     
     func contactListRefreshed(contacts: [String : Friend]) {
             // update with the refreshed contact list
-        let contactList = contacts.map{ $0.value}
-        refreshViewWith(data: contactList)
+        refreshViewWith(data: contacts)
     }
     func newContactAdded(contact: Friend){
  
@@ -176,7 +177,7 @@ extension FriendsViewController: UITableViewDelegate{
         print(friend)
         
         let detailController = FriendDetailViewController()
-        detailController.configure(with: friend.copy()){ friend in
+        detailController.configure(with: friend){ friend in
             PhonebookManager.shared.update(friend)
         }
         navigationController?.pushViewController(detailController, animated: true)

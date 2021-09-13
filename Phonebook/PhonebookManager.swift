@@ -37,10 +37,22 @@ class PhonebookManager {
         target: nil)
     
     var delegate: PhonebookManagerDelegate?
+    private var notiToken: NSObjectProtocol?
 
     static let shared = PhonebookManager()
-    private init(){}
+    private init(){
+        NotificationCenter.default.addObserver(self, selector: #selector(refreshData), name: .CNContactStoreDidChange, object: nil)
+    }
     
+    deinit {
+        NotificationCenter.default.removeObserver(self)
+    }
+    
+    @objc func refreshData() {
+        fetchData { res in
+            print(res)
+        }
+    }
     
     func fetchData(forceReload :Bool = false,_ complilationHandler: @escaping (Result<String,Error>) -> () ){
         var dataDidChange = false
@@ -58,22 +70,25 @@ class PhonebookManager {
             return
         }
         
-
         self.friendsQueue.async {
             let cnContacts = self.getAllContactsFromNative()
             // case 1: native contact added or updated O(n)
             for cnContact in cnContacts{
+                //print("native id: \(cnContact.identifier) -> \(cnContact.givenName)")
                 let nativeFriend = Friend(contact: cnContact)
+                self.friends[cnContact.identifier]?.source = cnContact
+
+                /// assign native source
                 if let localCopy = self.friends[cnContact.identifier] {
-                    /// assign native source
-                    localCopy.source = cnContact
                     // notice changes from native
                     if nativeFriend != localCopy {
                         /// Edited contact if we have a record with this id but the record's content is not the same
                         dataDidChange = true
+                        print("updated contact:\(nativeFriend)")
+                        print("previous: \(localCopy)")
                         self.updateFriend(nativeFriend)
                         self.friendStore.updateFriend(nativeFriend)
-                        print("updated contact:\(nativeFriend)")
+
                    }
                 }else {
                     /// New contact if we didn't have record that has this contact id
