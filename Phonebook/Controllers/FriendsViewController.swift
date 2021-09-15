@@ -96,17 +96,29 @@ class FriendsViewController : UIViewController {
     }
     
     func refreshViewWith(data: [String: Friend]){
+        print("current contacts in view: \(self.friendList)")
+        if self.friendList.count == 0 {
+            DispatchQueue.main.async {
+                print("Refresh table.")
+                self.friendList = data.compactMap { $0.value }
+                self.tableView.reloadData()
+            }
+            return
+
+        }
         for e in self.friendList {
-            if data[e.uid] == nil || data[e.uid] != e{
+            if data[e.uid] == nil || data[e.uid] != e {
+                
                 DispatchQueue.main.async {
                     print("Refresh table.")
                     self.friendList = data.compactMap { $0.value }
                     self.tableView.reloadData()
                 }
                 return
+
+                }
             }
         }
-    }
 }
 
 extension FriendsViewController: PhonebookManagerDelegate{

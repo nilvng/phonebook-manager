@@ -14,7 +14,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         
-        PhonebookManager.shared.friendStore = CoreDataFriendStoreAdapter(adaptee: CoreDataFriendStore())
+        PhonebookManager.shared.friendStore = CoreDataFriendStoreAdapter(adaptee: CoreDataStoreTest())
         // Ask for permission to access Contacts
         CNContactStore().requestAccess(for: CNEntityType.contacts){ res,err  in
             if res {

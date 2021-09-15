@@ -76,7 +76,7 @@ extension FriendEditDataSource : UITableViewDataSource {
             }
         case .phonenumber:
             if let phoneNumberCell = cell as? FriendTextEditCell{
-                phoneNumberCell.configure(with: self.friend.getPhoneNumber(index: 0), placeholder: "Phone number"){ value in
+                phoneNumberCell.configure(with: self.friend.getPhoneNumber(index: 0), placeholder: "Phone number", onlyNumber: true){ value in
                     self.friend.setPhoneNumber(value, at: 0)
                     self.changeAction?(self.friend)
 

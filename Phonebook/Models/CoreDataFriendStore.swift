@@ -11,15 +11,19 @@ import CoreData
 class CoreDataFriendStore {
     
     // MARK: Properties
-    let persistentContainer: NSPersistentContainer = {
+    var persistentContainer: NSPersistentContainer
+//    var persistentContainer: NSPersistentContainer!
+
+    init() {
         let container = NSPersistentContainer(name: "Phonebook")
         container.loadPersistentStores { description, error in
             if let error = error {
                 fatalError("Unable to load persistent stores: \(error)")
             }
         }
-        return container
-    }()
+        persistentContainer =  container
+
+    }
     
     func getContext() -> NSManagedObjectContext {
        // return persistentContainer.newBackgroundContext()
@@ -89,5 +93,42 @@ class CoreDataFriendStore {
             }
         return friends
     }
+    
+    func gets(id: String) -> FriendCoreData? {
+        let context = getContext()
+        let fetchRequest : NSFetchRequest<FriendCoreData> = FriendCoreData.fetchRequest()
+        
+        let predicate = NSPredicate(format: "uid == %@", id)
+        fetchRequest.predicate = predicate
+        
+        do {
+            let objects = try context.fetch(fetchRequest)
+            return objects.first
+        } catch (let err) {
+            print("Error:\(err)\nCannot retrieve object from Core Data with this id: \(id)")
+            return nil
+        }
+    }
 }
 
+
+class CoreDataStoreTest : CoreDataFriendStore {
+    
+    
+    override init() {
+        super.init()
+        let container = NSPersistentContainer(name: "Phonebook")
+        
+        let description = NSPersistentStoreDescription()
+        description.url = URL(fileURLWithPath: "/dev/null")
+        container.persistentStoreDescriptions = [description]
+                
+        container.loadPersistentStores { _, err in
+            if let error = err as NSError? {
+                fatalError("Unresolved error \(error), \(error.userInfo)")
+              }
+        }
+        
+        persistentContainer = container
+    }
+}

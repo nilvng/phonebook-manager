@@ -84,6 +84,13 @@ class PlistFriendStore {
         NotificationCenter.default.removeObserver(self, name: UIApplication.didEnterBackgroundNotification, object: nil)
     }
 
-    
+    func gets(id: String) -> FriendPlist? {
+        for f in friends {
+            if f.uid == id {
+                return f
+            }
+        }
+        return nil
+    }
 }
 

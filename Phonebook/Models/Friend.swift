@@ -34,17 +34,6 @@ struct Friend{
         lastName = ""
         phoneNumbers = []
     }
-
-//    func copy() -> Friend {
-//        let copy = Friend()
-//        copy.uid = self.uid
-//        copy.firstName = self.firstName
-//        copy.lastName = self.lastName
-//        copy.phoneNumbers = self.phoneNumbers
-//        copy.source = self.source
-//        copy.avatarData = self.avatarData
-//        return copy
-//    }
     
     func getPhoneNumber(index: Int) -> String{
         guard index > -1 else {
@@ -70,10 +59,11 @@ extension Friend{
         
     init(contact: CNContact) {
         self.init()
-        self.uid = contact.identifier
+        self.uid            = contact.identifier
         self.firstName      = contact.givenName
         self.lastName       = contact.familyName
         self.source         = contact
+        self.avatarData     = contact.imageData
         self.phoneNumbers   = contact.phoneNumbers.compactMap { $0.value.stringValue}
     }
     
@@ -112,11 +102,11 @@ extension Friend : Equatable {
             lhs.source == rhs.source
     }
     
-    static func == (lhs: Friend, rhs: CNContact) -> Bool {
-        return lhs.uid == rhs.identifier &&
+    static func != (lhs: Friend, rhs: CNContact) -> Bool {
+        return !(lhs.uid == rhs.identifier &&
             lhs.firstName == rhs.givenName &&
             lhs.lastName == rhs.familyName &&
-            lhs.phoneNumbers == rhs.phoneNumbers.compactMap { $0.value.stringValue}
+            lhs.phoneNumbers == rhs.phoneNumbers.compactMap { $0.value.stringValue})
     }
 }
 

@@ -11,6 +11,30 @@
 		C85A6AD226D8F7CF00349794 /* PhonebookManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = C85A6AD126D8F7CF00349794 /* PhonebookManager.swift */; };
 		C85A6AE026D929EB00349794 /* FriendDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C85A6ADF26D929EB00349794 /* FriendDetailViewController.swift */; };
 		C85A6AF726DA47C700349794 /* UIViewExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = C85A6AF626DA47C700349794 /* UIViewExtension.swift */; };
+		C894F6F726F0BE5C003137EB /* UIViewExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = C85A6AF626DA47C700349794 /* UIViewExtension.swift */; };
+		C894F6FB26F0BE5E003137EB /* UIViewExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = C85A6AF626DA47C700349794 /* UIViewExtension.swift */; };
+		C894F70226F0C0AE003137EB /* ContactCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C80690ED26D602B000DDAC94 /* ContactCell.swift */; };
+		C894F70626F0C0B7003137EB /* ContactCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C80690ED26D602B000DDAC94 /* ContactCell.swift */; };
+		C894F70A26F0C0BE003137EB /* FriendsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8A4B9F426D534C20065BB20 /* FriendsViewController.swift */; };
+		C894F70E26F0C0C3003137EB /* FriendDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C85A6ADF26D929EB00349794 /* FriendDetailViewController.swift */; };
+		C894F71226F0C0C6003137EB /* FriendEditDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = C89F6D7D26E832780044A83E /* FriendEditDataSource.swift */; };
+		C894F71626F0C0CA003137EB /* FriendDetailDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = C89F6D8226E832880044A83E /* FriendDetailDataSource.swift */; };
+		C894F71A26F0C180003137EB /* Friend.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8A4BA2326D534EA0065BB20 /* Friend.swift */; };
+		C894F71E26F0C181003137EB /* Friend.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8A4BA2326D534EA0065BB20 /* Friend.swift */; };
+		C894F72226F0C185003137EB /* FriendStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8A4BA2826D53A3D0065BB20 /* FriendStore.swift */; };
+		C894F72626F0C186003137EB /* FriendStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8A4BA2826D53A3D0065BB20 /* FriendStore.swift */; };
+		C894F72A26F0C18B003137EB /* CoreDataFriendStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = C899496226EDBC69005E2735 /* CoreDataFriendStore.swift */; };
+		C894F72E26F0C18C003137EB /* CoreDataFriendStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = C899496226EDBC69005E2735 /* CoreDataFriendStore.swift */; };
+		C894F73226F0C18F003137EB /* PlistFriendStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = C899496726EDBC97005E2735 /* PlistFriendStore.swift */; };
+		C894F73626F0C190003137EB /* PlistFriendStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = C899496726EDBC97005E2735 /* PlistFriendStore.swift */; };
+		C894F73A26F0C193003137EB /* FriendCoreData+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = C899494626ECED2A005E2735 /* FriendCoreData+CoreDataClass.swift */; };
+		C894F73E26F0C194003137EB /* FriendCoreData+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = C899494626ECED2A005E2735 /* FriendCoreData+CoreDataClass.swift */; };
+		C894F74226F0C198003137EB /* FriendCoreData+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = C899494726ECED2A005E2735 /* FriendCoreData+CoreDataProperties.swift */; };
+		C894F74626F0C198003137EB /* FriendCoreData+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = C899494726ECED2A005E2735 /* FriendCoreData+CoreDataProperties.swift */; };
+		C894F74A26F0C19B003137EB /* FriendPlist.swift in Sources */ = {isa = PBXBuildFile; fileRef = C897BF7026EBAB5B00ABCF18 /* FriendPlist.swift */; };
+		C894F74E26F0C19C003137EB /* FriendPlist.swift in Sources */ = {isa = PBXBuildFile; fileRef = C897BF7026EBAB5B00ABCF18 /* FriendPlist.swift */; };
+		C894F75226F0C1B3003137EB /* PhonebookManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = C85A6AD126D8F7CF00349794 /* PhonebookManager.swift */; };
+		C894F75626F0C1B3003137EB /* PhonebookManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = C85A6AD126D8F7CF00349794 /* PhonebookManager.swift */; };
 		C897BF7126EBAB5B00ABCF18 /* FriendPlist.swift in Sources */ = {isa = PBXBuildFile; fileRef = C897BF7026EBAB5B00ABCF18 /* FriendPlist.swift */; };
 		C899494226ECA7DE005E2735 /* Phonebook.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = C899493F26ECA7DE005E2735 /* Phonebook.xcdatamodeld */; };
 		C899494826ECED2A005E2735 /* FriendCoreData+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = C899494626ECED2A005E2735 /* FriendCoreData+CoreDataClass.swift */; };
@@ -375,8 +399,18 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C894F70626F0C0B7003137EB /* ContactCell.swift in Sources */,
+				C894F72226F0C185003137EB /* FriendStore.swift in Sources */,
+				C894F73226F0C18F003137EB /* PlistFriendStore.swift in Sources */,
+				C894F71E26F0C181003137EB /* Friend.swift in Sources */,
+				C894F74A26F0C19B003137EB /* FriendPlist.swift in Sources */,
+				C894F75226F0C1B3003137EB /* PhonebookManager.swift in Sources */,
+				C894F74226F0C198003137EB /* FriendCoreData+CoreDataProperties.swift in Sources */,
+				C894F6F726F0BE5C003137EB /* UIViewExtension.swift in Sources */,
 				C8F25E3126E0D0A8000EA9CC /* FriendTextEditCell.swift in Sources */,
+				C894F72A26F0C18B003137EB /* CoreDataFriendStore.swift in Sources */,
 				C8F25E3F26E0D991000EA9CC /* FriendAvatarEditCell.swift in Sources */,
+				C894F73A26F0C193003137EB /* FriendCoreData+CoreDataClass.swift in Sources */,
 				C8A4BA0826D534C50065BB20 /* PhonebookTests.swift in Sources */,
 				C8F25E3826E0D0E4000EA9CC /* FriendAvatarCell.swift in Sources */,
 			);
@@ -386,10 +420,24 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C894F70226F0C0AE003137EB /* ContactCell.swift in Sources */,
+				C894F72626F0C186003137EB /* FriendStore.swift in Sources */,
+				C894F6FB26F0BE5E003137EB /* UIViewExtension.swift in Sources */,
+				C894F70E26F0C0C3003137EB /* FriendDetailViewController.swift in Sources */,
+				C894F71226F0C0C6003137EB /* FriendEditDataSource.swift in Sources */,
+				C894F75626F0C1B3003137EB /* PhonebookManager.swift in Sources */,
 				C8F25E3226E0D0A8000EA9CC /* FriendTextEditCell.swift in Sources */,
+				C894F74E26F0C19C003137EB /* FriendPlist.swift in Sources */,
 				C8F25E4026E0D991000EA9CC /* FriendAvatarEditCell.swift in Sources */,
+				C894F70A26F0C0BE003137EB /* FriendsViewController.swift in Sources */,
+				C894F74626F0C198003137EB /* FriendCoreData+CoreDataProperties.swift in Sources */,
+				C894F73E26F0C194003137EB /* FriendCoreData+CoreDataClass.swift in Sources */,
 				C8A4BA1326D534C50065BB20 /* PhonebookUITests.swift in Sources */,
 				C8F25E3926E0D0E4000EA9CC /* FriendAvatarCell.swift in Sources */,
+				C894F73626F0C190003137EB /* PlistFriendStore.swift in Sources */,
+				C894F71626F0C0CA003137EB /* FriendDetailDataSource.swift in Sources */,
+				C894F71A26F0C180003137EB /* Friend.swift in Sources */,
+				C894F72E26F0C18C003137EB /* CoreDataFriendStore.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -15,13 +15,22 @@ protocol FriendStore {
     func updateFriend(_ person: Friend)
     func getAll() -> [Friend]
     func saveChanges(completion: @escaping (Bool) ->Void)
+    func gets(id: String) -> Friend?
 }
 
 class CoreDataFriendStoreAdapter: FriendStore {
+
     
     private var adaptee : CoreDataFriendStore
     init(adaptee : CoreDataFriendStore) {
         self.adaptee = adaptee
+    }
+    func gets(id: String) -> Friend? {
+        let cdFriend = adaptee.gets(id: id)
+        if let cdfriend = cdFriend {
+            return toFriend(cdfriend)
+        }
+        return nil
     }
     
     func toFriendCoreData(_ person: Friend) -> FriendCoreData{
@@ -106,7 +115,13 @@ class PlistFriendStoreAdapter : FriendStore{
     func saveChanges(completion: @escaping (Bool) -> Void) {
         adaptee.saveChanges(completion: completion)
     }
-    
+    func gets(id: String) -> Friend? {
+        let cdFriend = adaptee.gets(id: id)
+        if cdFriend == nil {
+            return nil
+        }
+        return convertToFriend(cdFriend!)
+    }
     
     func convertToFriendList(_ plistFriends: [FriendPlist]) -> [Friend] {
         let friendList : [Friend] = plistFriends.compactMap {f in

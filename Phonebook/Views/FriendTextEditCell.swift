@@ -24,10 +24,12 @@ class FriendTextEditCell: UITableViewCell {
     }
     func configure(with text: String,
                    placeholder: String,
+                   onlyNumber: Bool = false,
                    changeAction: @escaping TitleChangeAction){
         
         textfield.placeholder = placeholder
         textfield.text = text
+        textfield.keyboardType = onlyNumber ? .numberPad : .alphabet
         self.titleChangeAction = changeAction
     }
         
