@@ -24,17 +24,16 @@ class CoreDataFriendStoreAdapter: FriendStore {
         self.adaptee = adaptee
     }
     
-    func toFriendCoreData(_ person: Friend) -> FriendCoreData{
+    func toFriendCoreData(_ person: Friend, completion: @escaping (FriendCoreData) -> Void){
         let context =  adaptee.getContext()
-        var friend : FriendCoreData!
-        context.performAndWait {
-        friend = FriendCoreData(context: context)
+        context.perform {
+        let friend = FriendCoreData(context: context)
         friend.firstName = person.firstName
         friend.lastName = person.lastName
         friend.phoneNumbers = person.phoneNumbers
         friend.uid = person.uid
+        completion(friend)
         }
-        return friend
     }
     
     func toFriend(_ person: FriendCoreData) -> Friend {
@@ -54,18 +53,21 @@ class CoreDataFriendStoreAdapter: FriendStore {
     }
     
     func addFriend(_ person: Friend) {
-        let coreDataCopy = toFriendCoreData(person)
-        adaptee.addFriend(coreDataCopy)
+        toFriendCoreData(person){ coreDataCopy in
+            self.adaptee.addFriend(coreDataCopy)
+        }
     }
     
     func deleteFriend(_ person: Friend) {
-        let coreDataCopy = toFriendCoreData(person)
-        adaptee.deleteFriend(coreDataCopy)
+        toFriendCoreData(person){ coreDataCopy in
+            self.adaptee.deleteFriend(coreDataCopy)
+        }
     }
     
     func updateFriend(_ person: Friend) {
-        let coreDataCopy = toFriendCoreData(person)
-        adaptee.updateFriend(coreDataCopy)
+        toFriendCoreData(person){ coreDataCopy in
+            self.adaptee.updateFriend(coreDataCopy)
+        }
     }
     
     func getAll() -> [Friend] {

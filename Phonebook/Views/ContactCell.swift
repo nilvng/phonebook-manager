@@ -59,6 +59,7 @@ class ContactCell: UITableViewCell {
     func configure(with friend: Friend){
         self.friend = friend
     }
+    
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
             
         super.init(style: style, reuseIdentifier: reuseIdentifier)

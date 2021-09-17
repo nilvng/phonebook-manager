@@ -107,6 +107,24 @@ class PhonebookManager {
             
     }
 
+    func resolveConflicts(){
+        /* Assume that our contact list is the most up-to-date
+            Push our list to native database */
+        for friend in self.friends.values {
+            self.saveContact(friend) { res in
+                if !res {
+                    // cannot save this contact -> attempt to update it
+                    self.updateContact(friend){ res in
+                        print("Resolve conflict of friend \(friend.uid): Update")
+                    }
+                }else {
+                    print("Resolve conflict of friend \(friend.uid): Add")
+                }
+            }
+        }
+        // fetchData()
+    }
+    
     func add(_ contact: Friend ){
         self.friendsQueue.async {
             // save copy in memo

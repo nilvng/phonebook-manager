@@ -70,12 +70,12 @@ extension Friend{
         self.init()
         self.firstName = contact.givenName
         self.lastName = contact.familyName
-        
-        let numbers =  contact.phoneNumbers.compactMap { $0.value.stringValue}
-        self.phoneNumbers = numbers
         self.uid = contact.identifier
         self.source = contact
-    }
+        self.avatarData     = contact.imageData
+        let numbers =  contact.phoneNumbers.compactMap { $0.value.stringValue}
+        self.phoneNumbers = numbers
+            }
     
     func toCNContact() -> CNContact {
         if let storedContact = source{

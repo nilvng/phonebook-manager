@@ -40,7 +40,7 @@ class FriendsViewController : UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         navigationItem.title = "Phonebook"
-        let rightButton = UIBarButtonItem(title: "Edit", style: UIBarButtonItem.Style.plain, target: self, action: #selector(toggleEditMode))
+        let rightButton = UIBarButtonItem(title: "Delete", style: UIBarButtonItem.Style.plain, target: self, action: #selector(toggleEditMode))
         
         navigationItem.rightBarButtonItem = rightButton
         navigationItem.leftBarButtonItem = UIBarButtonItem(
@@ -63,7 +63,7 @@ class FriendsViewController : UIViewController {
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        let contacts = PhonebookManager.shared.getAll().map{ $0.value}
+        let contacts = PhonebookManager.shared.getAll()
 
         refreshViewWith(data: contacts)
     }
@@ -86,7 +86,7 @@ class FriendsViewController : UIViewController {
     @objc func toggleEditMode(){
         if (tableView.isEditing  == true) {
             tableView.setEditing(false, animated: true)
-            self.navigationItem.rightBarButtonItem?.title = "Edit"
+            self.navigationItem.rightBarButtonItem?.title = "Delete"
 
         } else {
             tableView.setEditing(true, animated: true)
@@ -94,25 +94,38 @@ class FriendsViewController : UIViewController {
         }
     }
     
-    func refreshViewWith(data: [Friend]){
-        let differences = data.difference(from: self.friendList)
-        if self.friendList != data {
-            print("Reload table.")
-            self.friendList = data
+    func refreshViewWith(data: [String:Friend]){
+
+        if self.friendList.count == 0 {
             DispatchQueue.main.async {
+                print("Refresh table.")
+                self.friendList = data.compactMap { $0.value }
                 self.tableView.reloadData()
             }
+            return
+
         }
-        
-    }
+        for e in self.friendList {
+            if data[e.uid] == nil || data[e.uid] != e {
+                
+                DispatchQueue.main.async {
+                    print("Refresh table.")
+                    self.friendList = data.compactMap { $0.value }
+                    self.tableView.reloadData()
+                }
+                return
+
+                }
+            }
+        }
+    
 }
 
 extension FriendsViewController: PhonebookManagerDelegate{
     
     func contactListRefreshed(contacts: [String : Friend]) {
             // update with the refreshed contact list
-        let contactList = contacts.map{ $0.value}
-        refreshViewWith(data: contactList)
+        refreshViewWith(data: contacts)
     }
     func newContactAdded(contact: Friend){
  
@@ -176,8 +189,11 @@ extension FriendsViewController: UITableViewDelegate{
         print(friend)
         
         let detailController = FriendDetailViewController()
-        detailController.configure(with: friend.copy()){ friend in
-            PhonebookManager.shared.update(friend)
+        detailController.configure(with: friend.copy()){ friendToUpdate in
+            // only ask Manager to update it truly changed
+            if friendToUpdate != friend{
+                PhonebookManager.shared.update(friendToUpdate)
+            }
         }
         navigationController?.pushViewController(detailController, animated: true)
     }

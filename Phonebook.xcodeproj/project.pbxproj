@@ -8,6 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		C80690EE26D602B000DDAC94 /* ContactCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C80690ED26D602B000DDAC94 /* ContactCell.swift */; };
+		C843467026F39B63003C8D5B /* Friend.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8A4BA2326D534EA0065BB20 /* Friend.swift */; };
+		C843467426F39B73003C8D5B /* Friend.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8A4BA2326D534EA0065BB20 /* Friend.swift */; };
 		C85A6AD226D8F7CF00349794 /* PhonebookManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = C85A6AD126D8F7CF00349794 /* PhonebookManager.swift */; };
 		C85A6AE026D929EB00349794 /* FriendDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C85A6ADF26D929EB00349794 /* FriendDetailViewController.swift */; };
 		C85A6AF726DA47C700349794 /* UIViewExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = C85A6AF626DA47C700349794 /* UIViewExtension.swift */; };
@@ -382,6 +384,7 @@
 			files = (
 				C8F25E3126E0D0A8000EA9CC /* FriendTextEditCell.swift in Sources */,
 				C8F25E3F26E0D991000EA9CC /* FriendAvatarEditCell.swift in Sources */,
+				C843467026F39B63003C8D5B /* Friend.swift in Sources */,
 				C8A4BA0826D534C50065BB20 /* PhonebookTests.swift in Sources */,
 				C8F25E3826E0D0E4000EA9CC /* FriendAvatarCell.swift in Sources */,
 			);
@@ -394,6 +397,7 @@
 				C8F25E3226E0D0A8000EA9CC /* FriendTextEditCell.swift in Sources */,
 				C8F25E4026E0D991000EA9CC /* FriendAvatarEditCell.swift in Sources */,
 				C8A4BA1326D534C50065BB20 /* PhonebookUITests.swift in Sources */,
+				C843467426F39B73003C8D5B /* Friend.swift in Sources */,
 				C8F25E3926E0D0E4000EA9CC /* FriendAvatarCell.swift in Sources */,
 				C8F25E5A26E115AA000EA9CC /* EditStackViewController.swift in Sources */,
 			);

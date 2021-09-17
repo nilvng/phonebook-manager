@@ -57,7 +57,7 @@ class CoreDataFriendStore {
         }
         let context = getContext()
         let fetchRequest: NSFetchRequest<FriendCoreData> = FriendCoreData.fetchRequest()
-        fetchRequest.predicate = NSPredicate.init(format: "uid == \(id)")
+        fetchRequest.predicate = NSPredicate.init(format: "\(#keyPath(FriendCoreData.uid)) == %@",id)
 
         do {
             let objects = try context.fetch(fetchRequest)

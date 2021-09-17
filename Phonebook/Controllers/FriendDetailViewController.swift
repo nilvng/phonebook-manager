@@ -51,6 +51,25 @@ class FriendDetailViewController: UIViewController {
         navigationItem.largeTitleDisplayMode = .never
         navigationItem.rightBarButtonItem = editButtonItem
         
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWasShown), name: UIResponder.keyboardDidShowNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillBeHidden), name: UIResponder.keyboardWillHideNotification, object: nil)
+
+    }
+    
+    @objc func keyboardWasShown (notification: NSNotification)
+    {
+        print("keyboard was shown")
+        if let keyboardSize = (notification.userInfo?[UIResponder.keyboardFrameBeginUserInfoKey] as? NSValue)?.cgRectValue {
+            tableView.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: keyboardSize.height + 20, right: 0)
+         }
+        
+    }
+
+    @objc func keyboardWillBeHidden (notification: NSNotification)
+    {
+        print("keyboard will be hidden")
+        tableView.contentInset = .zero
+        tableView.scrollIndicatorInsets = UIEdgeInsets.zero
     }
     
     @objc func onEditButtonPressed(){
