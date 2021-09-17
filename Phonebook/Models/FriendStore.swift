@@ -18,54 +18,6 @@ protocol FriendStore {
     func getFriend(id: String) -> Friend?
     func contains(id: String) -> Bool
 }
-//
-//class CoreDataFriendStoreAdapter: FriendStore {
-//
-//
-//    private var adaptee : CoreDataFriendStore
-//    init(adaptee : CoreDataFriendStore) {
-//        self.adaptee = adaptee
-//    }
-//    func gets(id: String) -> Friend? {
-//        let cdFriend = adaptee.gets(id: id)
-//        if let cdfriend = cdFriend {
-//            return toFriend(cdfriend)
-//        }
-//        return nil
-//    }
-//
-//    func contains(id: String) -> Bool {
-//        return gets(id: id) != nil
-//    }
-//
-//    func addFriend(_ person: Friend) {
-//        toFriendCoreData(person){ coreDataCopy in
-//            self.adaptee.addFriend(coreDataCopy)
-//        }
-//    }
-//
-//    func deleteFriend(_ person: Friend) {
-//        toFriendCoreData(person){ coreDataCopy in
-//            self.adaptee.deleteFriend(coreDataCopy)
-//        }
-//    }
-//
-//    func updateFriend(_ person: Friend) {
-//        toFriendCoreData(person){ coreDataCopy in
-//            self.adaptee.updateFriend(coreDataCopy)
-//        }
-//    }
-//
-//    func getAll() -> [Friend] {
-//        let cdList = adaptee.getAll()
-//        return toFriendList(cdList)
-//    }
-//
-//    func saveChanges(completion: @escaping (Bool) -> Void) {
-//        adaptee.saveChanges(completion: completion)
-//    }
-//}
-
 
 class PlistFriendStoreAdapter : FriendStore{
 

@@ -74,6 +74,7 @@ extension Friend{
         self.avatarData     = contact.imageData
         self.phoneNumbers   = contact.phoneNumbers.compactMap { $0.value.stringValue}
     }
+
     
     func toCNContact() -> CNContact {
         if let storedContact = source{

@@ -40,7 +40,7 @@ class FriendsViewController : UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         navigationItem.title = "Phonebook"
-        let rightButton = UIBarButtonItem(title: "Edit", style: UIBarButtonItem.Style.plain, target: self, action: #selector(toggleEditMode))
+        let rightButton = UIBarButtonItem(title: "Delete", style: UIBarButtonItem.Style.plain, target: self, action: #selector(toggleEditMode))
         
         navigationItem.rightBarButtonItem = rightButton
         navigationItem.leftBarButtonItem = UIBarButtonItem(
@@ -65,10 +65,10 @@ class FriendsViewController : UIViewController {
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         let contacts = PhonebookManager.shared.getAll()
-//        refreshViewWith(data: contacts)
         self.friendList = contacts.compactMap { $0.value }
         self.tableView.reloadData()
     }
+    
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         tableView.anchor(top: view.topAnchor, left: view.leftAnchor, bottom: view.bottomAnchor, right: view.rightAnchor)
@@ -88,7 +88,7 @@ class FriendsViewController : UIViewController {
     @objc func toggleEditMode(){
         if (tableView.isEditing  == true) {
             tableView.setEditing(false, animated: true)
-            self.navigationItem.rightBarButtonItem?.title = "Edit"
+            self.navigationItem.rightBarButtonItem?.title = "Delete"
 
         } else {
             tableView.setEditing(true, animated: true)
@@ -96,8 +96,8 @@ class FriendsViewController : UIViewController {
         }
     }
     
-    func refreshViewWith(data: [String: Friend]){
-        print("current contacts in view: \(self.friendList)")
+    func refreshViewWith(data: [String:Friend]){
+
         if self.friendList.count == 0 {
             DispatchQueue.main.async {
                 print("Refresh table.")
@@ -190,8 +190,12 @@ extension FriendsViewController: UITableViewDelegate{
         print(friend)
         
         let detailController = FriendDetailViewController()
-        detailController.configure(with: friend){ friend in
-            PhonebookManager.shared.update(friend)
+
+        detailController.configure(with: friend){ friendToUpdate in
+            // only ask Manager to update it truly changed
+            if friendToUpdate != friend{
+                PhonebookManager.shared.update(friendToUpdate)
+            }
         }
         navigationController?.pushViewController(detailController, animated: true)
     }

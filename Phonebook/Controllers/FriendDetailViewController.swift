@@ -23,8 +23,6 @@ class FriendDetailViewController: UIViewController {
         view.rowHeight = UITableView.automaticDimension
         view.estimatedRowHeight = 70
         view.tableFooterView = UIView()
-//        view.accessibilityIdentifier = "DetailTable"
-//        view.isAccessibilityElement = true
         return view
     }()
     
@@ -64,27 +62,28 @@ class FriendDetailViewController: UIViewController {
         navigationItem.largeTitleDisplayMode = .never
         navigationItem.rightBarButtonItem = editButtonItem
         
-        view.isAccessibilityElement = false
-        navigationItem.accessibilityLabel = "DetailView"
-        navigationItem.rightBarButtonItem?.accessibilityIdentifier = "DetailView.Edit"
-        tableView.isAccessibilityElement = false
-        
-        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
 
-        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide), name: UIResponder.keyboardWillHideNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWasShown), name: UIResponder.keyboardDidShowNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillBeHidden), name: UIResponder.keyboardWillHideNotification, object: nil)
 
-        
     }
-    @objc func keyboardWillShow(_ notification:Notification) {
-
+    
+    @objc func keyboardWasShown (notification: NSNotification)
+    {
+        print("keyboard was shown")
         if let keyboardSize = (notification.userInfo?[UIResponder.keyboardFrameBeginUserInfoKey] as? NSValue)?.cgRectValue {
-            tableView.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: keyboardSize.height, right: 0)
-        }
-    }
-    @objc func keyboardWillHide(_ notification:Notification) {
-        tableView.contentInset = .zero
+            tableView.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: keyboardSize.height + 20, right: 0)
+         }
         
     }
+
+    @objc func keyboardWillBeHidden (notification: NSNotification)
+    {
+        print("keyboard will be hidden")
+        tableView.contentInset = .zero
+        tableView.scrollIndicatorInsets = UIEdgeInsets.zero
+    }
+ 
         
     override func setEditing(_ isEditing: Bool, animated: Bool){
         super.setEditing(isEditing, animated: animated)

@@ -122,6 +122,24 @@ class PhonebookManager {
             
     }
 
+    func resolveConflicts(){
+        /* Assume that our contact list is the most up-to-date
+            Push our list to native database */
+        for friend in self.friends.values {
+            self.saveContactToNative(friend) { res in
+                if !res {
+                    // cannot save this contact -> attempt to update it
+                    self.updateNativeContact(friend){ res in
+                        print("Resolve conflict of friend \(friend.uid): Update")
+                    }
+                }else {
+                    print("Resolve conflict of friend \(friend.uid): Add")
+                }
+            }
+        }
+        // fetchData()
+    }
+    
     func add(_ contact: Friend ){
         self.friendsQueue.async {
             // save copy in memo
@@ -129,15 +147,15 @@ class PhonebookManager {
             // save copy in database
             self.friendStore.addFriend(contact)
             // qualified to delegate now...
-//            self.delegate?.newContactAdded(contact: contact)
-//
-//            // save copy in database
-//            self.saveContactToNative(contact){ success in
-//                if success {
-//                    // TODO: update uid to match native contact identifier
-//                    print("Successfully Add contact to native.")
-//                }
-//            }
+            self.delegate?.newContactAdded(contact: contact)
+
+            // save copy in database
+            self.saveContactToNative(contact){ success in
+                if success {
+                    // TODO: update uid to match native contact identifier
+                    print("Successfully Add contact to native.")
+                }
+            }
         }
     }
     func delete(_ contact: Friend, at row: Int){
