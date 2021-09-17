@@ -8,79 +8,15 @@
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
             uuid = "E043C73F-BCDD-4FA4-906A-6D1B151D2909"
-            shouldBeEnabled = "No"
+            shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "PhonebookTests/PhonebookTests.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "43"
-            endingLineNumber = "43"
+            startingLineNumber = "50"
+            endingLineNumber = "50"
             landmarkName = "testCreateContact()"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            uuid = "4E4A9AB6-90DA-4AA3-82C5-54D016C91195"
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "PhonebookTests/PhonebookTests.swift"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "45"
-            endingLineNumber = "45"
-            landmarkName = "testCreateContact()"
-            landmarkType = "7">
-            <Locations>
-               <Location
-                  uuid = "4E4A9AB6-90DA-4AA3-82C5-54D016C91195 - 218f1af2f820f20c"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "PhonebookTests.PhonebookTests.testCreateContact() throws -&gt; ()"
-                  moduleName = "PhonebookTests"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/mac/Desktop/iOS_pprojects/Phonebook/PhonebookTests/PhonebookTests.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "45"
-                  endingLineNumber = "45"
-                  offsetFromSymbolStart = "1595">
-               </Location>
-               <Location
-                  uuid = "4E4A9AB6-90DA-4AA3-82C5-54D016C91195 - 3a3560747e012f8"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "closure #1 () -&gt; () in PhonebookTests.PhonebookTests.testCreateContact() throws -&gt; ()"
-                  moduleName = "PhonebookTests"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/mac/Desktop/iOS_pprojects/Phonebook/PhonebookTests/PhonebookTests.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "45"
-                  endingLineNumber = "45"
-                  offsetFromSymbolStart = "8">
-               </Location>
-            </Locations>
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            uuid = "4A176A36-DBD1-4025-88C5-7EB6569913E8"
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "Phonebook/Models/FriendStore.swift"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "67"
-            endingLineNumber = "67"
-            landmarkName = "addFriend(_:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -88,7 +24,7 @@
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
             uuid = "9D7714E7-D966-4D10-BC4D-464D0553C7AE"
-            shouldBeEnabled = "Yes"
+            shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Phonebook/PhonebookManager.swift"
@@ -98,36 +34,180 @@
             endingLineNumber = "130"
             landmarkName = "add(_:)"
             landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "81883F8B-F646-41C7-8E9C-0547169A9E7C"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "PhonebookUITests/PhonebookUITests.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "35"
+            endingLineNumber = "35"
+            landmarkName = "PhonebookUITests"
+            landmarkType = "3">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "164A66C2-5621-4485-9B43-B09157589C05"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Phonebook/Models/FriendStore.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "38"
+            endingLineNumber = "38"
+            landmarkName = "contains(id:)"
+            landmarkType = "7">
             <Locations>
                <Location
-                  uuid = "9D7714E7-D966-4D10-BC4D-464D0553C7AE - 5e8233287bb035d1"
+                  uuid = "164A66C2-5621-4485-9B43-B09157589C05 - d370adc7b9a89ea5"
                   shouldBeEnabled = "Yes"
                   ignoreCount = "0"
                   continueAfterRunningActions = "No"
-                  symbolName = "closure #1 () -&gt; () in Phonebook.PhonebookManager.add(Phonebook.Friend) -&gt; ()"
+                  symbolName = "Phonebook.CoreDataFriendStoreAdapter.contains(id: Swift.String) -&gt; Swift.Bool"
                   moduleName = "Phonebook"
                   usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/mac/Desktop/iOS_pprojects/Phonebook/Phonebook/PhonebookManager.swift"
+                  urlString = "file:///Users/mac/Desktop/iOS_pprojects/Phonebook/Phonebook/Models/FriendStore.swift"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "130"
-                  endingLineNumber = "130"
-                  offsetFromSymbolStart = "123">
+                  startingLineNumber = "38"
+                  endingLineNumber = "38"
+                  offsetFromSymbolStart = "138">
                </Location>
                <Location
-                  uuid = "9D7714E7-D966-4D10-BC4D-464D0553C7AE - 606a7f2cec665c89"
+                  uuid = "164A66C2-5621-4485-9B43-B09157589C05 - c84ae4c3cb5b2e35"
                   shouldBeEnabled = "Yes"
                   ignoreCount = "0"
                   continueAfterRunningActions = "No"
-                  symbolName = "closure #1 () -&gt; () in PhonebookTests.PhonebookManager.add(PhonebookTests.Friend) -&gt; ()"
+                  symbolName = "PhonebookTests.CoreDataFriendStoreAdapter.contains(id: Swift.String) -&gt; Swift.Bool"
                   moduleName = "PhonebookTests"
                   usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/mac/Desktop/iOS_pprojects/Phonebook/Phonebook/PhonebookManager.swift"
+                  urlString = "file:///Users/mac/Desktop/iOS_pprojects/Phonebook/Phonebook/Models/FriendStore.swift"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "130"
-                  endingLineNumber = "130"
-                  offsetFromSymbolStart = "123">
+                  startingLineNumber = "38"
+                  endingLineNumber = "38"
+                  offsetFromSymbolStart = "138">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "4971D763-3F24-4E2B-B765-4256FDE8E689"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Phonebook/Models/CoreDataFriendStore.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "102"
+            endingLineNumber = "102"
+            landmarkName = "gets(id:)"
+            landmarkType = "7">
+            <Locations>
+               <Location
+                  uuid = "4971D763-3F24-4E2B-B765-4256FDE8E689 - 28f6988abe07e518"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "Phonebook.CoreDataFriendStore.gets(id: Swift.String) -&gt; Swift.Optional&lt;Phonebook.FriendCoreData&gt;"
+                  moduleName = "Phonebook"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/mac/Desktop/iOS_pprojects/Phonebook/Phonebook/Models/CoreDataFriendStore.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "100"
+                  endingLineNumber = "100"
+                  offsetFromSymbolStart = "239">
+               </Location>
+               <Location
+                  uuid = "4971D763-3F24-4E2B-B765-4256FDE8E689 - 1fd0e06c52c5a33a"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "PhonebookTests.CoreDataFriendStore.gets(id: Swift.String) -&gt; Swift.Optional&lt;PhonebookTests.FriendCoreData&gt;"
+                  moduleName = "PhonebookTests"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/mac/Desktop/iOS_pprojects/Phonebook/Phonebook/Models/CoreDataFriendStore.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "100"
+                  endingLineNumber = "100"
+                  offsetFromSymbolStart = "239">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "FBECE86F-BA3C-485B-8405-0E6BEC31AF9B"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Phonebook/Models/CoreDataFriendStore.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "106"
+            endingLineNumber = "106"
+            landmarkName = "gets(id:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "1AEDA41D-EC99-4779-AD23-3DEFEB630D67"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Phonebook/Models/FriendStore.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "71"
+            endingLineNumber = "71"
+            landmarkName = "addFriend(_:)"
+            landmarkType = "7">
+            <Locations>
+               <Location
+                  uuid = "1AEDA41D-EC99-4779-AD23-3DEFEB630D67 - c8c8a0189d6fe7bd"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "Phonebook.CoreDataFriendStoreAdapter.addFriend(Phonebook.Friend) -&gt; ()"
+                  moduleName = "Phonebook"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/mac/Desktop/iOS_pprojects/Phonebook/Phonebook/Models/FriendStore.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "71"
+                  endingLineNumber = "71"
+                  offsetFromSymbolStart = "59">
+               </Location>
+               <Location
+                  uuid = "1AEDA41D-EC99-4779-AD23-3DEFEB630D67 - 55938178757dbe5"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "PhonebookTests.CoreDataFriendStoreAdapter.addFriend(PhonebookTests.Friend) -&gt; ()"
+                  moduleName = "PhonebookTests"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/mac/Desktop/iOS_pprojects/Phonebook/Phonebook/Models/FriendStore.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "71"
+                  endingLineNumber = "71"
+                  offsetFromSymbolStart = "59">
                </Location>
             </Locations>
          </BreakpointContent>

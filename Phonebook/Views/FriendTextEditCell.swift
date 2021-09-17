@@ -31,6 +31,8 @@ class FriendTextEditCell: UITableViewCell {
         textfield.text = text
         textfield.keyboardType = onlyNumber ? .numberPad : .alphabet
         self.titleChangeAction = changeAction
+        
+        // for UI Test
     }
         
     override func layoutSubviews() {

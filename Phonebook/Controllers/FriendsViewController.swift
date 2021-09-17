@@ -59,6 +59,7 @@ class FriendsViewController : UIViewController {
         // set up relationship with Phonebook manager
         PhonebookManager.shared.delegate = self
         
+        // set identifier to facilitate UI Test
     }
     
     override func viewDidAppear(_ animated: Bool) {

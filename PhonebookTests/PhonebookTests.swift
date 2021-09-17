@@ -16,7 +16,7 @@ class PhonebookTests: XCTestCase {
         // Put setup code here. This method is called before the invocation of each test method in the class.
         try super.setUpWithError()
         sut = PhonebookManager.shared
-        sut.friendStore = CoreDataFriendStoreAdapter(adaptee: CoreDataStoreTest())
+
     }
 
     override func tearDownWithError() throws {
@@ -28,28 +28,36 @@ class PhonebookTests: XCTestCase {
 
     func testCreateContact() throws {
         // Given
+        let coreDataStore =  CoreDataStoreTest()
+        sut.friendStore = CoreDataFriendStoreAdapter(adaptee: coreDataStore)
         let store = sut.friendStore
-        let queue = sut.friendsQueue
-        
+    
         var newFriend = Friend()
         newFriend.firstName = "Ngan"
         newFriend.lastName = "Nguyen"
         newFriend.phoneNumbers.append("1234567")
         
-        /// intial state: empty
-        XCTAssertEqual(sut.getAll().count, 0)
+        XCTAssertEqual(sut.getAll().count, 0)        // intial state: empty
+        XCTAssertFalse(store!.contains(id: newFriend.uid)) // this friend doesn't exist before
         
         // When
+        expectation(
+           forNotification: .NSManagedObjectContextDidSave,
+            object: coreDataStore.getContext()) { _ in
+             return true
+         }
+        
         sut.add(newFriend) // async here
         
-        queue.sync {
-            print("hi")
+        waitForExpectations(timeout: 2.0) { error in
+          XCTAssertNil(error, "Save did not occur")
         }
+        
         // Then
         /// successfully add in memory list
-        XCTAssertEqual(sut.get(key: newFriend.uid), newFriend)
+        XCTAssertEqual(sut.getContact(key: newFriend.uid), newFriend)
         /// successfully add to Core Data
-        XCTAssertEqual(store?.gets(id: newFriend.uid), newFriend)
+        XCTAssertNotNil(coreDataStore.gets(id: newFriend.uid))
         /// successfully add to native Contacts
         
     }
@@ -57,25 +65,36 @@ class PhonebookTests: XCTestCase {
     
     func testDeleteContact() throws {
         // Given
+        let coreDataStore =  CoreDataStoreTest()
+        sut.friendStore = CoreDataFriendStoreAdapter(adaptee: coreDataStore)
         let store = sut.friendStore
-        let queue = sut.friendsQueue
         
         var friendToDelete = Friend()
         friendToDelete.firstName = "Ngan"
         friendToDelete.lastName = "Nguyen"
         friendToDelete.phoneNumbers.append("1234567")
         
+        expectation(
+           forNotification: .NSManagedObjectContextDidSave,
+            object: coreDataStore.getContext()) { _ in
+             return true
+         }
         sut.add(friendToDelete)
+        waitForExpectations(timeout: 2.0) { error in
+          XCTAssertNil(error, "Save did not occur")
+        }
         
         /// confirm that this friend exists
         XCTAssertEqual(sut.get(key: friendToDelete.uid), friendToDelete)
 
         // When
-        sut.delete(friendToDelete, at: -1) // warning missing index
-        
-        queue.sync {
-            print("hi")
-        }
+        expectation(
+            forNotification: .NSManagedObjectContextDidSave,
+            object: coreDataStore.getContext()) { _ in
+             return true
+         }
+        sut.delete(friendToDelete, at: 0) // warning missing index
+
         // Then
         /// successfully delete in memory list
         XCTAssertEqual(sut.get(key: friendToDelete.uid), nil)

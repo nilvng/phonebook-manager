@@ -41,11 +41,11 @@ class PhonebookManager {
 
     static let shared = PhonebookManager()
     private init(){
-        NotificationCenter.default.addObserver(self, selector: #selector(refreshData), name: .CNContactStoreDidChange, object: nil)
+//        NotificationCenter.default.addObserver(self, selector: #selector(refreshData), name: .CNContactStoreDidChange, object: nil)
     }
     
     deinit {
-        NotificationCenter.default.removeObserver(self)
+//        NotificationCenter.default.removeObserver(self)
     }
     
     @objc func refreshData() {
@@ -181,7 +181,9 @@ class PhonebookManager {
     }
     
     func getContact(key: String) -> Friend? {
+        self.friendsQueue.sync {
         return self.friends[key]
+        }
     }
     
     func listToDict(listFriend: [Friend]) -> [String:Friend]{

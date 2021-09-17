@@ -12,7 +12,6 @@ class CoreDataFriendStore {
     
     // MARK: Properties
     var persistentContainer: NSPersistentContainer
-//    var persistentContainer: NSPersistentContainer!
 
     init() {
         let container = NSPersistentContainer(name: "Phonebook")
@@ -26,7 +25,7 @@ class CoreDataFriendStore {
     }
     
     func getContext() -> NSManagedObjectContext {
-       // return persistentContainer.newBackgroundContext()
+        //return persistentContainer.newBackgroundContext()
         return persistentContainer.viewContext
     }
     // MARK: APIs
@@ -49,8 +48,9 @@ class CoreDataFriendStore {
         completion(false)
     }
     func addFriend(_ person : FriendCoreData){
+        let context = getContext()
         do {
-            try persistentContainer.viewContext.save()
+            try context.save()
         } catch (let err){
             print("Error in adding contact: \(err)")
         }
@@ -74,8 +74,9 @@ class CoreDataFriendStore {
         }
     }
     func updateFriend(_ person: FriendCoreData){
+        let context = getContext()
         do {
-            try persistentContainer.viewContext.save()
+            try context.save()
         } catch (let err){
             print("Error in updating contact: \(err)")
         }
@@ -96,9 +97,9 @@ class CoreDataFriendStore {
     
     func gets(id: String) -> FriendCoreData? {
         let context = getContext()
-        let fetchRequest : NSFetchRequest<FriendCoreData> = FriendCoreData.fetchRequest()
+        let fetchRequest : NSFetchRequest<FriendCoreData> = NSFetchRequest<FriendCoreData>(entityName: "FriendCoreData")
         
-        let predicate = NSPredicate(format: "uid == %@", id)
+        let predicate = NSPredicate(format: "\(#keyPath(FriendCoreData.uid)) == %@", id)
         fetchRequest.predicate = predicate
         
         do {

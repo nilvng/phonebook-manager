@@ -26,11 +26,43 @@ class PhonebookUITests: XCTestCase {
     override func tearDownWithError() throws {
         // Put teardown code here. This method is called after the invocation of each test method in the class.
     }
-
-    func testExample() throws {
-        // UI tests must launch the application that they test.
+    
+    func testAppLaunch() throws {
         app.launch()
         
+        XCTAssertTrue(app.isDisplayingFriendsView)
+    }
+
+    func testAddNewContact() throws {
+        // UI tests must launch the application that they test.
+        app.launch()
+                
+        let homeNavigationBar = app.navigationBars["Phonebook"]
+        homeNavigationBar.buttons["Add"].tap()
+
+        let tablesQuery = app.tables
+        let fnameField = tablesQuery.cells.textFields["First name"]
+        print("Element query heres: \(tablesQuery.cells.debugDescription)")
+
+        fnameField.tap()
+        fnameField.typeText("UI")
+
+        let lastNameTextField = tablesQuery.cells.textFields["Last name"]
+        lastNameTextField.tap()
+        lastNameTextField.typeText("Test")
+
+        let phoneNumberTextField = tablesQuery.cells.textFields["Phone number"]
+        phoneNumberTextField.tap()
+        phoneNumberTextField.typeText("1234567")
+        
+        app.navigationBars["DetailView"].buttons["Edit"].tap()
+                                
+    }
+    
+    func testDeletingContact() throws {
+        app.launch()
+//        app.launchArguments["-contacts", "Nil2,NilThursday"]
+                                        
     }
 
     func testLaunchPerformance() throws {
@@ -40,5 +72,11 @@ class PhonebookUITests: XCTestCase {
                 XCUIApplication().launch()
             }
         }
+    }
+}
+
+extension XCUIApplication {
+    var isDisplayingFriendsView: Bool {
+        return otherElements["FriendsView"].exists
     }
 }
