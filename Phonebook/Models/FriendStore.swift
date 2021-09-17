@@ -11,92 +11,64 @@ import CoreData
 
 protocol FriendStore {
     func addFriend(_ person : Friend)
-    func deleteFriend(_ person: Friend)
+    func deleteFriend(id : String)
     func updateFriend(_ person: Friend)
     func getAll() -> [Friend]
     func saveChanges(completion: @escaping (Bool) ->Void)
-    func gets(id: String) -> Friend?
+    func getFriend(id: String) -> Friend?
     func contains(id: String) -> Bool
 }
-
-class CoreDataFriendStoreAdapter: FriendStore {
-
-    
-    private var adaptee : CoreDataFriendStore
-    init(adaptee : CoreDataFriendStore) {
-        self.adaptee = adaptee
-    }
-    func gets(id: String) -> Friend? {
-        let cdFriend = adaptee.gets(id: id)
-        if let cdfriend = cdFriend {
-            return toFriend(cdfriend)
-        }
-        return nil
-    }
-    
-    func contains(id: String) -> Bool {
-        return gets(id: id) != nil
-    }
-    
-    func toFriendCoreData(_ person: Friend, completion: @escaping (FriendCoreData) -> Void){
-        let context =  adaptee.getContext()
-        context.perform {
-        let friend = FriendCoreData(context: context)
-        friend.firstName = person.firstName
-        friend.lastName = person.lastName
-        friend.phoneNumbers = person.phoneNumbers
-        friend.uid = person.uid
-        completion(friend)
-            
-        }
-    }
-    
-    func toFriend(_ person: FriendCoreData) -> Friend {
-        var friend = Friend()
-        friend.uid = person.uid!
-        friend.firstName = person.firstName!
-        friend.lastName = person.lastName!
-        friend.phoneNumbers = person.phoneNumbers!
-        return friend
-    }
-    
-    func toFriendList(_ friends: [FriendCoreData]) -> [Friend]{
-        return friends.compactMap {f in
-            let friend = toFriend(f)
-            return friend
-        }
-    }
-    
-    func addFriend(_ person: Friend) {
-        toFriendCoreData(person){ coreDataCopy in
-            self.adaptee.addFriend(coreDataCopy)
-        }
-    }
-    
-    func deleteFriend(_ person: Friend) {
-        toFriendCoreData(person){ coreDataCopy in
-            self.adaptee.deleteFriend(coreDataCopy)
-        }
-    }
-    
-    func updateFriend(_ person: Friend) {
-        toFriendCoreData(person){ coreDataCopy in
-            self.adaptee.updateFriend(coreDataCopy)
-        }
-    }
-    
-    func getAll() -> [Friend] {
-        let cdList = adaptee.getAll()
-        return toFriendList(cdList)
-    }
-    
-    func saveChanges(completion: @escaping (Bool) -> Void) {
-        adaptee.saveChanges(completion: completion)
-    }
-}
+//
+//class CoreDataFriendStoreAdapter: FriendStore {
+//
+//
+//    private var adaptee : CoreDataFriendStore
+//    init(adaptee : CoreDataFriendStore) {
+//        self.adaptee = adaptee
+//    }
+//    func gets(id: String) -> Friend? {
+//        let cdFriend = adaptee.gets(id: id)
+//        if let cdfriend = cdFriend {
+//            return toFriend(cdfriend)
+//        }
+//        return nil
+//    }
+//
+//    func contains(id: String) -> Bool {
+//        return gets(id: id) != nil
+//    }
+//
+//    func addFriend(_ person: Friend) {
+//        toFriendCoreData(person){ coreDataCopy in
+//            self.adaptee.addFriend(coreDataCopy)
+//        }
+//    }
+//
+//    func deleteFriend(_ person: Friend) {
+//        toFriendCoreData(person){ coreDataCopy in
+//            self.adaptee.deleteFriend(coreDataCopy)
+//        }
+//    }
+//
+//    func updateFriend(_ person: Friend) {
+//        toFriendCoreData(person){ coreDataCopy in
+//            self.adaptee.updateFriend(coreDataCopy)
+//        }
+//    }
+//
+//    func getAll() -> [Friend] {
+//        let cdList = adaptee.getAll()
+//        return toFriendList(cdList)
+//    }
+//
+//    func saveChanges(completion: @escaping (Bool) -> Void) {
+//        adaptee.saveChanges(completion: completion)
+//    }
+//}
 
 
 class PlistFriendStoreAdapter : FriendStore{
+
     private var adaptee : PlistFriendStore
     init(adaptee : PlistFriendStore) {
         self.adaptee = adaptee
@@ -106,8 +78,8 @@ class PlistFriendStoreAdapter : FriendStore{
         adaptee.addFriend(plistCopy)
     }
     
-    func deleteFriend(_ person: Friend) {
-        adaptee.deleteFriend(uid: person.uid)
+    func deleteFriend(id : String) {
+        adaptee.deleteFriend(uid: id)
     }
     
     func updateFriend(_ person: Friend) {
@@ -123,7 +95,7 @@ class PlistFriendStoreAdapter : FriendStore{
     func saveChanges(completion: @escaping (Bool) -> Void) {
         adaptee.saveChanges(completion: completion)
     }
-    func gets(id: String) -> Friend? {
+    func getFriend(id: String) -> Friend? {
         let cdFriend = adaptee.gets(id: id)
         if cdFriend == nil {
             return nil
@@ -132,7 +104,7 @@ class PlistFriendStoreAdapter : FriendStore{
     }
     
     func contains(id: String) -> Bool{
-        return gets(id: id) != nil
+        return getFriend(id: id) != nil
     }
 
     

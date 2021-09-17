@@ -28,9 +28,8 @@ class PhonebookTests: XCTestCase {
 
     func testCreateContact() throws {
         // Given
-        let coreDataStore =  CoreDataStoreTest()
-        sut.friendStore = CoreDataFriendStoreAdapter(adaptee: coreDataStore)
-        let store = sut.friendStore
+        let store =  CoreDataFriendStore(inMemory: true)
+        sut.friendStore = store
     
         var newFriend = Friend()
         newFriend.firstName = "Ngan"
@@ -38,68 +37,49 @@ class PhonebookTests: XCTestCase {
         newFriend.phoneNumbers.append("1234567")
         
         XCTAssertEqual(sut.getAll().count, 0)        // intial state: empty
-        XCTAssertFalse(store!.contains(id: newFriend.uid)) // this friend doesn't exist before
+        XCTAssertFalse(store.contains(id: newFriend.uid)) // this friend doesn't exist before
         
-        // When
-        expectation(
-           forNotification: .NSManagedObjectContextDidSave,
-            object: coreDataStore.getContext()) { _ in
-             return true
-         }
-        
+//        // When
+//        expectation(
+//           forNotification: .NSManagedObjectContextDidSave,
+//            object: coreDataStore.getContext()) { _ in
+//             return true
+//         }
+//
         sut.add(newFriend) // async here
-        
-        waitForExpectations(timeout: 2.0) { error in
-          XCTAssertNil(error, "Save did not occur")
-        }
-        
-        // Then
+//
+//        // Then
         /// successfully add in memory list
         XCTAssertEqual(sut.getContact(key: newFriend.uid), newFriend)
         /// successfully add to Core Data
-        XCTAssertNotNil(coreDataStore.gets(id: newFriend.uid))
-        /// successfully add to native Contacts
+        XCTAssertNotNil(store.getFriend(id: newFriend.uid))
+//        /// successfully add to native Contacts
         
     }
     
     
     func testDeleteContact() throws {
         // Given
-        let coreDataStore =  CoreDataStoreTest()
-        sut.friendStore = CoreDataFriendStoreAdapter(adaptee: coreDataStore)
-        let store = sut.friendStore
+        let store =  CoreDataFriendStore(inMemory: true)
+        sut.friendStore = store
         
         var friendToDelete = Friend()
-        friendToDelete.firstName = "Ngan"
+        friendToDelete.firstName = "Delete"
         friendToDelete.lastName = "Nguyen"
         friendToDelete.phoneNumbers.append("1234567")
         
-        expectation(
-           forNotification: .NSManagedObjectContextDidSave,
-            object: coreDataStore.getContext()) { _ in
-             return true
-         }
         sut.add(friendToDelete)
-        waitForExpectations(timeout: 2.0) { error in
-          XCTAssertNil(error, "Save did not occur")
-        }
-        
         /// confirm that this friend exists
-        XCTAssertEqual(sut.get(key: friendToDelete.uid), friendToDelete)
+        XCTAssertEqual(sut.getContact(key: friendToDelete.uid), friendToDelete)
 
         // When
-        expectation(
-            forNotification: .NSManagedObjectContextDidSave,
-            object: coreDataStore.getContext()) { _ in
-             return true
-         }
         sut.delete(friendToDelete, at: 0) // warning missing index
 
         // Then
         /// successfully delete in memory list
-        XCTAssertEqual(sut.get(key: friendToDelete.uid), nil)
+        XCTAssertEqual(sut.getContact(key: friendToDelete.uid), nil)
         /// successfully delete in Core Data
-        XCTAssertEqual(store?.gets(id: friendToDelete.uid), nil)
+        XCTAssertEqual(store.getFriend(id: friendToDelete.uid), nil)
         /// successfully add to native Contacts
         
     }
@@ -107,33 +87,29 @@ class PhonebookTests: XCTestCase {
     
     func testUpdateContact() throws {
         // Given
-        let store = sut.friendStore
-        let queue = sut.friendsQueue
-        
+        let store =  CoreDataFriendStore(inMemory: true)
+        sut.friendStore = store
+
         var friendToUpdate = Friend()
         friendToUpdate.firstName = "Ngan"
         friendToUpdate.lastName = "Nguyen"
         friendToUpdate.phoneNumbers.append("1234567")
         
         sut.add(friendToUpdate)
-        
         /// confirm that this friend exists
-        XCTAssertEqual(sut.get(key: friendToUpdate.uid), friendToUpdate)
+        XCTAssertEqual(sut.getContact(key: friendToUpdate.uid), friendToUpdate)
 
         // When
+        friendToUpdate.firstName = "Updated"
         sut.update(friendToUpdate) // warning missing index
-        
-        queue.sync {
-            print("hi")
-        }
+
         // Then
-        /// successfully add in memory list
-        XCTAssertEqual(sut.get(key: friendToUpdate.uid), friendToUpdate)
-        /// successfully add to Core Data
-        XCTAssertEqual(store?.gets(id: friendToUpdate.uid), friendToUpdate)
+        /// successfully delete in memory list
+        XCTAssertEqual(sut.getContact(key: friendToUpdate.uid), friendToUpdate)
+        /// successfully delete in Core Data
+        XCTAssertEqual(store.getFriend(id: friendToUpdate.uid), friendToUpdate)
         /// successfully add to native Contacts
-        
-    }
+            }
 
 
     func testPerformanceExample() throws {

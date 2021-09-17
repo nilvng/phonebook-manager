@@ -105,7 +105,7 @@ class PhonebookManager {
                         /// Deleted contact
                         dataDidChange = true
                         self.deleteFriend(localCopy)
-                        self.friendStore.deleteFriend(localCopy)
+                        self.friendStore.deleteFriend(id: localCopy.uid)
                         print("deleted contact:\(localCopy)")
                         }
                     }
@@ -145,7 +145,7 @@ class PhonebookManager {
             // delete copy in memory
             self.deleteFriend(contact)
             // delete copy in database
-            self.friendStore.deleteFriend(contact)
+            self.friendStore.deleteFriend(id: contact.uid)
             // qualified to delegate now...
             self.delegate?.contactDeleted(row: row)
             

@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		C80690EE26D602B000DDAC94 /* ContactCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C80690ED26D602B000DDAC94 /* ContactCell.swift */; };
 		C84346E226F43814003C8D5B /* Phonebook.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = C84346E026F43814003C8D5B /* Phonebook.xcdatamodeld */; };
+		C84346ED26F472E0003C8D5B /* CoreDataFriendStoreTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C84346EC26F472E0003C8D5B /* CoreDataFriendStoreTests.swift */; };
 		C85A6AD226D8F7CF00349794 /* PhonebookManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = C85A6AD126D8F7CF00349794 /* PhonebookManager.swift */; };
 		C85A6AE026D929EB00349794 /* FriendDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C85A6ADF26D929EB00349794 /* FriendDetailViewController.swift */; };
 		C85A6AF726DA47C700349794 /* UIViewExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = C85A6AF626DA47C700349794 /* UIViewExtension.swift */; };
@@ -53,6 +54,7 @@
 /* Begin PBXFileReference section */
 		C80690ED26D602B000DDAC94 /* ContactCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactCell.swift; sourceTree = "<group>"; };
 		C84346E126F43814003C8D5B /* Phonebook.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Phonebook.xcdatamodel; sourceTree = "<group>"; };
+		C84346EC26F472E0003C8D5B /* CoreDataFriendStoreTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataFriendStoreTests.swift; sourceTree = "<group>"; };
 		C85A6AD126D8F7CF00349794 /* PhonebookManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhonebookManager.swift; sourceTree = "<group>"; };
 		C85A6ADF26D929EB00349794 /* FriendDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendDetailViewController.swift; sourceTree = "<group>"; };
 		C85A6AF626DA47C700349794 /* UIViewExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIViewExtension.swift; sourceTree = "<group>"; };
@@ -185,6 +187,7 @@
 		C8A4BA0626D534C50065BB20 /* PhonebookTests */ = {
 			isa = PBXGroup;
 			children = (
+				C84346EC26F472E0003C8D5B /* CoreDataFriendStoreTests.swift */,
 				C8A4BA0726D534C50065BB20 /* PhonebookTests.swift */,
 				C8A4BA0926D534C50065BB20 /* Info.plist */,
 			);
@@ -365,6 +368,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				C8A4BA0826D534C50065BB20 /* PhonebookTests.swift in Sources */,
+				C84346ED26F472E0003C8D5B /* CoreDataFriendStoreTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

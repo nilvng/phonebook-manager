@@ -35,6 +35,14 @@ struct Friend{
         phoneNumbers = []
     }
     
+    init(firstName: String, lastName: String, phoneNumbers: [String]){
+        self.uid = UUID().uuidString
+        self.firstName = firstName
+        self.lastName = lastName
+        self.phoneNumbers = phoneNumbers
+
+    }
+    
     func getPhoneNumber(index: Int) -> String{
         guard index > -1 else {
             print("Warning: access phone number out of range.")
