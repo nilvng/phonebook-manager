@@ -8,28 +8,34 @@
 import UIKit
 
 class FriendDetailViewController: UIViewController {
+    
     typealias FriendChangeAction = (Friend) -> Void
+    
     private var changeAction : FriendChangeAction?
     
     private var friend : Friend?
     private var tempFriend : Friend?
+    private var isNew = false
+    
     private var dataSource : UITableViewDataSource?
     private var tableView : UITableView = {
        let view = UITableView()
         view.rowHeight = UITableView.automaticDimension
         view.estimatedRowHeight = 70
-        view.register(UITableViewCell.self, forCellReuseIdentifier: FriendDetailDataSource.identifier)
-        view.register(FriendTextEditCell.self, forCellReuseIdentifier: FriendTextEditCell.identifier)
-        view.register(FriendDetailAvatarCell.self, forCellReuseIdentifier: FriendDetailAvatarCell.identifier)
-        view.register(FriendAvatarEditCell.self, forCellReuseIdentifier: FriendAvatarEditCell.identifier)
-
         view.tableFooterView = UIView()
         return view
     }()
     
-    func configure(with friend: Friend, changeAction: @escaping FriendChangeAction){
+    func configure(with friend: Friend,
+                   isNew : Bool = false,
+                   changeAction: FriendChangeAction? = nil){
         self.friend = friend
+        self.isNew = isNew
         self.changeAction = changeAction
+        if isViewLoaded {
+            setEditing(isNew, animated: false)
+        }
+
     }
     
     init() {
@@ -43,59 +49,90 @@ class FriendDetailViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         view.addSubview(tableView)
+        
         tableView.frame = view.layer.bounds
         tableView.delegate = self
+        tableView.register(UITableViewCell.self, forCellReuseIdentifier: FriendDetailDataSource.identifier)
+        tableView.register(FriendTextEditCell.self, forCellReuseIdentifier: FriendTextEditCell.identifier)
+        tableView.register(FriendDetailAvatarCell.self, forCellReuseIdentifier: FriendDetailAvatarCell.identifier)
+        tableView.register(FriendAvatarEditCell.self, forCellReuseIdentifier: FriendAvatarEditCell.identifier)
 
-        setEditing(false, animated: false)
+        setEditing(isNew, animated: false) // if it's new Friend, auto show edit view
 
         navigationItem.largeTitleDisplayMode = .never
         navigationItem.rightBarButtonItem = editButtonItem
         
+
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWasShown), name: UIResponder.keyboardDidShowNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillBeHidden), name: UIResponder.keyboardWillHideNotification, object: nil)
+
     }
     
-    @objc func onEditButtonPressed(){
-        if tableView.isEditing {
-            self.setEditing(false, animated: true)
-        } else {
-            self.setEditing(true, animated: true)
-        }
+    @objc func keyboardWasShown (notification: NSNotification)
+    {
+        print("keyboard was shown")
+        if let keyboardSize = (notification.userInfo?[UIResponder.keyboardFrameBeginUserInfoKey] as? NSValue)?.cgRectValue {
+            tableView.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: keyboardSize.height + 20, right: 0)
+         }
+        
     }
-    
+
+    @objc func keyboardWillBeHidden (notification: NSNotification)
+    {
+        print("keyboard will be hidden")
+        tableView.contentInset = .zero
+        tableView.scrollIndicatorInsets = UIEdgeInsets.zero
+    }
+ 
+        
     override func setEditing(_ isEditing: Bool, animated: Bool){
         super.setEditing(isEditing, animated: animated)
         
+        guard let selectedFriend = self.friend else {
+            fatalError("No friend found in detail view")
+        }
+        
         if isEditing {
-            transitionToEditMode()
+            transitionToEditMode(selectedFriend)
         } else {
-            // done editing existing contact
+            // done editing existing contact?
             if let temp = tempFriend {
                 self.friend = temp
                 self.tempFriend = nil
                 self.changeAction?(temp)
             }
-            transitionToDetailMode()
+            transitionToDetailMode(selectedFriend)
         }
         tableView.dataSource = dataSource
         tableView.reloadData()
     }
     
-    fileprivate func transitionToDetailMode(){
+    fileprivate func transitionToDetailMode(_ friend : Friend){
         dataSource = FriendDetailDataSource(friend: self.friend!)
         tableView.allowsSelection = false
         navigationItem.title = NSLocalizedString("View Contact", comment: "nav title for detail view")
         navigationItem.leftBarButtonItem = nil
-        navigationItem.rightBarButtonItem?.isEnabled = true
+        editButtonItem.isEnabled = true
     }
     
-    fileprivate func transitionToEditMode(){
-        dataSource = FriendEditDataSource(friend: self.friend!.copy()){ friend in
+    fileprivate func transitionToEditMode(_ friend: Friend){
+        
+        navigationItem.title = isNew ? NSLocalizedString("New Contact", comment: "new contact nav title") : NSLocalizedString("Edit Contact", comment: "edit contact nav title")
+        
+        dataSource = FriendEditDataSource(friend: friend){ friend in
             self.tempFriend = friend
         }
-        navigationItem.title = NSLocalizedString("Edit Contact", comment: "edit reminder nav title")
         navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .cancel, target: self, action: #selector(cancelButtonTrigger))
+        
+        // For UI Test
+        
+        navigationItem.leftBarButtonItem?.accessibilityIdentifier = "DetailView.Cancel"
     }
     @objc
     func cancelButtonTrigger() {
+        if isNew {
+            dismiss(animated: true, completion: nil)
+        }
         tempFriend = nil
         setEditing(false, animated: true)
     }

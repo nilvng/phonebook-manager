@@ -37,10 +37,22 @@ class PhonebookManager {
         target: nil)
     
     var delegate: PhonebookManagerDelegate?
+    private var notiToken: NSObjectProtocol?
 
     static let shared = PhonebookManager()
-    private init(){}
+    private init(){
+//        NotificationCenter.default.addObserver(self, selector: #selector(refreshData), name: .CNContactStoreDidChange, object: nil)
+    }
     
+    deinit {
+//        NotificationCenter.default.removeObserver(self)
+    }
+    
+    @objc func refreshData() {
+        fetchData { res in
+            print(res)
+        }
+    }
     
     func fetchData(forceReload :Bool = false,_ complilationHandler: @escaping (Result<String,Error>) -> () ){
         var dataDidChange = false
@@ -52,45 +64,48 @@ class PhonebookManager {
         // 1a. record is new
         // 1b. record existed
 
-        // Fetch data from native Contacts app
         guard isAuthorized else {
             complilationHandler(.failure(FetchError.unauthorized))
             return
         }
         
-
+        // Sync native data into the app
         self.friendsQueue.async {
+            // Fetch data from native Contacts app
             let cnContacts = self.getAllContactsFromNative()
-            // case 1: native contact added or updated O(n)
+            // case 1: contact added or updated O(n)
             for cnContact in cnContacts{
+                
                 let nativeFriend = Friend(contact: cnContact)
+                /// assign native source
+                self.friends[cnContact.identifier]?.source = cnContact
+
                 if let localCopy = self.friends[cnContact.identifier] {
-                    /// assign native source
-                    localCopy.source = cnContact
-                    // notice changes from native
-                    if nativeFriend != localCopy {
+                    if localCopy != cnContact {
                         /// Edited contact if we have a record with this id but the record's content is not the same
                         dataDidChange = true
+                        print("updated contact:\(nativeFriend)")
+                        print("previous: \(localCopy)")
                         self.updateFriend(nativeFriend)
                         self.friendStore.updateFriend(nativeFriend)
-                        print("updated contact:\(nativeFriend)")
+
                    }
                 }else {
-                    /// New contact if we didn't have record that has this contact id
+                    /// It is new contact if we didn't have record that has this contact id
                     dataDidChange = true
                     self.addFriend(nativeFriend)
                     self.friendStore.addFriend(nativeFriend)
                     print("new contact:\(nativeFriend)")
                 }
             }
-            // case 2: native contact deleted O(n^2)
+            // case 2: contact deleted O(n^2)
             if cnContacts.count < self.friends.count{
                 for localCopy in self.friends.values{ // reader
                     if !cnContacts.contains(where: {$0.identifier == localCopy.uid}){
                         /// Deleted contact
                         dataDidChange = true
                         self.deleteFriend(localCopy)
-                        self.friendStore.deleteFriend(localCopy)
+                        self.friendStore.deleteFriend(id: localCopy.uid)
                         print("deleted contact:\(localCopy)")
                         }
                     }
@@ -107,6 +122,24 @@ class PhonebookManager {
             
     }
 
+    func resolveConflicts(){
+        /* Assume that our contact list is the most up-to-date
+            Push our list to native database */
+        for friend in self.friends.values {
+            self.saveContactToNative(friend) { res in
+                if !res {
+                    // cannot save this contact -> attempt to update it
+                    self.updateNativeContact(friend){ res in
+                        print("Resolve conflict of friend \(friend.uid): Update")
+                    }
+                }else {
+                    print("Resolve conflict of friend \(friend.uid): Add")
+                }
+            }
+        }
+        // fetchData()
+    }
+    
     func add(_ contact: Friend ){
         self.friendsQueue.async {
             // save copy in memo
@@ -115,9 +148,9 @@ class PhonebookManager {
             self.friendStore.addFriend(contact)
             // qualified to delegate now...
             self.delegate?.newContactAdded(contact: contact)
-            
+
             // save copy in database
-            self.saveContact(contact){ success in
+            self.saveContactToNative(contact){ success in
                 if success {
                     // TODO: update uid to match native contact identifier
                     print("Successfully Add contact to native.")
@@ -130,12 +163,12 @@ class PhonebookManager {
             // delete copy in memory
             self.deleteFriend(contact)
             // delete copy in database
-            self.friendStore.deleteFriend(contact)
+            self.friendStore.deleteFriend(id: contact.uid)
             // qualified to delegate now...
             self.delegate?.contactDeleted(row: row)
             
             // delete copy in native database
-            self.removeContact(contact){ success in
+            self.removeNativeContact(contact){ success in
                 if success {
                     print("Successfully Delete from native.")
                 }
@@ -152,7 +185,7 @@ class PhonebookManager {
             self.delegate?.contactUpdated(contact)
             
             // update copy in native database
-            self.updateContact(contact){ success in
+            self.updateNativeContact(contact){ success in
                 if success {
                     print("Successfully Update contact to native.")
                 }
@@ -166,7 +199,9 @@ class PhonebookManager {
     }
     
     func getContact(key: String) -> Friend? {
+        self.friendsQueue.sync {
         return self.friends[key]
+        }
     }
     
     func listToDict(listFriend: [Friend]) -> [String:Friend]{
@@ -182,16 +217,16 @@ class PhonebookManager {
 // MARK: - In-memo Store
 extension PhonebookManager {
 
-    func addFriend(_ person: Friend){
+    private func addFriend(_ person: Friend){
         friends[person.uid] = person
     }
     
-    func deleteFriend(_ person: Friend) {
+    private func deleteFriend(_ person: Friend) {
         // remove in-memo
         friends.removeValue(forKey: person.uid)
     }
     
-    func updateFriend(_ person: Friend){
+    private func updateFriend(_ person: Friend){
         friends[person.uid] = person
     }
     func contains(_ person:Friend) -> Bool{
@@ -226,7 +261,7 @@ extension PhonebookManager {
         return results
     }
     
-    private func saveContact(_ contact: Friend, completition: @escaping (Bool) -> Void) {
+    private func saveContactToNative(_ contact: Friend, completition: @escaping (Bool) -> Void) {
         guard isAuthorized else {
             completition(false)
             return
@@ -242,7 +277,7 @@ extension PhonebookManager {
         }
     }
     
-    private func removeContact(_ contact: Friend, completition: @escaping (Bool) -> Void) {
+    private func removeNativeContact(_ contact: Friend, completition: @escaping (Bool) -> Void) {
         guard isAuthorized else {
             completition(false)
             return
@@ -259,7 +294,7 @@ extension PhonebookManager {
             }
     }
     
-    private func updateContact(_ contact: Friend, completition: @escaping (Bool) -> Void) {
+    private func updateNativeContact(_ contact: Friend, completition: @escaping (Bool) -> Void) {
         guard isAuthorized else {
             completition(false)
             return

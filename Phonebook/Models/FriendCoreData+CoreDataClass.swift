@@ -9,7 +9,7 @@
 import Foundation
 import CoreData
 
-@objc(FriendCoreData)
+//@objc(FriendCoreData)
 public class FriendCoreData: NSManagedObject {
 
 }

@@ -9,7 +9,7 @@ import Contacts
 import UIKit
 import CoreData
 
-class Friend{
+struct Friend{
     
     var uid : String
     var firstName: String
@@ -19,7 +19,10 @@ class Friend{
 
     var source: CNContact? {
         didSet{
-            if let photoData = source?.imageData {
+            // uid and avatar have to comply native source
+            guard let s = source else { return }
+            self.uid = s.identifier
+            if let photoData = s.imageData {
                 self.avatarData = photoData
             }
         }
@@ -29,18 +32,15 @@ class Friend{
         uid = UUID().uuidString
         firstName = ""
         lastName = ""
-        phoneNumbers = [""]
+        phoneNumbers = []
     }
+    
+    init(firstName: String, lastName: String, phoneNumbers: [String]){
+        self.uid = UUID().uuidString
+        self.firstName = firstName
+        self.lastName = lastName
+        self.phoneNumbers = phoneNumbers
 
-    func copy() -> Friend {
-        let copy = Friend()
-        copy.uid = self.uid
-        copy.firstName = self.firstName
-        copy.lastName = self.lastName
-        copy.phoneNumbers = self.phoneNumbers
-        copy.source = self.source
-        copy.avatarData = self.avatarData
-        return copy
     }
     
     func getPhoneNumber(index: Int) -> String{
@@ -54,7 +54,7 @@ class Friend{
         return phoneNumbers[index]
     }
     
-    func setPhoneNumber(_ value :String ,at index: Int) {
+    mutating func setPhoneNumber(_ value :String ,at index: Int) {
         if phoneNumbers.count <= index {
             phoneNumbers.append(value)
         } else {
@@ -65,17 +65,16 @@ class Friend{
 
 extension Friend{
         
-    convenience init(contact: CNContact) {
-        
+    init(contact: CNContact) {
         self.init()
-        self.firstName = contact.givenName
-        self.lastName = contact.familyName
-        
-        let numbers =  contact.phoneNumbers.compactMap { $0.value.stringValue}
-        self.phoneNumbers = numbers
-        self.uid = contact.identifier
-        self.source = contact
+        self.uid            = contact.identifier
+        self.firstName      = contact.givenName
+        self.lastName       = contact.familyName
+        self.source         = contact
+        self.avatarData     = contact.imageData
+        self.phoneNumbers   = contact.phoneNumbers.compactMap { $0.value.stringValue}
     }
+
     
     func toCNContact() -> CNContact {
         if let storedContact = source{
@@ -108,12 +107,20 @@ extension Friend : Equatable {
         return lhs.uid == rhs.uid &&
             lhs.firstName == rhs.firstName &&
             lhs.lastName == rhs.lastName &&
-            lhs.phoneNumbers == rhs.phoneNumbers
+            lhs.phoneNumbers == rhs.phoneNumbers &&
+            lhs.source == rhs.source
+    }
+    
+    static func != (lhs: Friend, rhs: CNContact) -> Bool {
+        return !(lhs.uid == rhs.identifier &&
+            lhs.firstName == rhs.givenName &&
+            lhs.lastName == rhs.familyName &&
+            lhs.phoneNumbers == rhs.phoneNumbers.compactMap { $0.value.stringValue})
     }
 }
 
 extension Friend : CustomStringConvertible {
     var description: String{
-        "id: \(uid); name: \(firstName) \(lastName); \(phoneNumbers)"
+        "\(uid); \(firstName) \(lastName); \(phoneNumbers)"
     }
 }

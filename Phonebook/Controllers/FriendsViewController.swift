@@ -40,7 +40,7 @@ class FriendsViewController : UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         navigationItem.title = "Phonebook"
-        let rightButton = UIBarButtonItem(title: "Edit", style: UIBarButtonItem.Style.plain, target: self, action: #selector(toggleEditMode))
+        let rightButton = UIBarButtonItem(title: "Delete", style: UIBarButtonItem.Style.plain, target: self, action: #selector(toggleEditMode))
         
         navigationItem.rightBarButtonItem = rightButton
         navigationItem.leftBarButtonItem = UIBarButtonItem(
@@ -59,14 +59,16 @@ class FriendsViewController : UIViewController {
         // set up relationship with Phonebook manager
         PhonebookManager.shared.delegate = self
         
+        // set identifier to facilitate UI Test
     }
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        let contacts = PhonebookManager.shared.getAll().map{ $0.value}
-
-        refreshViewWith(data: contacts)
+        let contacts = PhonebookManager.shared.getAll()
+        self.friendList = contacts.compactMap { $0.value }
+        self.tableView.reloadData()
     }
+    
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         tableView.anchor(top: view.topAnchor, left: view.leftAnchor, bottom: view.bottomAnchor, right: view.rightAnchor)
@@ -75,8 +77,8 @@ class FriendsViewController : UIViewController {
     //MARK: Actions
     @objc func addContact(){
         // add to the store
-        let addView = EditStackViewController()
-        addView.configure(for: Friend(), isNew: true, addAction: { friend in
+        let addView = FriendDetailViewController()
+        addView.configure(with: Friend(), isNew: true, changeAction: { friend in
             PhonebookManager.shared.add(friend)
         })
         present(UINavigationController(rootViewController: addView), animated: true, completion: nil)
@@ -86,7 +88,7 @@ class FriendsViewController : UIViewController {
     @objc func toggleEditMode(){
         if (tableView.isEditing  == true) {
             tableView.setEditing(false, animated: true)
-            self.navigationItem.rightBarButtonItem?.title = "Edit"
+            self.navigationItem.rightBarButtonItem?.title = "Delete"
 
         } else {
             tableView.setEditing(true, animated: true)
@@ -94,25 +96,37 @@ class FriendsViewController : UIViewController {
         }
     }
     
-    func refreshViewWith(data: [Friend]){
-        let differences = data.difference(from: self.friendList)
-        if self.friendList != data {
-            print("Reload table.")
-            self.friendList = data
+    func refreshViewWith(data: [String:Friend]){
+
+        if self.friendList.count == 0 {
             DispatchQueue.main.async {
+                print("Refresh table.")
+                self.friendList = data.compactMap { $0.value }
                 self.tableView.reloadData()
             }
+            return
+
         }
-        
-    }
+        for e in self.friendList {
+            if data[e.uid] == nil || data[e.uid] != e {
+                
+                DispatchQueue.main.async {
+                    print("Refresh table.")
+                    self.friendList = data.compactMap { $0.value }
+                    self.tableView.reloadData()
+                }
+                return
+
+                }
+            }
+        }
 }
 
 extension FriendsViewController: PhonebookManagerDelegate{
     
     func contactListRefreshed(contacts: [String : Friend]) {
             // update with the refreshed contact list
-        let contactList = contacts.map{ $0.value}
-        refreshViewWith(data: contactList)
+        refreshViewWith(data: contacts)
     }
     func newContactAdded(contact: Friend){
  
@@ -176,8 +190,12 @@ extension FriendsViewController: UITableViewDelegate{
         print(friend)
         
         let detailController = FriendDetailViewController()
-        detailController.configure(with: friend.copy()){ friend in
-            PhonebookManager.shared.update(friend)
+
+        detailController.configure(with: friend){ friendToUpdate in
+            // only ask Manager to update it truly changed
+            if friendToUpdate != friend{
+                PhonebookManager.shared.update(friendToUpdate)
+            }
         }
         navigationController?.pushViewController(detailController, animated: true)
     }

@@ -11,7 +11,6 @@ class FriendEditDataSource : NSObject {
     typealias FriendChangeAction = (Friend) -> Void
     private var changeAction : FriendChangeAction?
 
-    private var isNew : Bool = false
     private var friend : Friend
     
     public enum ContactDetail: Int, CaseIterable{
@@ -35,10 +34,9 @@ class FriendEditDataSource : NSObject {
         
     }
 
-    init( friend: Friend, isNew : Bool = false ,changeAction: @escaping FriendChangeAction) {
+    init( friend: Friend, changeAction: @escaping FriendChangeAction) {
         self.friend = friend
         self.changeAction = changeAction
-        self.isNew = isNew
         super.init()
     }
 
@@ -78,7 +76,7 @@ extension FriendEditDataSource : UITableViewDataSource {
             }
         case .phonenumber:
             if let phoneNumberCell = cell as? FriendTextEditCell{
-                phoneNumberCell.configure(with: self.friend.getPhoneNumber(index: 0), placeholder: "Phone number"){ value in
+                phoneNumberCell.configure(with: self.friend.getPhoneNumber(index: 0), placeholder: "Phone number", onlyNumber: true){ value in
                     self.friend.setPhoneNumber(value, at: 0)
                     self.changeAction?(self.friend)
 
