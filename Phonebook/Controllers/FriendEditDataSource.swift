@@ -10,6 +10,7 @@ import UIKit
 class FriendEditDataSource : NSObject {
     typealias FriendChangeAction = (Friend) -> Void
     private var changeAction : FriendChangeAction?
+    private var deleteAction : FriendChangeAction?
 
     private var friend : Friend
     
@@ -34,9 +35,10 @@ class FriendEditDataSource : NSObject {
         
     }
 
-    init( friend: Friend, changeAction: @escaping FriendChangeAction) {
+    init( friend: Friend, deleteAction: @escaping FriendChangeAction, changeAction: @escaping FriendChangeAction) {
         self.friend = friend
         self.changeAction = changeAction
+        self.deleteAction = deleteAction
         super.init()
     }
 
@@ -44,10 +46,19 @@ class FriendEditDataSource : NSObject {
 extension FriendEditDataSource : UITableViewDataSource {
 
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return ContactDetail.allCases.count
+        // all detail + delete button
+        return ContactDetail.allCases.count + 1
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        // for delete button row
+        if indexPath.row == ContactDetail.allCases.count {
+            let cell = tableView.dequeueReusableCell(withIdentifier: FriendDeleteCell.identifier, for: indexPath) as! FriendDeleteCell
+            cell.configure { self.deleteAction?(self.friend) }
+            return cell
+        }
+        
+        // for other details
         guard let detail = ContactDetail.init(rawValue: indexPath.row) else {
             fatalError("friend detail is out of range.")
         }

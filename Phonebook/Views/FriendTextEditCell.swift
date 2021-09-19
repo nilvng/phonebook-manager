@@ -21,6 +21,7 @@ class FriendTextEditCell: UITableViewCell {
         
         contentView.addSubview(textfield)
         textfield.delegate = self
+        
     }
     func configure(with text: String,
                    placeholder: String,
@@ -33,6 +34,7 @@ class FriendTextEditCell: UITableViewCell {
         self.titleChangeAction = changeAction
         
         // for UI Test
+        textfield.accessibilityIdentifier = "edit-\(placeholder)"
     }
         
     override func layoutSubviews() {

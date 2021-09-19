@@ -30,8 +30,8 @@
             filePath = "PhonebookUITests/PhonebookUITests.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "35"
-            endingLineNumber = "35"
+            startingLineNumber = "27"
+            endingLineNumber = "27"
             landmarkName = "PhonebookUITests"
             landmarkType = "3">
          </BreakpointContent>
@@ -81,6 +81,22 @@
             startingLineNumber = "83"
             endingLineNumber = "83"
             landmarkName = "testUpdate()"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "A68DEC78-863B-4242-95BC-0D591F2B612A"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "PhonebookUITests/PhonebookUITests.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "76"
+            endingLineNumber = "76"
+            landmarkName = "testDeletingContact()"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>

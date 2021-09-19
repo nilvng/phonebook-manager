@@ -13,7 +13,7 @@ import CoreData
 protocol PhonebookManagerDelegate {
     func contactListRefreshed(contacts: [String: Friend])
     func newContactAdded(contact: Friend)
-    func contactDeleted(row: Int)
+    func contactDeleted(_ contact: Friend)
     func contactUpdated(_ contact: Friend)
 }
 class PhonebookManager {
@@ -158,14 +158,14 @@ class PhonebookManager {
             }
         }
     }
-    func delete(_ contact: Friend, at row: Int){
+    func delete(_ contact: Friend){
         self.friendsQueue.async {
             // delete copy in memory
             self.deleteFriend(contact)
             // delete copy in database
             self.friendStore.deleteFriend(id: contact.uid)
             // qualified to delegate now...
-            self.delegate?.contactDeleted(row: row)
+            self.delegate?.contactDeleted(contact)
             
             // delete copy in native database
             self.removeNativeContact(contact){ success in

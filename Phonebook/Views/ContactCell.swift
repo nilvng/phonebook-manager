@@ -27,7 +27,8 @@ class ContactCell: UITableViewCell {
             } else {
                 self.avatarImage.image = UIImage(named: "default_avatar")
             }
-        }
+            personNameLabel.accessibilityIdentifier = personNameLabel.text
+        } // didSet
     }
     
     private let personNameLabel: UILabel = {
@@ -36,6 +37,7 @@ class ContactCell: UITableViewCell {
         label.font = UIFont.boldSystemFont(ofSize: 16)
         label.textAlignment = .left
         label.numberOfLines = 0
+        label.isUserInteractionEnabled = true
         return label
     }()
     

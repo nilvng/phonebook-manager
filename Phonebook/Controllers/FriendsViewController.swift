@@ -40,9 +40,6 @@ class FriendsViewController : UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         navigationItem.title = "Phonebook"
-        let rightButton = UIBarButtonItem(title: "Delete", style: UIBarButtonItem.Style.plain, target: self, action: #selector(toggleEditMode))
-        
-        navigationItem.rightBarButtonItem = rightButton
         navigationItem.leftBarButtonItem = UIBarButtonItem(
             barButtonSystemItem: .add,
             target: self,
@@ -60,10 +57,13 @@ class FriendsViewController : UIViewController {
         PhonebookManager.shared.delegate = self
         
         // set identifier to facilitate UI Test
+        view.accessibilityIdentifier = "FriendsView"
+        tableView.accessibilityIdentifier = "table-FriendsView"
     }
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
+        // populate table
         let contacts = PhonebookManager.shared.getAll()
         self.friendList = contacts.compactMap { $0.value }
         self.tableView.reloadData()
@@ -85,19 +85,8 @@ class FriendsViewController : UIViewController {
 
     }
     
-    @objc func toggleEditMode(){
-        if (tableView.isEditing  == true) {
-            tableView.setEditing(false, animated: true)
-            self.navigationItem.rightBarButtonItem?.title = "Delete"
-
-        } else {
-            tableView.setEditing(true, animated: true)
-            self.navigationItem.rightBarButtonItem?.title = "Done"
-        }
-    }
-    
     func refreshViewWith(data: [String:Friend]){
-
+        // refreshing view only when data has been changed
         if self.friendList.count == 0 {
             DispatchQueue.main.async {
                 print("Refresh table.")
@@ -125,7 +114,7 @@ class FriendsViewController : UIViewController {
 extension FriendsViewController: PhonebookManagerDelegate{
     
     func contactListRefreshed(contacts: [String : Friend]) {
-            // update with the refreshed contact list
+        // update with the refreshed contact list
         refreshViewWith(data: contacts)
     }
     func newContactAdded(contact: Friend){
@@ -139,7 +128,11 @@ extension FriendsViewController: PhonebookManagerDelegate{
             self.tableView.insertRows(at: [indexPath], with: .automatic)
         }
     }
-    func contactDeleted(row: Int){
+    func contactDeleted(_ contact: Friend){
+        guard let row = self.friendList.firstIndex(of: contact) else {
+            print("Error: contact to delete from table is out of range")
+            return
+        }
         DispatchQueue.main.async {
             self.friendList.remove(at: row)
             let indexPath = IndexPath(row: row, section: 0)
@@ -174,13 +167,6 @@ extension FriendsViewController : UITableViewDataSource{
 
 // MARK: - UITableViewDelegate
 extension FriendsViewController: UITableViewDelegate{
-    
-    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
-        if editingStyle == .delete{
-            let friend = friendList[indexPath.row]
-            PhonebookManager.shared.delete(friend, at: indexPath.row)
-        }
-    }
 
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         

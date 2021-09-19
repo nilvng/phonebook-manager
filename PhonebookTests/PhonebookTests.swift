@@ -73,7 +73,7 @@ class PhonebookTests: XCTestCase {
         XCTAssertEqual(sut.getContact(key: friendToDelete.uid), friendToDelete)
 
         // When
-        sut.delete(friendToDelete, at: 0) // warning missing index
+        sut.delete(friendToDelete) // warning missing index
 
         // Then
         /// successfully delete in memory list
