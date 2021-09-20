@@ -13,7 +13,7 @@ import CoreData
 class AppDelegate: UIResponder, UIApplicationDelegate {
     
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
-        
+
         PhonebookManager.shared.friendStore = CoreDataFriendStore()
             // Ask for permission to access Contacts
         CNContactStore().requestAccess(for: CNEntityType.contacts){ res,err  in

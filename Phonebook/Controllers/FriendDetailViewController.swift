@@ -40,6 +40,10 @@ class FriendDetailViewController: UIViewController {
     
     init() {
         super.init(nibName: nil, bundle: nil)
+
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWasShown), name: UIResponder.keyboardDidShowNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillBeHidden), name: UIResponder.keyboardWillHideNotification, object: nil)
+
     }
     
     required init?(coder: NSCoder) {
@@ -56,21 +60,19 @@ class FriendDetailViewController: UIViewController {
         tableView.register(FriendTextEditCell.self, forCellReuseIdentifier: FriendTextEditCell.identifier)
         tableView.register(FriendDetailAvatarCell.self, forCellReuseIdentifier: FriendDetailAvatarCell.identifier)
         tableView.register(FriendAvatarEditCell.self, forCellReuseIdentifier: FriendAvatarEditCell.identifier)
+        tableView.register(FriendDeleteCell.self, forCellReuseIdentifier: FriendDeleteCell.identifier)
 
         setEditing(isNew, animated: false) // if it's new Friend, auto show edit view
 
         navigationItem.largeTitleDisplayMode = .never
         navigationItem.rightBarButtonItem = editButtonItem
         
-
-        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWasShown), name: UIResponder.keyboardDidShowNotification, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillBeHidden), name: UIResponder.keyboardWillHideNotification, object: nil)
-
+        // accessibility
+        tableView.accessibilityIdentifier = "table-EditView"
     }
     
     @objc func keyboardWasShown (notification: NSNotification)
     {
-        print("keyboard was shown")
         if let keyboardSize = (notification.userInfo?[UIResponder.keyboardFrameBeginUserInfoKey] as? NSValue)?.cgRectValue {
             tableView.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: keyboardSize.height + 20, right: 0)
          }
@@ -79,7 +81,6 @@ class FriendDetailViewController: UIViewController {
 
     @objc func keyboardWillBeHidden (notification: NSNotification)
     {
-        print("keyboard will be hidden")
         tableView.contentInset = .zero
         tableView.scrollIndicatorInsets = UIEdgeInsets.zero
     }
@@ -119,13 +120,15 @@ class FriendDetailViewController: UIViewController {
         
         navigationItem.title = isNew ? NSLocalizedString("New Contact", comment: "new contact nav title") : NSLocalizedString("Edit Contact", comment: "edit contact nav title")
         
-        dataSource = FriendEditDataSource(friend: friend){ friend in
+        dataSource = FriendEditDataSource(friend: friend, deleteAction: { friend in
+            PhonebookManager.shared.delete(friend)
+            self.navigationController?.popViewController(animated: true)
+        }, changeAction: { friend in
             self.tempFriend = friend
-        }
+        })
         navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .cancel, target: self, action: #selector(cancelButtonTrigger))
         
         // For UI Test
-        
         navigationItem.leftBarButtonItem?.accessibilityIdentifier = "DetailView.Cancel"
     }
     @objc
