@@ -8,19 +8,31 @@
 
 /* Begin PBXBuildFile section */
 		C80690EE26D602B000DDAC94 /* ContactCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C80690ED26D602B000DDAC94 /* ContactCell.swift */; };
+		C80BAB2B26F61A6B0021A27D /* FriendDeleteCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C80BAB2A26F61A6B0021A27D /* FriendDeleteCell.swift */; };
+		C84346E226F43814003C8D5B /* Phonebook.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = C84346E026F43814003C8D5B /* Phonebook.xcdatamodeld */; };
+		C84346ED26F472E0003C8D5B /* CoreDataFriendStoreTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C84346EC26F472E0003C8D5B /* CoreDataFriendStoreTests.swift */; };
 		C85A6AD226D8F7CF00349794 /* PhonebookManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = C85A6AD126D8F7CF00349794 /* PhonebookManager.swift */; };
-		C85A6AE026D929EB00349794 /* DetailPersonViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C85A6ADF26D929EB00349794 /* DetailPersonViewController.swift */; };
+		C85A6AE026D929EB00349794 /* FriendDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C85A6ADF26D929EB00349794 /* FriendDetailViewController.swift */; };
+		C85A6AF726DA47C700349794 /* UIViewExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = C85A6AF626DA47C700349794 /* UIViewExtension.swift */; };
+		C897BF7126EBAB5B00ABCF18 /* FriendPlist.swift in Sources */ = {isa = PBXBuildFile; fileRef = C897BF7026EBAB5B00ABCF18 /* FriendPlist.swift */; };
+		C899494826ECED2A005E2735 /* FriendCoreData+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = C899494626ECED2A005E2735 /* FriendCoreData+CoreDataClass.swift */; };
+		C899494926ECED2A005E2735 /* FriendCoreData+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = C899494726ECED2A005E2735 /* FriendCoreData+CoreDataProperties.swift */; };
+		C899496326EDBC69005E2735 /* CoreDataFriendStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = C899496226EDBC69005E2735 /* CoreDataFriendStore.swift */; };
+		C899496826EDBC97005E2735 /* PlistFriendStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = C899496726EDBC97005E2735 /* PlistFriendStore.swift */; };
+		C89F6D7E26E832780044A83E /* FriendEditDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = C89F6D7D26E832780044A83E /* FriendEditDataSource.swift */; };
+		C89F6D8326E832880044A83E /* FriendDetailDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = C89F6D8226E832880044A83E /* FriendDetailDataSource.swift */; };
 		C8A4B9F126D534C20065BB20 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8A4B9F026D534C20065BB20 /* AppDelegate.swift */; };
 		C8A4B9F326D534C20065BB20 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8A4B9F226D534C20065BB20 /* SceneDelegate.swift */; };
-		C8A4B9F526D534C20065BB20 /* PersonsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8A4B9F426D534C20065BB20 /* PersonsViewController.swift */; };
-		C8A4B9F826D534C20065BB20 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C8A4B9F626D534C20065BB20 /* Main.storyboard */; };
+		C8A4B9F526D534C20065BB20 /* FriendsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8A4B9F426D534C20065BB20 /* FriendsViewController.swift */; };
 		C8A4B9FA26D534C50065BB20 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C8A4B9F926D534C50065BB20 /* Assets.xcassets */; };
 		C8A4B9FD26D534C50065BB20 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C8A4B9FB26D534C50065BB20 /* LaunchScreen.storyboard */; };
 		C8A4BA0826D534C50065BB20 /* PhonebookTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8A4BA0726D534C50065BB20 /* PhonebookTests.swift */; };
 		C8A4BA1326D534C50065BB20 /* PhonebookUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8A4BA1226D534C50065BB20 /* PhonebookUITests.swift */; };
-		C8A4BA2426D534EA0065BB20 /* Person.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8A4BA2326D534EA0065BB20 /* Person.swift */; };
-		C8A4BA2926D53A3D0065BB20 /* PersonStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8A4BA2826D53A3D0065BB20 /* PersonStore.swift */; };
-		C8B86A5D26D7D7CC00F35DF4 /* ContactsUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8B86A5C26D7D7CC00F35DF4 /* ContactsUtils.swift */; };
+		C8A4BA2426D534EA0065BB20 /* Friend.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8A4BA2326D534EA0065BB20 /* Friend.swift */; };
+		C8A4BA2926D53A3D0065BB20 /* FriendStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8A4BA2826D53A3D0065BB20 /* FriendStore.swift */; };
+		C8F25E3026E0D0A8000EA9CC /* FriendTextEditCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8F25E2F26E0D0A8000EA9CC /* FriendTextEditCell.swift */; };
+		C8F25E3726E0D0E4000EA9CC /* FriendAvatarCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8F25E3626E0D0E4000EA9CC /* FriendAvatarCell.swift */; };
+		C8F25E3E26E0D991000EA9CC /* FriendAvatarEditCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8F25E3D26E0D991000EA9CC /* FriendAvatarEditCell.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -42,13 +54,23 @@
 
 /* Begin PBXFileReference section */
 		C80690ED26D602B000DDAC94 /* ContactCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactCell.swift; sourceTree = "<group>"; };
+		C80BAB2A26F61A6B0021A27D /* FriendDeleteCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendDeleteCell.swift; sourceTree = "<group>"; };
+		C84346E126F43814003C8D5B /* Phonebook.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Phonebook.xcdatamodel; sourceTree = "<group>"; };
+		C84346EC26F472E0003C8D5B /* CoreDataFriendStoreTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataFriendStoreTests.swift; sourceTree = "<group>"; };
 		C85A6AD126D8F7CF00349794 /* PhonebookManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhonebookManager.swift; sourceTree = "<group>"; };
-		C85A6ADF26D929EB00349794 /* DetailPersonViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailPersonViewController.swift; sourceTree = "<group>"; };
+		C85A6ADF26D929EB00349794 /* FriendDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendDetailViewController.swift; sourceTree = "<group>"; };
+		C85A6AF626DA47C700349794 /* UIViewExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIViewExtension.swift; sourceTree = "<group>"; };
+		C897BF7026EBAB5B00ABCF18 /* FriendPlist.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendPlist.swift; sourceTree = "<group>"; };
+		C899494626ECED2A005E2735 /* FriendCoreData+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "FriendCoreData+CoreDataClass.swift"; sourceTree = "<group>"; };
+		C899494726ECED2A005E2735 /* FriendCoreData+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "FriendCoreData+CoreDataProperties.swift"; sourceTree = "<group>"; };
+		C899496226EDBC69005E2735 /* CoreDataFriendStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataFriendStore.swift; sourceTree = "<group>"; };
+		C899496726EDBC97005E2735 /* PlistFriendStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlistFriendStore.swift; sourceTree = "<group>"; };
+		C89F6D7D26E832780044A83E /* FriendEditDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendEditDataSource.swift; sourceTree = "<group>"; };
+		C89F6D8226E832880044A83E /* FriendDetailDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendDetailDataSource.swift; sourceTree = "<group>"; };
 		C8A4B9ED26D534C20065BB20 /* Phonebook.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Phonebook.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		C8A4B9F026D534C20065BB20 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		C8A4B9F226D534C20065BB20 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
-		C8A4B9F426D534C20065BB20 /* PersonsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersonsViewController.swift; sourceTree = "<group>"; };
-		C8A4B9F726D534C20065BB20 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		C8A4B9F426D534C20065BB20 /* FriendsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendsViewController.swift; sourceTree = "<group>"; };
 		C8A4B9F926D534C50065BB20 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		C8A4B9FC26D534C50065BB20 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		C8A4B9FE26D534C50065BB20 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -58,9 +80,11 @@
 		C8A4BA0E26D534C50065BB20 /* PhonebookUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = PhonebookUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		C8A4BA1226D534C50065BB20 /* PhonebookUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhonebookUITests.swift; sourceTree = "<group>"; };
 		C8A4BA1426D534C50065BB20 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		C8A4BA2326D534EA0065BB20 /* Person.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Person.swift; sourceTree = "<group>"; };
-		C8A4BA2826D53A3D0065BB20 /* PersonStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersonStore.swift; sourceTree = "<group>"; };
-		C8B86A5C26D7D7CC00F35DF4 /* ContactsUtils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactsUtils.swift; sourceTree = "<group>"; };
+		C8A4BA2326D534EA0065BB20 /* Friend.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Friend.swift; sourceTree = "<group>"; };
+		C8A4BA2826D53A3D0065BB20 /* FriendStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendStore.swift; sourceTree = "<group>"; };
+		C8F25E2F26E0D0A8000EA9CC /* FriendTextEditCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendTextEditCell.swift; sourceTree = "<group>"; };
+		C8F25E3626E0D0E4000EA9CC /* FriendAvatarCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendAvatarCell.swift; sourceTree = "<group>"; };
+		C8F25E3D26E0D991000EA9CC /* FriendAvatarEditCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendAvatarEditCell.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -88,9 +112,47 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		C85A6B0C26DC6AEF00349794 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				C80690ED26D602B000DDAC94 /* ContactCell.swift */,
+				C8F25E3626E0D0E4000EA9CC /* FriendAvatarCell.swift */,
+				C8F25E2F26E0D0A8000EA9CC /* FriendTextEditCell.swift */,
+				C8F25E3D26E0D991000EA9CC /* FriendAvatarEditCell.swift */,
+				C80BAB2A26F61A6B0021A27D /* FriendDeleteCell.swift */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		C85A6B0D26DC6AF600349794 /* Controllers */ = {
+			isa = PBXGroup;
+			children = (
+				C8A4B9F426D534C20065BB20 /* FriendsViewController.swift */,
+				C85A6ADF26D929EB00349794 /* FriendDetailViewController.swift */,
+				C89F6D7D26E832780044A83E /* FriendEditDataSource.swift */,
+				C89F6D8226E832880044A83E /* FriendDetailDataSource.swift */,
+			);
+			path = Controllers;
+			sourceTree = "<group>";
+		};
+		C85A6B0E26DC6AFE00349794 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				C8A4BA2326D534EA0065BB20 /* Friend.swift */,
+				C8A4BA2826D53A3D0065BB20 /* FriendStore.swift */,
+				C899496226EDBC69005E2735 /* CoreDataFriendStore.swift */,
+				C899496726EDBC97005E2735 /* PlistFriendStore.swift */,
+				C899494626ECED2A005E2735 /* FriendCoreData+CoreDataClass.swift */,
+				C899494726ECED2A005E2735 /* FriendCoreData+CoreDataProperties.swift */,
+				C897BF7026EBAB5B00ABCF18 /* FriendPlist.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
 		C8A4B9E426D534C20065BB20 = {
 			isa = PBXGroup;
 			children = (
+				C84346E026F43814003C8D5B /* Phonebook.xcdatamodeld */,
 				C8A4B9EF26D534C20065BB20 /* Phonebook */,
 				C8A4BA0626D534C50065BB20 /* PhonebookTests */,
 				C8A4BA1126D534C50065BB20 /* PhonebookUITests */,
@@ -113,17 +175,14 @@
 			children = (
 				C8A4B9F026D534C20065BB20 /* AppDelegate.swift */,
 				C8A4B9F226D534C20065BB20 /* SceneDelegate.swift */,
-				C8A4B9F426D534C20065BB20 /* PersonsViewController.swift */,
-				C8A4B9F626D534C20065BB20 /* Main.storyboard */,
+				C85A6AD126D8F7CF00349794 /* PhonebookManager.swift */,
+				C85A6B0E26DC6AFE00349794 /* Models */,
+				C85A6B0D26DC6AF600349794 /* Controllers */,
+				C85A6B0C26DC6AEF00349794 /* Views */,
+				C8D6C89526DCE16200C3AEAA /* Helpers */,
 				C8A4B9F926D534C50065BB20 /* Assets.xcassets */,
 				C8A4B9FB26D534C50065BB20 /* LaunchScreen.storyboard */,
 				C8A4B9FE26D534C50065BB20 /* Info.plist */,
-				C8A4BA2326D534EA0065BB20 /* Person.swift */,
-				C8A4BA2826D53A3D0065BB20 /* PersonStore.swift */,
-				C80690ED26D602B000DDAC94 /* ContactCell.swift */,
-				C8B86A5C26D7D7CC00F35DF4 /* ContactsUtils.swift */,
-				C85A6AD126D8F7CF00349794 /* PhonebookManager.swift */,
-				C85A6ADF26D929EB00349794 /* DetailPersonViewController.swift */,
 			);
 			path = Phonebook;
 			sourceTree = "<group>";
@@ -131,6 +190,7 @@
 		C8A4BA0626D534C50065BB20 /* PhonebookTests */ = {
 			isa = PBXGroup;
 			children = (
+				C84346EC26F472E0003C8D5B /* CoreDataFriendStoreTests.swift */,
 				C8A4BA0726D534C50065BB20 /* PhonebookTests.swift */,
 				C8A4BA0926D534C50065BB20 /* Info.plist */,
 			);
@@ -144,6 +204,14 @@
 				C8A4BA1426D534C50065BB20 /* Info.plist */,
 			);
 			path = PhonebookUITests;
+			sourceTree = "<group>";
+		};
+		C8D6C89526DCE16200C3AEAA /* Helpers */ = {
+			isa = PBXGroup;
+			children = (
+				C85A6AF626DA47C700349794 /* UIViewExtension.swift */,
+			);
+			path = Helpers;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -251,7 +319,6 @@
 			files = (
 				C8A4B9FD26D534C50065BB20 /* LaunchScreen.storyboard in Resources */,
 				C8A4B9FA26D534C50065BB20 /* Assets.xcassets in Resources */,
-				C8A4B9F826D534C20065BB20 /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -276,15 +343,27 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C80BAB2B26F61A6B0021A27D /* FriendDeleteCell.swift in Sources */,
+				C85A6AF726DA47C700349794 /* UIViewExtension.swift in Sources */,
+				C8F25E3026E0D0A8000EA9CC /* FriendTextEditCell.swift in Sources */,
+				C899494826ECED2A005E2735 /* FriendCoreData+CoreDataClass.swift in Sources */,
 				C80690EE26D602B000DDAC94 /* ContactCell.swift in Sources */,
 				C85A6AD226D8F7CF00349794 /* PhonebookManager.swift in Sources */,
-				C8A4B9F526D534C20065BB20 /* PersonsViewController.swift in Sources */,
+				C8A4B9F526D534C20065BB20 /* FriendsViewController.swift in Sources */,
 				C8A4B9F126D534C20065BB20 /* AppDelegate.swift in Sources */,
-				C8A4BA2426D534EA0065BB20 /* Person.swift in Sources */,
+				C8A4BA2426D534EA0065BB20 /* Friend.swift in Sources */,
+				C8F25E3E26E0D991000EA9CC /* FriendAvatarEditCell.swift in Sources */,
+				C899496826EDBC97005E2735 /* PlistFriendStore.swift in Sources */,
 				C8A4B9F326D534C20065BB20 /* SceneDelegate.swift in Sources */,
-				C8B86A5D26D7D7CC00F35DF4 /* ContactsUtils.swift in Sources */,
-				C8A4BA2926D53A3D0065BB20 /* PersonStore.swift in Sources */,
-				C85A6AE026D929EB00349794 /* DetailPersonViewController.swift in Sources */,
+				C8F25E3726E0D0E4000EA9CC /* FriendAvatarCell.swift in Sources */,
+				C897BF7126EBAB5B00ABCF18 /* FriendPlist.swift in Sources */,
+				C8A4BA2926D53A3D0065BB20 /* FriendStore.swift in Sources */,
+				C899494926ECED2A005E2735 /* FriendCoreData+CoreDataProperties.swift in Sources */,
+				C84346E226F43814003C8D5B /* Phonebook.xcdatamodeld in Sources */,
+				C899496326EDBC69005E2735 /* CoreDataFriendStore.swift in Sources */,
+				C89F6D8326E832880044A83E /* FriendDetailDataSource.swift in Sources */,
+				C89F6D7E26E832780044A83E /* FriendEditDataSource.swift in Sources */,
+				C85A6AE026D929EB00349794 /* FriendDetailViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -293,6 +372,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				C8A4BA0826D534C50065BB20 /* PhonebookTests.swift in Sources */,
+				C84346ED26F472E0003C8D5B /* CoreDataFriendStoreTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -320,14 +400,6 @@
 /* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
-		C8A4B9F626D534C20065BB20 /* Main.storyboard */ = {
-			isa = PBXVariantGroup;
-			children = (
-				C8A4B9F726D534C20065BB20 /* Base */,
-			);
-			name = Main.storyboard;
-			sourceTree = "<group>";
-		};
 		C8A4B9FB26D534C50065BB20 /* LaunchScreen.storyboard */ = {
 			isa = PBXVariantGroup;
 			children = (
@@ -463,6 +535,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = UBHQB9F5N3;
 				INFOPLIST_FILE = Phonebook/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.2;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -482,6 +555,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = UBHQB9F5N3;
 				INFOPLIST_FILE = Phonebook/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.2;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -617,6 +691,19 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCVersionGroup section */
+		C84346E026F43814003C8D5B /* Phonebook.xcdatamodeld */ = {
+			isa = XCVersionGroup;
+			children = (
+				C84346E126F43814003C8D5B /* Phonebook.xcdatamodel */,
+			);
+			currentVersion = C84346E126F43814003C8D5B /* Phonebook.xcdatamodel */;
+			path = Phonebook.xcdatamodeld;
+			sourceTree = "<group>";
+			versionGroupType = wrapper.xcdatamodel;
+		};
+/* End XCVersionGroup section */
 	};
 	rootObject = C8A4B9E526D534C20065BB20 /* Project object */;
 }

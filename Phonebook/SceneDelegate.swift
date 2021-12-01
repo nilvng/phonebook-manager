@@ -14,11 +14,14 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
     func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
         
-        guard let _ = (scene as? UIWindowScene) else { return }
-        let navController = window!.rootViewController as! UINavigationController
-        let homeController = navController.topViewController as! PersonsViewController
-        let store = PlistPersonStore()
-        homeController.personStore = store
+        guard let winScene = (scene as? UIWindowScene) else { return }
+        
+        // launch home view
+        window = UIWindow(windowScene: winScene)
+        window?.makeKeyAndVisible()
+        
+        let navController = UINavigationController(rootViewController: FriendsViewController())
+        window?.rootViewController = navController
 
     }
 
@@ -42,6 +45,14 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     func sceneWillEnterForeground(_ scene: UIScene) {
         // Called as the scene transitions from the background to the foreground.
         // Use this method to undo the changes made on entering the background.
+        PhonebookManager.shared.fetchData(forceReload: false) { result in
+            switch result {
+            case .success(let msg):
+                print(msg)
+            case .failure(let err):
+                print(err)
+                }
+        }
     }
 
     func sceneDidEnterBackground(_ scene: UIScene) {

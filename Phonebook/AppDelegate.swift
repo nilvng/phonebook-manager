@@ -7,22 +7,36 @@
 
 import UIKit
 import Contacts
+import CoreData
 
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate {
-
-
+    
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
-        CNContactStore().requestAccess(for: .contacts) { (access, error) in
-          print("Access: \(access)")
+
+        PhonebookManager.shared.friendStore = CoreDataFriendStore()
+            // Ask for permission to access Contacts
+        CNContactStore().requestAccess(for: CNEntityType.contacts){ res,err  in
+            if res {
+                print("Permission granted.")
+                // Get the latest contacts
+                PhonebookManager.shared.fetchData(forceReload: true) { result in
+                    switch result {
+                    case .success(let msg):
+                        print(msg)
+                    case .failure(let err):
+                        print(err)
+                        }
+                }
+            }
         }
-        // fetch data
+        
+
         return true
     }
 
     // MARK: UISceneSession Lifecycle
     func applicationWillEnterForeground(_ application: UIApplication) {
-        
     }
     
     func application(_ application: UIApplication, configurationForConnecting connectingSceneSession: UISceneSession, options: UIScene.ConnectionOptions) -> UISceneConfiguration {

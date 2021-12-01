@@ -8,27 +8,78 @@
 import XCTest
 
 class PhonebookUITests: XCTestCase {
+    // MARK: - XCTestCase
 
-    override func setUpWithError() throws {
-        // Put setup code here. This method is called before the invocation of each test method in the class.
+    override func setUp() {
+        super.setUp()
 
-        // In UI tests it is usually best to stop immediately when a failure occurs.
+        // Since UI tests are more expensive to run, it's usually a good idea
+        // to exit if a failure was encountered
         continueAfterFailure = false
 
-        // In UI tests it’s important to set the initial state - such as interface orientation - required for your tests before they run. The setUp method is a good place to do this.
+    }
+    func testAppLaunch() throws {
+        let app = XCUIApplication()
+        app.launch()
+        
+        XCTAssertTrue(app.isDisplayingFriendsView)
     }
 
-    override func tearDownWithError() throws {
-        // Put teardown code here. This method is called after the invocation of each test method in the class.
-    }
-
-    func testExample() throws {
+    func testAddNewContact() throws {
         // UI tests must launch the application that they test.
         let app = XCUIApplication()
         app.launch()
+        
+        // Given
+        // number cell before add new contact
+        let friendsTable = app.tables["table-FriendsView"]
+        let totalCell = friendsTable.cells.count
+                
+        // When
+        let homeNavigationBar = app.navigationBars["Phonebook"]
+        homeNavigationBar.buttons["Add"].tap()
+        ///navigate to detail view
+        let tablesQuery = app.tables["table-EditView"]
+        
+        let fnameField = tablesQuery.textFields["edit-First name"]
+        fnameField.tap()
+        fnameField.typeText("UI")
 
-        // Use recording to get started writing UI tests.
-        // Use XCTAssert and related functions to verify your tests produce the correct results.
+        let lastNameTextField = tablesQuery.cells.textFields["edit-Last name"]
+        lastNameTextField.tap()
+        lastNameTextField.typeText("Test")
+
+        let phoneNumberTextField = tablesQuery.cells.textFields["edit-Phone number"]
+        phoneNumberTextField.tap()
+        phoneNumberTextField.typeText("1234567")
+        
+        app.navigationBars["New Contact"].buttons["Done"].tap()
+        
+        // Then
+        let totalCellAfter = friendsTable.cells.count
+        XCTAssertEqual(totalCellAfter, totalCell + 1)
+    }
+    
+    func testDeletingContact() throws {
+        let app = XCUIApplication()
+        app.launch()
+        
+        let friendsTable = app.tables["table-FriendsView"]
+        let totalCell = friendsTable.cells.count
+        if totalCell > 0{
+            // navigate to detail view
+            let cell = friendsTable.cells.element(boundBy: 0)
+            cell.tap()
+            // enable editing mode
+            app.navigationBars["View Contact"].buttons["Edit"].tap()
+            // When
+            app.tables["table-EditView"].buttons["Delete"].tap()
+            
+            //Then
+            XCTAssertEqual(friendsTable.cells.count, totalCell - 1)
+            
+        }
+                                                
     }
 
     func testLaunchPerformance() throws {
@@ -38,5 +89,11 @@ class PhonebookUITests: XCTestCase {
                 XCUIApplication().launch()
             }
         }
+    }
+}
+
+extension XCUIApplication {
+    var isDisplayingFriendsView: Bool {
+        return otherElements["FriendsView"].exists
     }
 }

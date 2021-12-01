@@ -9,10 +9,16 @@ import UIKit
 import ContactsUI
 import Contacts
 
-class PersonsViewController: UITableViewController {
+class FriendsViewController {
     // MARK: Properties
-    var personStore:PersonStore!
+    var personStore:FriendStore!
     var cellID = "ContactCell"
+    var tableView : UITableView = {
+        register(ContactCell.self, forCellReuseIdentifier: cellID)
+        rowHeight = UITableView.automaticDimension
+        estimatedRowHeight = 45
+        
+    }()
     
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
@@ -27,10 +33,8 @@ class PersonsViewController: UITableViewController {
     // MARK: Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        tableView.register(ContactCell.self, forCellReuseIdentifier: cellID)
-        
-        personStore.fetchAllContacts{ (fetched) in
+        title = "My Phonebook"
+                personStore.fetchAllContacts{ (fetched) in
             if fetched{
                 print("from Contacts.")
                 DispatchQueue.main.async {
@@ -50,20 +54,20 @@ class PersonsViewController: UITableViewController {
     
     //MARK: Actions
     @objc func addNativeContact(){
-        personStore.addPerson(Person(random: true))
+        personStore.addFriend(Friend(random: true))
         tableView.reloadData()
     }
 
 }
 // MARK: - CNContactPickerDelegate
-extension PersonsViewController : CNContactPickerDelegate{
+extension FriendsViewController : CNContactPickerDelegate{
     
     func contactPicker(_ picker: CNContactPickerViewController, didSelect contacts: [CNContact]){
-        let newContacts = contacts.compactMap{Person(contact: $0)}
+        let newContacts = contacts.compactMap{Friend(contact: $0)}
         
         for c in newContacts{
             if !personStore.contains(c){
-                personStore.addPerson(c)
+                personStore.addFriend(c)
             }
         }
         tableView.reloadData()
@@ -71,7 +75,7 @@ extension PersonsViewController : CNContactPickerDelegate{
 }
 
 // MARK: - UITableViewDataSource
-extension PersonsViewController{
+extension FriendsViewController{
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return personStore.persons.count
     }
@@ -96,7 +100,7 @@ extension PersonsViewController{
 }
 
 // MARK: - UITableViewDelegate
-extension PersonsViewController{
+extension FriendsViewController{
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         
